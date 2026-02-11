@@ -1,0 +1,3 @@
+SELECT DISTINCTROW [Receipts Journal].*, [>Resources].ID
+FROM [Receipts Journal] LEFT JOIN [>Resources] ON [Receipts Journal].Payor=[>Resources].Key
+WHERE ((([CheckDate]<=forms!GeneralLedger!ToDate And [Closed]=False Or [CheckDate]>=forms!GeneralLedgerFromdate And [CheckDate]<=Forms!GeneralLedger!ToDate And [Closed]=True And [EntryDate]>=DatePlus30(Forms!GeneralLedger!ToDate))=True) And (([Receipts Journal].Void)=False));

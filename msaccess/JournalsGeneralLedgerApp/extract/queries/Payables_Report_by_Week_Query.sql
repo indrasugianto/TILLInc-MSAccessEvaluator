@@ -1,0 +1,4 @@
+SELECT DISTINCTROW IIf([due] Is Null,Null,theweekbegin([Due])) AS DueDate, [>Resources].Category, [>Resources].ID, [Purchase Journal].InvoiceDate, [Purchase Journal].Paid, [Purchase Journal].Key, [Purchase Journal].DebitAmount, [Purchase Journal].CheckDate, [Purchase Journal].PayablesAccount, [Purchase Journal].SupplierID, [Purchase Journal].InvoiceNo, [Purchase Journal].Void, [Purchase Journal].Posted, [Purchase Journal].CheckKey, [Purchase Journal].CheckNumber
+FROM [Purchase Journal] LEFT JOIN [>Resources] ON [Purchase Journal].SupplierID=[>Resources].Key
+WHERE (((IIf([due] Is Null,Null,theweekbegin([Due]))) Is Not Null) AND (([Purchase Journal].DebitAmount)>0) AND (([Purchase Journal].Void)=False) AND (([Purchase Journal].Posted)=True))
+ORDER BY IIf([due] Is Null,Null,theweekbegin([Due])), [>Resources].Category, [>Resources].ID, [Purchase Journal].InvoiceDate;

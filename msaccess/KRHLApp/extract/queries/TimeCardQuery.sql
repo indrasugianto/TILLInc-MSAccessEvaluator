@@ -1,0 +1,3 @@
+SELECT DISTINCTROW [MIS Hours].Employee, [MIS Hours].Date, [MIS Hours].Archive, [MIS Hours].DesignNote, [MIS Hours].Journal, [MIS Hours].ADPFile, [MIS Hours].General, [MIS Hours].GeneralHour, [MIS Hours].JobHour, [MIS Hours].Hours, [MIS Hours].Rate, [MIS Hours].MondayNote, [MIS Hours].TuesdayNote, [MIS Hours].WednesdayNote, [MIS Hours].ThursdayNote, [MIS Hours].FridayNote, [MIS Hours].SaturdayNote, [MIS Hours].SundayNote, [MIS Hours].Cost, [MIS Hours].Monday, [MIS Hours].Tuesday, [MIS Hours].Wednesday, [MIS Hours].Thursday, [MIS Hours].Friday, [MIS Hours].Saturday, [MIS Hours].[Job ID], [MIS Hours].Activity, [MIS Hours].Sunday, [MIS Hours].Key
+FROM [MIS Hours]
+WHERE ((([MIS Hours].Employee)=Forms!HoursEntryV2!EmpName) And (([MIS Hours].Date)=Forms!HoursEntryV2!Week));

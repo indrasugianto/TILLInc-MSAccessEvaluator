@@ -1,0 +1,6 @@
+SELECT DISTINCTROW [General Ledger].SourceJournal, [General Ledger].TransactionDate, [General Ledger].AccountNumber, Sum([General Ledger].CreditAmount) AS SumOfCreditAmount, Sum([General Ledger].DebitAmount) AS SumOfDebitAmount, IIf(Forms!APChecksEntry!SelectPayee,IIf(Forms!APChecksEntry!SelectedPayee=[SourceOperative],True,False),True) AS Expr1
+FROM [General Ledger] LEFT JOIN [>Resources] ON [General Ledger].SourceOperative=[>Resources].Key
+WHERE (((IIf(forms!APChecksEntry!PayableAccount=[AccountNumber],True,False))=True))
+GROUP BY [General Ledger].SourceJournal, [General Ledger].TransactionDate, [General Ledger].AccountNumber, IIf(Forms!APChecksEntry!SelectPayee,IIf(Forms!APChecksEntry!SelectedPayee=[SourceOperative],True,False),True)
+HAVING ((([General Ledger].SourceJournal)="Loan" Or ([General Ledger].SourceJournal)="Purchase" Or ([General Ledger].SourceJournal)="Check") And (([General Ledger].TransactionDate)>=forms!APChecksEntry!FromDate And ([General Ledger].TransactionDate)<=forms!APChecksEntry!ToDate) And ((IIf(Forms!APChecksEntry!SelectPayee,IIf(Forms!APChecksEntry!SelectedPayee=[SourceOperative],True,False),True))=True))
+ORDER BY [General Ledger].TransactionDate;

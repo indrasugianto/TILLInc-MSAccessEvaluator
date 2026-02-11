@@ -1,0 +1,6 @@
+SELECT [Payroll Journal].CheckDate, [Gross]-NNEZ([Field1])-NNEZ([Field2])-NNEZ([Field3])-NNEZ([Federal])-NNEZ([State])-NNEZ([Payroll Journal].SocialSecurity)-NNEZ([Medicare]) AS Expr1, [MIS Personnel].Employee, Sum([Payroll Journal].Federal) AS SumOfFederal, Sum([Payroll Journal].State) AS SumOfState, Sum([Payroll Journal].Medicare) AS SumOfMedicare, Sum([Payroll Journal].Field1) AS SumOfField1, Sum([Payroll Journal].Field2) AS SumOfField2, Sum([Payroll Journal].Field3) AS SumOfField3, Sum([Payroll Journal].Bonus) AS SumOfBonus
+FROM [Payroll Journal], [MIS Personnel]
+WHERE ((([Payroll Journal].CheckNumber)=0) AND (([Payroll Journal].ADPFile)>5))
+GROUP BY [Payroll Journal].CheckDate, [Gross]-NNEZ([Field1])-NNEZ([Field2])-NNEZ([Field3])-NNEZ([Federal])-NNEZ([State])-NNEZ([Payroll Journal].SocialSecurity)-NNEZ([Medicare]), [MIS Personnel].Employee
+HAVING ((([Payroll Journal].CheckDate)>#1/1/2009# And ([Payroll Journal].CheckDate)<#12/31/2009#))
+ORDER BY [Payroll Journal].CheckDate, [MIS Personnel].Employee;

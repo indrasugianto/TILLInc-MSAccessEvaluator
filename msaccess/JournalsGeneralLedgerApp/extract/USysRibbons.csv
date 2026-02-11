@@ -1,0 +1,201 @@
+ID,RibbonName,RibbonXML
+1,GL Tab,"<customUI xmlns=""http://schemas.microsoft.com/office/2009/07/customui"">
+<ribbon startFromScratch=""true"">
+<tabs>
+<tab id=""Goto"" label=""Goto"" visible=""true"">
+<group id=""GotoGroup"" label=""Goto Form"">
+<button id=""Goto2"" label=""General Ledger Adjustments"" onAction=""MenuGLGoto.General Ledger Adjustments"" imageMso=""ViewsFormView""/>
+<button id=""Goto3"" label=""Accounts"" onAction=""MenuGLGoto.Accounts"" imageMso=""ViewsFormView""/>
+</group>
+
+<group id=""TemplateGroup"" label=""Templates"">
+<button id=""Template1"" label=""Balance Sheet"" onAction=""MenuGeneralLedgerTemplateForms.Balance Sheet"" imageMso=""ViewsFormView""/>
+<button id=""Template2"" label=""Income Statement"" onAction=""MenuGeneralLedgerTemplateForms.Income Statement"" imageMso=""ViewsFormView""/>
+</group>
+</tab>
+
+<tab id=""Reports"" label=""Reports"" visible=""true"">
+<group id=""ReportGroup"" label=""Ledger Reports"">
+<button id=""Report1"" label=""by Resource"" onAction=""MenuReportsGeneralLedger.by Resource"" imageMso=""ShowDetailsPage""/>
+<button id=""Report2"" label=""by Resource for Selected Account"" onAction=""MenuReportsGeneralLedger.by Resource for Selected Account"" imageMso=""ShowDetailsPage""/>
+<button id=""Report3"" label=""by Selected Account"" onAction=""MenuReportsGeneralLedger.by Selected Account"" imageMso=""ShowDetailsPage""/>
+<button id=""Report4"" label=""by Selected Journal"" onAction=""MenuReportsGeneralLedger.by Selected Journal"" imageMso=""ShowDetailsPage""/>
+<button id=""Report5"" label=""by Selected Job"" onAction=""MenuReportsGeneralLedger.by Selected Job"" imageMso=""ShowDetailsPage""/>
+</group>
+
+<group id=""TradeGroup"" label=""Trade Payables"">
+<button id=""Trade1"" label=""by Enry Date"" onAction=""MenuReportsGeneralLedgerJobReports.Trade Paybles by Entry Date"" imageMso=""ShowDetailsPage""/>
+<button id=""Trade2"" label=""by Due Date"" onAction=""MenuReportsGeneralLedgerJobReports.Trade Paybles by Due Date"" imageMso=""ShowDetailsPage""/>
+</group> 
+
+<group id=""JobGroup"" label=""Job Reports"">
+<button id=""JobReport1"" label=""Receivables"" onAction=""MenuReportsGeneralLedgerJobReports.Job Receivables"" imageMso=""ShowDetailsPage""/>
+<button id=""JobReport2"" label=""Receivables Aged"" onAction=""MenuReportsGeneralLedgerJobReports.Job Receivables Aged"" imageMso=""ShowDetailsPage""/>
+<button id=""JobReport3"" label=""Deposits"" onAction=""MenuReportsGeneralLedgerJobReports.Job Deposits"" imageMso=""ShowDetailsPage""/>
+<button id=""JobReport4"" label=""Sales"" onAction=""MenuReportsGeneralLedgerJobReports.Job Sales"" imageMso=""ShowDetailsPage""/>
+<button id=""JobReport5"" label=""Receipts"" onAction=""MenuReportsGeneralLedgerJobReports.Job Receipts"" imageMso=""ShowDetailsPage""/>
+<button id=""JobReport6"" label=""Refunds"" onAction=""MenuReportsGeneralLedgerJobReports.Job Refunds"" imageMso=""ShowDetailsPage""/>
+</group>
+ </tab>
+
+<tab id=""Statement"" label=""Statements"" visible=""true"">
+<group id=""StatementGroup"" label=""Statements"">
+<button id=""Statement1"" label=""Income Summary"" onAction=""MenuGeneralLedgerIncomeReports.Summary"" imageMso=""ShowDetailsPage""/>
+<button id=""Statement2"" label=""Income Detail"" onAction=""MenuGeneralLedgerIncomeReports.Detail"" imageMso=""ShowDetailsPage""/>
+<button id=""Statement3"" label=""Income COGS"" onAction=""MenuGeneralLedgerIncomeReports.COGS"" imageMso=""ShowDetailsPage""/>
+<button id=""Statement4"" label=""Balance Sheet Summary"" onAction=""MenuGeneralLedgerBalanceReports.Summary"" imageMso=""ShowDetailsPage""/>
+<button id=""Statement5"" label=""Balance Sheet Detail"" onAction=""MenuGeneralLedgerBalanceReports.Detail"" imageMso=""ShowDetailsPage""/>
+</group>
+
+<group id=""TrialGroup"" label=""Trial Balance"">
+<button id=""TrialGroup1"" label=""Asset and Liability"" onAction=""MenuGeneralLedgerStatements.Asset and Liability Trial Balance"" imageMso=""ShowDetailsPage""/>
+<button id=""TrialGroup2"" label=""Income and Expense"" onAction=""MenuGeneralLedgerStatements.Income and Expense Trial Balance"" imageMso=""ShowDetailsPage""/>
+<button id=""TrialGroup3"" label=""All Accounts Detail"" onAction=""MenuGeneralLedgerStatements.Detailed Report for All Accounts"" imageMso=""ShowDetailsPage""/>
+</group>
+</tab>
+
+
+
+<tab id=""Web"" label=""Help"" visible=""true"">
+<group id=""WebGroup"" label=""Web Help"">
+<button id=""Web1"" label=""General Ledger"" onAction=""MenuGeneralLedgerHelp.General Ledger"" imageMso=""ViewsFormView""/>
+<button id=""Web2"" label=""Accounts"" onAction=""MenuGeneralLedgerHelp.Accounts"" imageMso=""ViewsFormView""/>
+<button id=""Web3"" label=""Year End"" onAction=""MenuGeneralLedgerHelp.Year End"" imageMso=""ViewsFormView""/>
+</group>
+</tab>
+
+<tab id=""YE"" label=""Year End"" visible=""true"">
+<group id=""YEGroup"" label=""Year End"">
+               <button id=""YE1"" label=""Prior Year Asset and Liability"" onAction=""MenuGeneralLedgerYearEnd.Prior Year Asset and Liability Trial Balance"" imageMso=""ShowDetailsPage""/>
+             <button id=""YE2"" label=""Verify All Journals"" onAction=""MenuGeneralLedgerYearEnd.Verify All Journals"" imageMso=""ShowDetailsPage""/>
+             <button id=""YE3"" label=""Year End Test"" onAction=""MenuGeneralLedgerYearEnd.Year End Test"" imageMso=""ShowDetailsPage""/>
+              <button id=""YE4"" label=""Bank Reconciliation"" onAction=""MenuGeneralLedgerYearEnd.Bank Reconciliation"" imageMso=""ShowDetailsPage""/>
+             <button id=""YE5"" label=""Job Sales"" onAction=""MenuGeneralLedgerYearEnd.Job Sales"" imageMso=""ShowDetailsPage""/>
+             <button id=""YE6"" label=""Job Deposits"" onAction=""MenuGeneralLedgerYearEnd.Job Deposits"" imageMso=""ShowDetailsPage""/>
+            <button id=""YE7"" label=""Job Refunds"" onAction=""MenuGeneralLedgerYearEnd.Job Refunds"" imageMso=""ShowDetailsPage""/>
+                <button id=""YE8"" label=""Job Receivables"" onAction=""MenuGeneralLedgerYearEnd.Job Receivables"" imageMso=""ShowDetailsPage""/>
+             <button id=""YE9"" label=""Trade Payables"" onAction=""MenuGeneralLedgerYearEnd.Job Payables"" imageMso=""ShowDetailsPage""/>
+             <button id=""YE10"" label=""Loan Account 202"" onAction=""MenuGeneralLedgerLoanReports.Account 202 Loan Payments"" imageMso=""ShowDetailsPage""/>
+              <button id=""YE11"" label=""Loan Account 200"" onAction=""MenuGeneralLedgerLoanReports.Account 200 Credit Line"" imageMso=""ShowDetailsPage""/>
+             <button id=""YE12"" label=""Loan Account 260"" onAction=""MenuGeneralLedgerLoanReports.Account 260 Credit Line"" imageMso=""ShowDetailsPage""/>
+             <button id=""YE13"" label=""Payroll Summary"" onAction=""MenuGeneralLedgerPayrollReports.Payroll Summary"" imageMso=""ShowDetailsPage""/>
+            <button id=""YE14"" label=""Payroll 401"" onAction=""MenuGeneralLedgerPayrollReports.Payroll 401K Deductions"" imageMso=""ShowDetailsPage""/>
+             <button id=""YE15"" label=""Payroll Roth"" onAction=""MenuGeneralLedgerPayrollReports.Payroll Roth Deductions"" imageMso=""ShowDetailsPage""/>
+            <button id=""YE16"" label=""Payroll Medical"" onAction=""MenuGeneralLedgerPayrollReports.Payroll Medical Deductions"" imageMso=""ShowDetailsPage""/>
+            <button id=""YE17"" label=""Payroll Prepay"" onAction=""MenuGeneralLedgerPayrollReports.Payroll Prepay"" imageMso=""ShowDetailsPage""/>
+            <button id=""YE18"" label=""Payroll Adjustments"" onAction=""MenuGeneralLedgerPayrollReports.Account 206 Payroll Adjustments"" imageMso=""ShowDetailsPage""/>
+             <button id=""YE20"" label=""Payroll 401K Witheld"" onAction=""MenuGeneralLedgerPayrollReports.Account 219 Payroll Witheld 401K"" imageMso=""ShowDetailsPage""/>
+               <button id=""YE21"" label=""Account List"" onAction=""MenuGeneralLedgerYearEnd.Account List"" imageMso=""ShowDetailsPage""/>
+             <button id=""YE22"" label=""Account 290 Dividends"" onAction=""MenuGeneralLedgerDetailReports.Account 290 Shareholder Dividends"" imageMso=""ShowDetailsPage""/>
+             <button id=""YE23"" label=""Account 410 Use Tax"" onAction=""MenuGeneralLedgerDetailReports.Account 410 Use Tax"" imageMso=""ShowDetailsPage""/>
+              <button id=""YE24"" label=""Account 521 Shop Rent"" onAction=""MenuGeneralLedgerDetailReports.Account 521 Shop Rent"" imageMso=""ShowDetailsPage""/>
+             <button id=""YE25"" label=""Account 731 Office Rent"" onAction=""MenuGeneralLedgerDetailReports.Account 731 Office Rent"" imageMso=""ShowDetailsPage""/>
+             <button id=""YE26"" label=""Account 713 Medical"" onAction=""MenuGeneralLedgerDetailReports.Account 713 Medical Insurance"" imageMso=""ShowDetailsPage""/>
+            <button id=""YE27"" label=""Account 790 Misc. Tax"" onAction=""MenuGeneralLedgerDetailReports.Account 790 Misc. Tax Expense"" imageMso=""ShowDetailsPage""/>
+                <button id=""YE28"" label=""Account 791 Dues"" onAction=""MenuGeneralLedgerDetailReports.Account 791 Due and Subscriptions"" imageMso=""ShowDetailsPage""/>
+             <button id=""YE29"" label=""Account 792 Licenses"" onAction=""MenuGeneralLedgerDetailReports.Account 792 Licenses and Permits"" imageMso=""ShowDetailsPage""/>
+             <button id=""YE30"" label=""Account 793 Donations"" onAction=""MenuGeneralLedgerDetailReports.Account 793 Charitable Donations""  imageMso=""ShowDetailsPage""/>
+              <button id=""YE31"" label=""Account 794 Bank Charges"" onAction=""MenuGeneralLedgerDetailReports.Account 794 Bank Charges"" imageMso=""ShowDetailsPage""/>
+             <button id=""YE32"" label=""Account 809 Misc. Income"" onAction=""MenuGeneralLedgerDetailReports.Account 809 Misc. Income"" imageMso=""ShowDetailsPage""/>
+             <button id=""YE33"" label=""All Accounts Detailed"" onAction=""MenuGeneralLedgerYearEnd.Detailed Report for All Accounts"" imageMso=""ShowDetailsPage""/>
+            <button id=""YE34"" label=""Asset and Liability"" onAction=""MenuGeneralLedgerYearEnd.Asset and Liability Trial Balance"" imageMso=""ShowDetailsPage""/>
+             <button id=""YE35"" label=""Income and Expense"" onAction=""MenuGeneralLedgerYearEnd.Income and Expense Trial Balance"" imageMso=""ShowDetailsPage""/>
+            <button id=""YE36"" label=""Update Beginning Balances"" onAction=""MenuGeneralLedgerYearEnd.Update Beginning Balances"" imageMso=""ShowDetailsPage""/>
+            <button id=""YE37"" label=""Update Retained Earning Balance"" onAction=""MenuGeneralLedgerYearEnd.Update Retained Earning Balance"" imageMso=""ShowDetailsPage""/>
+</group>
+</tab>
+
+<tab id=""Verify"" label=""Verify"" visible=""true"">
+<group id=""VerifyGroup"" label=""Verify Journals"">
+<button id=""Verify1"" label=""All"" onAction=""MenuUtilityGeneralLedger.Verify All Journals"" imageMso=""ShowDetailsPage""/>
+<button id=""Verify2"" label=""Purchase"" onAction=""MenuUtilityGeneralLedger.Verify Purchase Journal"" imageMso=""ShowDetailsPage""/>
+<button id=""Verify3"" label=""Loan"" onAction=""MenuUtilityGeneralLedger.Verify Loan Journal"" imageMso=""ShowDetailsPage""/>
+<button id=""Verify4"" label=""Sale"" onAction=""MenuUtilityGeneralLedger.Verify Sale Journal"" imageMso=""ShowDetailsPage""/>
+<button id=""Verify5"" label=""Invoice"" onAction=""MenuUtilityGeneralLedger.Verify Invoice Journal"" imageMso=""ShowDetailsPage""/>
+<button id=""Verify6"" label=""Check"" onAction=""MenuUtilityGeneralLedger.Verify Check Journal"" imageMso=""ShowDetailsPage""/>
+<button id=""Verify7"" label=""Receipt"" onAction=""MenuUtilityGeneralLedger.Verify Receipt Journal"" imageMso=""ShowDetailsPage""/>
+</group>
+</tab>
+
+          </tabs>
+</ribbon>
+</customUI>"
+2,Report Tab,"<customUI xmlns=""http://schemas.microsoft.com/office/2009/07/customui"">
+<ribbon startFromScratch=""true"">
+<tabs>
+<tab id=""dbCustomTab"" label=""KR+H Print"" visible=""true"">
+<group id=""dbCustomGroup"" label="" "">
+<control idMso=""PageSetupDialog"" label=""Page Setup"" enabled=""true""/>
+<control idMso=""PrintDialogAccess"" label=""Print"" enabled=""true""/>
+<control idMso=""PrintPreviewClose"" label=""Close"" enabled=""true""/>
+</group>
+</tab>
+</tabs>
+</ribbon>
+</customUI>"
+3,Main Tab,"<customUI xmlns=""http://schemas.microsoft.com/office/2009/07/customui"">
+<ribbon startFromScratch=""true"">
+
+</ribbon>
+</customUI>"
+4,Accounts Tab,"<customUI xmlns=""http://schemas.microsoft.com/office/2009/07/customui"">
+<ribbon startFromScratch=""true"">
+<tabs>
+  <tab id=""AccountGroup1"" label=""Edit"" visible=""true"">
+  <group id=""Edit"" label=""Edit Text"">
+  <control idMso=""Undo"" label=""Undo"" enabled=""true""/>
+  <control idMso=""Cut"" label=""Cut"" enabled=""true""/>
+  <control idMso=""Copy"" label=""Copy"" enabled=""true""/>
+  <control idMso=""Paste"" label=""Paste"" enabled=""true""/>
+</group>
+  </tab>
+
+ <tab id=""AccountGroup2"" label=""Goto"" visible=""true"">
+     <group id=""GotoGroup"" label=""Goto Form"">
+          <button id=""Goto1"" label=""General Ledger"" onAction=""MenuGLGoto.General Ledger"" imageMso=""ViewsFormView""/>
+             <button id=""Goto2"" label=""General Ledger Adjustments"" onAction=""MenuGLGoto.General Ledger Adjustments"" imageMso=""ViewsFormView""/>
+</group>
+  </tab>
+
+ <tab id=""AccountGroup3"" label=""Templates"" visible=""true"">
+     <group id=""TemplateGroup"" label=""Templates"">
+         <button id=""Template1"" label=""Balance Sheet"" onAction=""MenuGeneralLedgerTemplateForms.Balance Sheet"" imageMso=""ViewsFormView""/>
+             <button id=""Template2"" label=""Income Statement"" onAction=""MenuGeneralLedgerTemplateForms.Income Statement"" imageMso=""ViewsFormView""/>
+  </group>
+   </tab>
+
+<tab id=""AccountGroup4"" label=""Help"" visible=""true"">
+     <group id=""WebGroup"" label=""Web Help"">
+         <button id=""Web1"" label=""General Ledger"" onAction=""MenuGeneralLedgerHelp.General Ledger"" imageMso=""ViewsFormView""/>
+             <button id=""Web2"" label=""Accounts"" onAction=""MenuGeneralLedgerHelp.Accounts"" imageMso=""ViewsFormView""/>
+              </group>
+  </tab>
+ </tabs>
+</ribbon>
+</customUI>"
+5,GLA Tab,"<customUI xmlns=""http://schemas.microsoft.com/office/2009/07/customui"">
+<ribbon startFromScratch=""true"">
+<tabs>
+  <tab id=""Group1"" label=""Edit"" visible=""true"">
+        <group id=""Edit"" label=""Edit Text"">
+              <control idMso=""Undo"" label=""Undo"" enabled=""true""/>
+            <control idMso=""Cut"" label=""Cut"" enabled=""true""/>
+            <control idMso=""Copy"" label=""Copy"" enabled=""true""/>
+               <control idMso=""Paste"" label=""Paste"" enabled=""true""/>
+          </group>
+ </tab>
+
+ <tab id=""Group2"" label=""Goto"" visible=""true"">
+<group id=""GotoGroup"" label=""Goto Form"">
+           <button id=""Goto2"" label=""General Ledger"" onAction=""MenuGLGoto.General Ledger"" imageMso=""ViewsFormView""/>
+              <button id=""Goto3"" label=""Accounts"" onAction=""MenuGLGoto.Accounts"" imageMso=""ViewsFormView""/>
+</group>
+ </tab>
+ </tabs>
+</ribbon>
+</customUI>"
+6,Blank Tab,"<customUI xmlns=""http://schemas.microsoft.com/office/2009/07/customui"">
+<ribbon startFromScratch=""true"">
+
+</ribbon>
+</customUI>"

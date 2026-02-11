@@ -1,0 +1,3 @@
+SELECT DISTINCTROW ProjectSchedule.*, [>Jobs].ID, [MIS Personnel].Employee, [>Jobs].Key, [>Jobs].ManagedBy, [>Jobs].SpecifiedBy, [MIS Personnel_1].Employee, [>Jobs].ProductionPhase, [>Settings.PhaseSort] AS Expr1
+FROM ((([>Jobs] LEFT JOIN [MIS Personnel] ON [>Jobs].SpecifiedBy=[MIS Personnel].Key) INNER JOIN ProjectSchedule ON [>Jobs].Key=ProjectSchedule.Job) INNER JOIN [MIS Personnel] AS [MIS Personnel_1] ON [>Jobs].ManagedBy=[MIS Personnel_1].Key) LEFT JOIN [>Settings] ON [>Jobs].ProductionPhase=[>Settings].Phase
+WHERE ((([>Jobs].ProductionPhase)<>"completed" And ([>Jobs].ProductionPhase)<>"archive") AND (([>Jobs].Estimate)=False) AND (([>Jobs].Closed)=False));

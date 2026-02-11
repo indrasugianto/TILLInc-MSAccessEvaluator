@@ -1,0 +1,4 @@
+SELECT IIf(NNEN([PrivateNote])="",[Description],[PrivateNote]) AS InvoiceNote, [Sales Journal].InvoiceAmount, [Sales Journal].InvoiceNumber, [>Jobs].ID, [Sales Journal].Job
+FROM [>Jobs] LEFT JOIN [Sales Journal] ON [>Jobs].Key=[Sales Journal].Job
+WHERE ((([Sales Journal].InvoiceAmount)<>0) And ((IIf(Not forms!Sales!Family And [Sales Journal].Job=forms!Sales!Jobname,True,IIf(forms!Sales!Family And [Parent]=Forms!Sales!JobName Or forms!Sales!Family And [Sales Journal].Job=Forms!Sales!JobName,True,False)))=True) And ((InStr([Description],"Additional")=0)=True) And ((InStr([Description],"Proposal")=0)=True))
+ORDER BY [Sales Journal].InvoiceNumber;

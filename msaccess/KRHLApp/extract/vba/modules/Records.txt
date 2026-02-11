@@ -1,0 +1,869 @@
+'------------------------------------------------------------------------
+'
+' MODULE
+'
+'   Records
+'
+' PURPOSE
+'
+'   Contains general routines for navigating/manipulating records.
+'
+'------------------------------------------------------------------------
+
+Option Compare Database   'Use database order for string comparisons
+
+Global SaveField(0 To 199) As Variant
+Global NeedToRequeryCoordinates
+Global CopyKey As Long
+Global ProductListHeight As Single
+Global TransferString As String
+Global RecalculateListQuery As Integer
+Global Skip As String
+Global AutomaticSort As Integer
+Global SortType As Integer
+Global DeleteinProgress As String
+Global RenumberinProgress As String
+Global SortRequired As String
+Dim ANewItem As Boolean
+
+Public Function CopyandInsertSelection()
+
+If Form_ProductList.SelHeight = 0 Then MsgBox "Select at least one record": Exit Function
+TheInsert = InputBox("Enter Item number to insert selection after:")
+If NNEN(TheInsert) = "" Then
+    MsgBox "Copy and insert canceled"
+    Exit Function
+End If
+SetMyDB
+TransferAttachments = 0
+Dim Selection As DAO.Recordset, Insert As DAO.Recordset, Copy As DAO.Recordset, attachment As DAO.Recordset, Correspondence As DAO.Recordset, Options As DAO.Recordset, Notes As DAO.Recordset
+Set Selection = Form_ProductList.RecordsetClone
+ItemIncrement = 0.001
+Selection.MoveFirst
+'Set Insert = mydb.OpenRecordset("Select * from [>Product List] where ProductListKey=" & Form_ProductList.ProductListKey, dbOpenDynaset, dbSeeChanges)
+Set Insert = mydb.OpenRecordset("Select * from [>Product List] where Key=" & Selection!Key, dbOpenDynaset, dbSeeChanges)
+Set Options = mydb.OpenRecordset("Select * from [>Options] where ProductListKey=" & Form_ProductList.ProductListKey, dbOpenDynaset, dbSeeChanges)
+Set Notes = mydb.OpenRecordset("Select * from [>Note] where ProductListKey=" & Form_ProductList.ProductListKey, dbOpenDynaset, dbSeeChanges)
+Selection.Move Form_ProductList.SelTop - 1
+If MessageOKCancel("Copy " & Form_ProductList.SelHeight & " record(s) and insert after item " & TheInsert & "?") Then Exit Function
+For ii = 1 To Form_ProductList.SelHeight
+    Set Copy = mydb.OpenRecordset("Select * from [>Product List] where Key=" & Selection!Key, dbOpenDynaset, dbSeeChanges)
+    StatusBarMessage "Copying and inserting item " & Selection!Item
+    DoEvents
+    TheCount = Copy.Fields.Count
+    Insert.AddNew
+    For i = 0 To TheCount - 1
+        On Error GoTo ControlError
+        If Copy(i).Name = "Key" Then
+        ElseIf InStr(Copy(i).Name, "TimeStamp") Then
+        ElseIf InStr(Copy(i).Name, "_") Then
+        ElseIf Not Copy(i).DataUpdatable Then
+        Else
+            Insert(i).Value = Copy(i).Value
+            If Insert(i).Name = "Item" Then
+                Insert(i).Value = Val(TheInsert) + ItemIncrement
+            End If
+         End If
+        GoTo GetNextControl
+ControlError:
+        MsgBox Err.Description
+        Resume ControlErrorResume
+ControlErrorResume:
+        Exit Function
+GetNextControl:
+    Next i
+    Pause 1
+    ItemIncrement = ItemIncrement + 0.001
+    Insert.Update
+    Insert.MoveLast
+    
+    If TransferAttachments < 2 Then
+        'TheTime = Timer
+        Set attachment = mydb.OpenRecordset("select correspondence from [>Correspondence] where [name] =" & Selection!Key, dbOpenSnapshot, dbSeeChanges)
+        If attachment.RecordCount <> 0 Then
+            If TransferAttachments = 0 Then
+                If MessageOKCancel("Copy and paste extra cost spreadsheet attachment(s?)") Then
+                    TransferAttachments = 2
+                Else
+                    TransferAttachments = 1
+                End If
+            End If
+            If TransferAttachments <> 2 Then
+                Set Correspondence = mydb.OpenRecordset("select * from [>Correspondence] where [name] =" & Selection!Key, dbOpenDynaset, dbSeeChanges)
+                Correspondence.AddNew
+                Correspondence!Description = "ProductList"
+                Correspondence!Archive = True
+                Correspondence!Correspondence = attachment!Correspondence
+                Correspondence!Name = Insert!Key
+                Correspondence!Date = Date
+                Correspondence.Update
+                Correspondence.MoveLast
+                'Correspondence.Edit
+                'Correspondence.Update
+                'MsgBox Timer - TheTime
+            End If
+        End If
+    End If
+    
+'Options and notes
+    StatusBarMessage "Working on Options"
+    Set MySetClone = mydb.OpenRecordset("Select * from [>Options] Where [ProductListKey] = " & Selection!Key, dbOpenSnapshot, dbSeeChanges)
+    Set Options = mydb.OpenRecordset("Select * from [>Options] where ProductListKey=" & Selection!Key, dbOpenDynaset, dbSeeChanges)
+    If MySetClone.RecordCount <> 0 Then
+        MySetClone.MoveLast
+        MySetClone.MoveFirst
+        Do Until MySetClone.EOF
+            Options.AddNew
+            Options!ProductListKey = Insert!Key
+            Options!Option = MySetClone!Option
+            Options!OptionRequirement = MySetClone!OptionRequirement
+            Options.Update
+            Options.MoveLast
+            MySetClone.MoveNext
+        Loop
+    End If
+    StatusBarMessage "Working on Notes"
+    Set MySetClone = mydb.OpenRecordset("Select * from [>Note] Where [ProductListKey] = " & Selection!Key, dbOpenSnapshot, dbSeeChanges)
+    If MySetClone.RecordCount <> 0 Then
+        MySetClone.MoveFirst
+        Do Until MySetClone.EOF
+            Notes.AddNew
+            Notes!ProductListKey = Insert!Key
+            Notes!ID = MySetClone!ID
+            Notes!Note = MySetClone!Note
+            Notes!EntryDate = Now
+            Notes.Update
+            Notes.MoveLast
+            MySetClone.MoveNext
+        Loop
+    End If
+    
+    
+    Selection.MoveNext
+Next ii
+StatusBarMessage " "
+Form_ProductList.RenumberItems
+'TheForm.Requery
+
+End Function
+
+
+Function CopyItem()
+
+EchoOn
+On Error GoTo CopyItemError
+SaveRecord
+RecalculateListInProgress = True
+For TheCount = 1 To 199
+    SaveField(TheCount) = ""
+Next
+Dim mytable As DAO.Recordset
+SetMyDB
+If Screen.ActiveForm.Name = "ProductListMaster" Then
+    Forms!productlistmaster!ProductListControl.SetFocus
+    'Set mytable = Forms!productlistmaster!ProductListControl.Form.RecordsetClone
+    Set mytable = mydb.OpenRecordset("Select * from [>Product List] Where [Key] = " & Forms!productlistmaster!ProductListControl!Key, dbOpenDynaset, dbSeeChanges)
+    ScreenActiveFormKey = Forms!productlistmaster!ProductListControl!Key
+Else
+    Set mytable = Screen.ActiveForm.RecordsetClone
+    ScreenActiveFormKey = Screen.ActiveForm!Key
+End If
+If mytable.RecordCount = 0 Then Exit Function
+StatusBarMessage "Copying item " & mytable!Item & " " & periods
+mytable.FindFirst "[Key] = " & ScreenActiveFormKey & " "
+TheCount = mytable.Fields.Count
+For i = 0 To TheCount - 1
+    On Error GoTo ControlError
+    If mytable(i).Name = "Key" Then
+        SaveField(i) = mytable(i)
+    ElseIf InStr(mytable(i).Name, "TimeStamp") Then
+    ElseIf InStr(mytable(i).Name, "_") Then
+    ElseIf Not mytable(i).DataUpdatable Then
+    Else
+        SaveField(i) = mytable(i)
+    End If
+    GoTo GetNextControl
+ControlError:
+    MsgBox Err.Description
+    Resume ControlErrorResume
+ControlErrorResume:
+    If Screen.ActiveForm.Name = "ProductListMaster" Then
+        Forms!productlistmaster!ProductListControl!PasteButton.Enabled = False
+    Else
+        'docmd.SetMenuItem 1, 5, , acMenuGray
+        MenuGray 1, 5
+    End If
+    g_PasteEnable = False
+    Exit Function
+GetNextControl:
+    periods = periods & "."
+    StatusBarMessage "Copying item " & mytable!Item & " " & periods
+    DoEvents
+    TheCount = TheCount + 1
+ Next
+CopyKey = ScreenActiveFormKey
+
+On Error GoTo CopyItemError
+If Screen.ActiveForm.Name = "ProductListMaster" Then
+    Forms!productlistmaster!ProductListControl!PasteButton.Enabled = True
+Else
+    'DoCmd.SetMenuItem 1, 5, , acMenuUngray
+    MenuBlack 1, 5
+End If
+g_PasteEnable = True
+RecalculateListInProgress = False
+StatusBarMessage " "
+Pause 1
+
+
+Exit Function
+
+CopyItemError:
+    MsgBox Err.Description
+Resume ExitCopyItem
+ExitCopyItem:
+SaveRecord
+MsgBox "Please click on the field in the record you wish to copy and try again.", 64, "Copy Record"
+
+
+End Function
+
+
+Function DataButton(CategoryData)
+
+If Left$(CategoryData, 6) = Left$(DesignAndMaterialRecordedControlName, 6) Then DataButton = True
+
+End Function
+
+Function ErrorInProgress()
+
+X = Err
+MsgBox Error(X)
+
+End Function
+Public Function InsertItems()
+
+
+End Function
+
+Function InsertItem(TheType)
+
+On Error GoTo InsertItemError
+Dim TheForm As Access.Form
+Set TheForm = Forms!productlistmaster!ProductListControl.Form
+'EchoNo "Inserting Record"
+RecalculateListInProgress = True
+ANewItem = True
+TheJob = TheForm!JobName
+TheItem = TheForm!Item
+Dim mytable As DAO.Recordset
+SetMyDB
+Forms!productlistmaster!ProductListControl.SetFocus
+Set mytable = TheForm.RecordsetClone
+mytable.MoveFirst
+If mytable!Item <> TheItem Then
+    Do Until mytable!Item = TheItem
+        mytable.MoveNext
+    Loop
+    mytable.MovePrevious
+    TheReference1 = mytable!Reference1
+    TheReference2 = mytable!Reference2
+    TheSort1 = mytable!Sort1
+    TheSort2 = mytable!Sort2
+    TheAlternate = mytable!Alternate
+End If
+Forms!productlistmaster!ProductListControl!Item = Val(TheItem) + 0.1
+ThePL = Forms!productlistmaster!ProductListControl!ProductList
+'TheControl = Screen.ActiveControl.ControlName
+Set mytable = mydb.OpenRecordset(">Product List", dbOpenDynaset, dbSeeChanges)
+'EchoNo "Adding Record"
+mytable.AddNew
+mytable!Item = Val(TheItem)
+mytable!ProductListKey = Forms!productlistmaster!ProductListControl!ProductListName
+mytable!Reference1 = TheReference1
+mytable!Reference2 = TheReference2
+mytable!Sort1 = TheSort1
+mytable!Sort2 = TheSort2
+mytable!Alternate = NNEN(TheAlternate)
+mytable.Update
+mytable.MoveLast
+theKey = mytable!Key
+Form_ProductList.RenumberItems
+TheForm.Requery
+'RequeryForm
+'DoCmd.RunCommand acCmdRecordsGoToPrevious
+If TheType = "Paste" And g_PasteEnable Then PasteItem
+ANewItem = False
+'Exit Function
+Set mytable = TheForm.RecordsetClone
+mytable.MoveLast
+TheListLength = mytable.RecordCount
+
+DoCmd.FindRecord TheItem, acEntire, False, acUp, False, , True
+If TheType = "Paste" And g_PasteEnable Then PasteItem
+If TheListLength < 9 Then
+Else
+    'DoCmd.FindRecord TheItem - 8, acEntire, False, acDown, False, , True
+    'DoCmd.FindRecord TheItem, acEntire, False, acUp, False, , True
+End If
+Forms!productlistmaster!ProductListControl!Product.SetFocus
+RecalculateListInProgress = False
+ANewItem = False
+
+Exit Function
+
+InsertItemError:
+MsgBox Err.Description
+Resume ResumeInsertItemError
+ResumeInsertItemError:
+
+End Function
+
+
+
+
+Function PasteItem()
+
+On Error GoTo PasteError
+If NNEZ(CopyKey) = 0 Or CopyKey = ScreenActiveFormKey Then
+    Exit Function
+End If
+TransferAttachments = 0
+If Screen.ActiveForm.FormName = "MainMenu" Then Exit Function
+If Screen.ActiveForm.FormName = "ProductListMaster" Then
+    TheItem = (SQLResult("Select Item from [>Product List] Where [Key] = " & CopyKey))
+    TheProductKey = (SQLResult("Select Product from [>Product List] Where [Key] = " & CopyKey))
+    ThePLKey = NNEN(SQLResult("Select ProductListKey from [>Product List] Where [Key] = " & CopyKey))
+    TheProductName = (SQLResult("Select ID from [>Products] Where [Key] = " & TheProductKey))
+    ThePList = NNEN(SQLResult("Select ProductList from [>Product Lists] Where [Key] = " & ThePLKey))
+    DoCmd.GoToControl "Item"
+    If MessageOKCancel("Paste item # " & TheItem & " " & TheProductName & " from Product List " & ThePList & "?") Then
+        Exit Function
+    End If
+End If
+SavedControlName = Screen.ActiveControl.ControlName
+StatusBarMessage "Pasting" & periods
+On Error GoTo PasteItemFirstError
+SaveRecord
+RecalculateListInProgress = True
+If Screen.ActiveForm.FormName = "ProductListMaster" Then SaveItem = Forms!productlistmaster!ProductListControl!Item
+Dim myset  As DAO.Recordset, MySetClone  As DAO.Recordset, attachment As DAO.Recordset, Correspondence As DAO.Recordset
+SetMyDB
+TheMessage = "Getting records"
+If InStr(Screen.ActiveForm.FormName, "ProductList") <> 0 Then
+    Forms!productlistmaster!ProductListControl.SetFocus
+    Set myset = Forms!productlistmaster!ProductListControl.Form.RecordsetClone
+    Set myset = mydb.OpenRecordset("Select * from [>Product List] Where [Key] = " & Forms!productlistmaster!ProductListControl!Key, dbOpenDynaset, dbSeeChanges)
+    ScreenActiveFormKey = Forms!productlistmaster!ProductListControl!Key
+    'MsgBox myset.RecordCount
+    myset.MoveLast
+Else
+    Set myset = Screen.ActiveForm.RecordsetClone
+    If NNEZ(Screen.ActiveForm!Key) = 0 Then
+        myset.AddNew
+        myset.Update
+        myset.MoveLast
+        ThePasteKey = myset!ProductListKey
+    Else
+        ThePasteKey = Screen.ActiveForm!Key
+    End If
+    myset.FindFirst "[Key] = " & ThePasteKey
+    ScreenActiveFormKey = Screen.ActiveForm!Key
+End If
+TheCount = myset.Fields.Count
+If myset.Fields.Count > 1 Then
+    ThePasteKey = ScreenActiveFormKey
+    TheMessage = "Getting field"
+ResumeFromFirstError:
+    On Error GoTo PasteControlError
+    myset.Edit
+    For i = 0 To TheCount - 1
+        TheMessage = "Working on field " & i
+        FieldName = myset(i).Name
+        TheMessage = "Working on field " & FieldName
+        If InStr(FieldName, "_") Then GoTo PasteGetNextControl
+        If Not myset(i).DataUpdatable Then GoTo PasteGetNextControl
+        If FieldName = "Job" Then GoTo PasteGetNextControl
+        If FieldName = "IncludeInEstimate" Then GoTo PasteGetNextControl
+        If FieldName = "TimeStamp" Then GoTo PasteGetNextControl
+        If FieldName = "Key" Then
+            If TransferAttachments < 2 Then
+                'TheTime = Timer
+                'On Error GoTo 0
+                Set attachment = mydb.OpenRecordset("select correspondence from [>Correspondence] where [name] =" & SaveField(i), dbOpenSnapshot, dbSeeChanges)
+                If attachment.RecordCount <> 0 Then
+                    If TransferAttachments = 0 Then
+                        If MessageOKCancel("Copy and paste extra cost spreadsheet attachment(s?)") Then
+                            TransferAttachments = 2
+                        Else
+                            TransferAttachments = 1
+                        End If
+                        If TransferAttachments <> 2 Then
+                            Set Correspondence = mydb.OpenRecordset("select * from [>Correspondence] where [name] =" & SaveField(i), dbOpenDynaset, dbSeeChanges)
+                            Correspondence.AddNew
+                            Correspondence!Archive = True
+                            Correspondence!Correspondence = attachment!Correspondence
+                            Correspondence!Name = myset!Key
+                            Correspondence!Date = Date
+                            Correspondence.Update
+                            Correspondence.MoveLast
+                            Correspondence.Edit
+                            Correspondence.Update
+                            'MsgBox Timer - TheTime
+                        End If
+                    End If
+                End If
+            End If
+            GoTo PasteGetNextControl
+        End If
+        If InStr(Screen.ActiveForm.FormName, "ProductList") <> 0 Then
+            If FieldName = "Item" Then SaveField(i) = SaveItem
+            If FieldName = "ProductListMaster" Then GoTo PasteGetNextControl
+            If FieldName = "Position" Then
+                myset(i) = 0
+                GoTo PasteGetNextControl
+            End If
+            'If FieldName = "TotalCost" Then GoTo PasteGetNextControl
+            If InStr(FieldName, "ProductList") <> 0 Then GoTo PasteGetNextControl
+            If InStr(FieldName, "Job") <> 0 Then GoTo PasteGetNextControl
+        ElseIf Screen.ActiveForm.FormName = "ProductParts" Then
+            If FieldName = "Category" Then SaveField(i) = Screen.ActiveForm!CategorySort
+            If FieldName = "PartType" Then SaveField(i) = Screen.ActiveForm!ProductType
+        ElseIf Screen.ActiveForm.FormName = "Correspondence" Then
+            If FieldName = "Name" Then SaveField(i) = Screen.ActiveForm!Category
+        ElseIf Screen.ActiveForm.FormName = "Drawings" Then
+            If FieldName = "TheName" Then SaveField(i) = Screen.ActiveForm!Category
+        ElseIf Screen.ActiveForm.FormName = "Drawings" Then
+        ElseIf Screen.ActiveForm.FormName = "Spreadsheets" Then
+            If FieldName = "TheName" Then SaveField(i) = Screen.ActiveForm!Category
+        ElseIf Left(Screen.ActiveForm.FormName, 5) = "Parts" Then
+            If FieldName = "Part" Then SaveField(i) = Screen.ActiveForm!CategorySort
+        End If
+        myset(i) = SaveField(i)
+        GoTo PasteGetNextControl
+PasteControlError:
+        'MsgBox Err.Description & " " & i & " of " & TheCount - 1 & " " & myset(i).Name & " " & SaveField(i) & vbCrLf & vbCrLf & "Please email Bill this information."
+        Resume PasteGetNextControl
+PasteGetNextControl:
+        periods = periods & "."
+        If Len(periods) > 200 Then Exit Function
+        StatusBarMessage "Pasting" & periods
+    Next
+    myset.Update
+End If
+On Error GoTo PasteItemError
+TheMessage = "Finished fields"
+'DoCmd.GoToControl SavedControlName
+If Screen.ActiveForm.FormName = "ProductListMaster" Then
+    'Forms!ProductListMaster!ProductListControl!Item = SaveItem
+'Options
+    TheMessage = "Working on Options"
+    Set myset = mydb.OpenRecordset("Select * from [>Options] Where [ProductListKey] = " & Forms!productlistmaster!ProductListControl!Key, dbOpenDynaset, dbSeeChanges)
+    If myset.RecordCount <> 0 Then
+        myset.MoveFirst
+        Do Until myset.EOF
+            myset.Delete
+            myset.MoveNext
+        Loop
+    End If
+    TheMessage = "Adding Options"
+    Set MySetClone = mydb.OpenRecordset("Select * from [>Options] Where [ProductListKey] = " & CopyKey, dbOpenDynaset, dbSeeChanges)
+    If MySetClone.RecordCount <> 0 Then
+        Do Until MySetClone.EOF
+            myset.AddNew
+            myset!ProductListKey = ScreenActiveFormKey
+            myset!Option = MySetClone!Option
+            myset!OptionRequirement = MySetClone!OptionRequirement
+            myset!DrawProduct = MySetClone!DrawProduct
+            myset!DrawDescription = 0 'MySetClone!DrawDescription
+            myset.Update
+            MySetClone.MoveNext
+        Loop
+    End If
+'Notes
+    TheMessage = "Working on Notes"
+    Set myset = mydb.OpenRecordset("Select * from [>Note] Where [ProductListKey] = " & Forms!productlistmaster!ProductListControl!Key, dbOpenDynaset, dbSeeChanges)
+    If myset.RecordCount <> 0 Then
+        Do Until myset.EOF
+            myset.Delete
+            myset.MoveNext
+        Loop
+    End If
+    TheMessage = "Adding Notes"
+    Set MySetClone = mydb.OpenRecordset("Select * from [>Note] Where [ProductListKey] = " & CopyKey, dbOpenDynaset, dbSeeChanges)
+    If MySetClone.RecordCount <> 0 Then
+        MySetClone.MoveFirst
+        Do Until MySetClone.EOF
+            myset.AddNew
+            myset!ProductListKey = ScreenActiveFormKey
+            myset!ID = MySetClone!ID
+            myset!DrawingNote = MySetClone!DrawingNote
+            myset!Note = MySetClone!Note
+            myset!DrawNote = MySetClone!DrawNote
+            myset!LowerX = MySetClone!LowerX
+            myset!UpperX = MySetClone!UpperX
+            myset.Update
+            MySetClone.MoveNext
+        Loop
+    End If
+    RecalculateListInProgress = False
+    TheMessage = "Finished Notes"
+    RequeryPopups
+    TheMessage = "Finished Paste Record in Product List"
+End If
+TheMessage = "Finished Paste Record"
+
+SaveRecord
+If Screen.ActiveForm.FormName = "ProductListMaster" Then
+Form_ProductList.Requery
+    DoCmd.GoToControl "Key"
+    DoCmd.FindRecord ScreenActiveFormKey
+    DoCmd.GoToControl "Product"
+
+End If
+StatusBarMessage " "
+
+'On Error Resume Next
+
+RecalculateListInProgress = False
+
+
+Exit Function
+
+PasteError:
+MsgBox Err.Description
+Resume ResumePasteError
+ResumePasteError:
+Exit Function
+
+PasteItemFirstError:
+myset.AddNew
+myset.Update
+myset.MoveLast
+On Error Resume Next
+ThePasteKey = myset!Key
+On Error GoTo PasteItemError
+Resume ResumeFromFirstError
+PasteItemError:
+Resume ExitPasteItem
+ExitPasteItem:
+MsgBox TheMessage '"Please click on any field in the record you wish to paste over and try again." & Chr$(13) & "Note: Pasting cannot be completed when the record bar is selected.", 64, "Copy Record"
+
+End Function
+
+'------------------------------------------------------------------------
+' FUNCTION     : RecDelete
+'
+' PURPOSE      : Deletes the current record, handling errors as
+'                they occur.
+'------------------------------------------------------------------------
+Function RecDelete() As Integer
+    
+On Error GoTo RecDeleteError
+DeleteinProgress = "Yes"
+TheForm = Screen.ActiveForm.Caption
+DoCmd.RunCommand acCmdDeleteRecord
+RecGotoPrev
+DeleteinProgress = "No"
+Exit Function
+
+RecDeleteError:
+Resume ResumeRecDeleteError
+ResumeRecDeleteError:
+DeleteinProgress = "No"
+If Screen.ActiveForm.FormName = "Jobs" Then
+    DoCmd.Requery
+    Forms!Jobs!JobName = ""
+    JobName.Requery
+End If
+If Screen.ActiveForm.FormName = "ProductListMaster" Then DoCmd.GoToControl "Product"
+
+End Function
+
+'------------------------------------------------------------------------
+' FUNCTION     : RecGotoFirst
+'
+' PURPOSE      : Moves to the first record.
+'------------------------------------------------------------------------
+Function RecGotoFirst() As Integer
+TheForm = Screen.ActiveForm.Caption
+On Error Resume Next
+DoCmd.GoToRecord A_FORM, Screen.ActiveForm.FormName, A_FIRST
+
+If TheForm <> "Product List" Then DoCmd.GoToControl "ID"
+If TheForm = "Product List" Then DoCmd.GoToControl "Product"
+
+End Function
+
+'------------------------------------------------------------------------
+' FUNCTION     : RecGotoLast
+'
+' PURPOSE      : Moves to the last record.
+'------------------------------------------------------------------------
+Function RecGotoLast() As Integer
+
+TheForm = Screen.ActiveForm.Caption
+On Error Resume Next
+DoCmd.GoToRecord A_FORM, Screen.ActiveForm.FormName, A_LAST
+
+If TheForm <> "Product List" Then DoCmd.GoToControl "ID"
+If TheForm = "Product List" Then DoCmd.GoToControl "Product"
+
+End Function
+
+'------------------------------------------------------------------------
+' FUNCTION     : RecGotoNext
+'
+' PURPOSE      : Moves to the next record.
+'------------------------------------------------------------------------
+Function RecGotoNext() As Integer
+
+'Dim MySet as dao.recordset
+TheFormName = Screen.ActiveForm.FormName
+'If Screen.ActiveForm.FormName = "ProductListMaster" Then
+'If Screen.ActiveForm.RecordCount > 0 Then
+'Set MySet = Screen.ActiveForm.RecordSetClone
+'    MySet.MoveLast
+'    If MySet!ID = Screen.ActiveForm.ID Then
+'
+'        Exit Function
+'    End If
+'End If
+On Error Resume Next
+DoCmd.GoToRecord A_FORM, Screen.ActiveForm.FormName, A_NEXT
+TheForm = Screen.ActiveForm.Caption
+'If Screen.ActiveForm.ID = "ID" Then
+'    DoCmd GoToRecord A_Form, Screen.ActiveForm.FormName, A_PREV
+'End If
+
+If TheForm <> "Product List" Then DoCmd.GoToControl "ID"
+If TheForm = "Product List" Then DoCmd.GoToControl "Product"
+
+End Function
+
+
+
+'------------------------------------------------------------------------
+' FUNCTION     : RecGotoPrev
+'
+' PURPOSE      : Moves to the previous record.
+'------------------------------------------------------------------------
+Function RecGotoPrev() As Integer
+TheForm = Screen.ActiveForm.Caption
+
+
+    On Error Resume Next
+DoCmd.GoToRecord A_FORM, Screen.ActiveForm.FormName, A_PREV
+
+If TheForm <> "Product List" Then DoCmd.GoToControl "ID"
+If TheForm = "Product List" Then DoCmd.GoToControl "Product"
+
+End Function
+
+'------------------------------------------------------------------------
+' FUNCTION     : RecNew
+'
+' PURPOSE      : Creates new record.
+'------------------------------------------------------------------------
+Function RecNew() As Integer
+
+If Screen.ActiveForm.FormName = "ProductListMaster" Then
+    If Forms!productlistmaster!ProductListControl!ProductList = "Product List" Then
+        On Error Resume Next
+        DoCmd.DoMenuItem 0, 1, 1
+        MsgBox "The Product List is empty." + Chr$(13) + "To open an existing list select from the menu on the window frame at the top of the list.  To create a new list select New from the File Menu.", 64
+        Exit Function
+    End If
+End If
+
+    On Error Resume Next
+DoCmd.GoToRecord A_FORM, Screen.ActiveForm.FormName, A_NEWREC
+TheForm = Screen.ActiveForm.Caption
+If TheForm <> "Product List" And TheForm <> "Memo" Then DoCmd.GoToControl "ID"
+If TheForm = "Product List" Then
+    DoCmd.GoToControl "Item"
+    DoCmd.GoToControl "Product"
+End If
+If Screen.ActiveForm.FormName = "Jobs" Then
+    Forms!Jobs!AlternateDisplay = ""
+    Forms!Jobs!JobName = ""
+    DoCmd.Requery
+End If
+
+
+End Function
+
+
+
+
+
+Sub RequeryNote()
+
+Exit Sub
+If NNEZ(Forms!productlistmaster!ProductListControl!ProductListKey) = 0 Then
+Else
+    If FIsLoaded("Note") Then
+        If Forms!Note.Visible Then
+            DoCmd.SelectObject acForm, "Note"
+            Forms!Note.Requery
+        End If
+    End If
+End If
+
+End Sub
+
+
+
+
+Sub RequeryPopups()
+
+On Error GoTo RequeryPopupsError
+If g_delete Then Exit Sub
+Forms!productlistmaster!OptionsControl.Form.Requery
+Forms!productlistmaster!NotesControl.Form.Requery
+'Exit Sub
+If ANewItem Then Exit Sub
+If NNEN(InProgress) <> "" Then
+      InProgress = ""
+      RecGotoPrev
+      Exit Sub
+End If
+Dim myset As DAO.Recordset
+Set myset = Form_ProductList.RecordsetClone
+If FIsLoaded("ProductListMaster") Then
+    If myset.RecordCount = 0 Then
+        'docmd.DoMenuItem 0, 1, 0
+        Exit Sub
+    End If
+    If NNEZ(Form_ProductList.Item) = 0 Then  'new record
+        'EchoOff
+        If NNEZ(Form_ProductList.Item) < 1 And DeleteinProgress <> "Yes" Then
+            If myset.RecordCount = 0 Then 'get highest item
+            Else
+                Dim TheItem As Single
+                myset.MoveFirst
+                ID = 0
+                TheItem = NNEZ(myset!Item)
+                TheReference1 = myset!Reference1
+                TheReference2 = myset!Reference2
+                TheSort1 = myset!Sort1
+                TheSort2 = myset!Sort2
+                TheSort3 = myset!Sort3
+                TheSort4 = myset!Sort4
+                TheAlternate = NNEN(myset!Alternate)
+                Do Until myset.EOF
+                    If NNEZ(myset!Item) > TheItem Then
+                        For i = 0 To myset.Fields.Count - 1
+                            If myset.Fields(i).Name = ">Product List.Key" Then PreviousKey = myset.Fields(i).Value: Exit For
+                        Next i
+                        TheItem = myset!Item
+                        TheReference1 = myset!Reference1
+                        TheReference2 = myset!Reference2
+                        TheSort1 = myset!Sort1
+                        TheSort2 = myset!Sort2
+                        TheSort3 = myset!Sort3
+                        TheSort4 = myset!Sort4
+                        TheAlternate = NNEN(myset!Alternate)
+                    End If
+                    myset.MoveNext
+                Loop
+                SaveRecord
+                theKey = Forms!productlistmaster!ProductListControl!Key
+                'Set myset = Forms!productlistmaster!ProductListControl.Form.RecordsetClone
+                myset.MoveLast
+                myset.Edit
+                myset!Item = TheItem + 1
+                myset!Reference1 = TheReference1
+                myset!Reference2 = TheReference2
+                myset!Alternate = TheAlternate
+                myset!Sort1 = TheSort1
+                myset!Sort2 = TheSort2
+                myset!Sort3 = TheSort3
+                myset!Sort4 = TheSort4
+                For i = 0 To myset.Fields.Count - 1
+                    If myset.Fields(i).Name = "ProductListKey" Then
+                        myset.Fields(i).Value = Form_ProductList.ProductListName
+                        Exit For
+                    End If
+                Next i
+                myset.Update
+                DoCmd.GoToControl "Product"
+                Set myset = Forms!productlistmaster!ProductListControl.Form.RecordsetClone
+                ANewItem = True
+                myset.MoveLast
+                '''Forms!ProductListMaster!ProductListControl!RecordsLabel.Caption = "of " & MySet.RecordCount
+                '''Forms!ProductListMaster!ScrollBar.Max = MySet.RecordCount
+                TheCount = 8
+            End If
+        End If
+    End If
+End If
+If FIsLoaded("Materials") Then
+    DoCmd.SelectObject A_FORM, "Materials"
+    DoCmd.Requery
+End If
+If FIsLoaded("Designs") Then
+    DoCmd.SelectObject A_FORM, "Designs"
+    DoCmd.Requery
+End If
+DoCmd.SelectObject acForm, "ProductListMaster"
+If ANewItem Then
+    If NNEZ(LocalVariable("Form_DrawingSetup_ProductListBox")) Then
+        'EchoOff
+        'SendKeys "{Enter}"
+        'MsgBox ""
+        Forms!productlistmaster!ProductListControl!Product.Dropdown
+    End If
+    'EchoOn
+    ANewItem = False
+Else
+End If
+Exit Sub
+
+RequeryPopupsError:
+'MsgBox Err.Description
+Resume ResumeRequeryPopups
+ResumeRequeryPopups:
+
+End Sub
+
+Public Function Renumber()
+
+Form_ProductList.RenumberItems
+
+End Function
+
+Public Function CheckGanttCharts()
+
+If Not ServerConnected Then
+    'MsgBox "Connection to " & ServerPath & " could not be established"
+    Exit Function
+End If
+Dim myset As DAO.Recordset
+ErrorLogClear
+ErrorLogEntry "Unsaved Schedules"
+SetMyDB
+Set myset = mydb.OpenRecordset("Select * from [ProjectSchedule]")
+If myset.RecordCount = 0 Then
+    ErrorLogEntry "No entries in database"
+    Exit Function
+End If
+myfile = Dir(ServerPath & "\Access\Gantt Schedules\*.vsd")
+Do While myfile <> ""
+    StatusBarMessage "Checking " & ServerPath & "\Access\Gantt Schedules\" & myfile
+    ThisDrawing = False
+    myset.MoveFirst
+    Do Until myset.EOF
+        If myfile = myset!Drawing Then
+            ThisDrawing = True
+            Exit Do
+        End If
+        myset.MoveNext
+    Loop
+    If Not ThisDrawing Then
+        ErrorLogEntry myfile & " not in database"
+    End If
+    myfile = Dir
+Loop
+
+End Function

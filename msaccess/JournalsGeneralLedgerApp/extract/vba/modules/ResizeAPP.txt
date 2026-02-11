@@ -1,0 +1,101 @@
+'====================================
+' Global Declarations
+'====================================
+Option Compare Database
+
+Option Explicit
+
+Declare PtrSafe Function GetDC Lib "user32" (ByVal hwnd As Long) As Long
+Declare PtrSafe Function ReleaseDC Lib "user32" (ByVal hwnd As Long, _
+  ByVal hdc As Long) As Long
+Declare PtrSafe Function GetDeviceCaps Lib "gdi32" (ByVal hdc As Long, _
+  ByVal nIndex As Long) As Long
+
+Const HWND_DESKTOP As Long = 0
+Const LOGPIXELSX As Long = 88
+Const LOGPIXELSY As Long = 90
+
+
+'NOTE: The following "declare ptrsafe" statement is case sensitive.
+
+Declare PtrSafe Sub SetWindowPos Lib "user32" (ByVal hwnd&, _
+                           ByVal hWndInsertAfter&, _
+                           ByVal X&, ByVal Y&, ByVal cX&, _
+                           ByVal cY&, ByVal wFlags&)
+
+'Moves MS Access window to top of Z-order.
+Global Const HWND_TOP = 0
+
+'Values for wFlags.
+Global Const SWP_NOZORDER = &H4      'Ignores the hWndInsertAfter.
+
+Public Sub SizeAccess(cX As Long, cY As Long, _
+  cHeight As Long, cWidth As Long)
+  On Error Resume Next
+
+   Dim h As Long
+   'Get handle to Microsoft Access.
+   h = Application.hWndAccessApp
+   'Position Microsoft Access.
+   SetWindowPos h, HWND_TOP, cX, cY, cWidth, _
+   cHeight, SWP_NOZORDER
+
+End Sub
+
+Function TwipsPerPixelX() As Single
+'--------------------------------------------------
+'Returns the width of a pixel, in twips.
+'--------------------------------------------------
+  Dim lngDC As Long
+  lngDC = GetDC(HWND_DESKTOP)
+  TwipsPerPixelX = 1440& / GetDeviceCaps(lngDC, LOGPIXELSX)
+  ReleaseDC HWND_DESKTOP, lngDC
+End Function
+
+'--------------------------------------------------
+Function TwipsPerPixelY() As Single
+'--------------------------------------------------
+'Returns the height of a pixel, in twips.
+'--------------------------------------------------
+  Dim lngDC As Long
+  lngDC = GetDC(HWND_DESKTOP)
+  TwipsPerPixelY = 1440& / GetDeviceCaps(lngDC, LOGPIXELSY)
+  ReleaseDC HWND_DESKTOP, lngDC
+End Function
+
+Public Function SizetoForm()
+
+Dim appHeight As Long
+Dim appWidth As Long
+Dim appLeft As Long
+Dim appTop As Long
+appWidth = Screen.ActiveForm.WindowWidth / TwipsPerPixelX() + 0.25 * 1440 / TwipsPerPixelX()
+appHeight = Screen.ActiveForm.WindowHeight / TwipsPerPixelY() + 1.1 * 1440 / TwipsPerPixelY()
+If Not CurrentDb.Updatable Then Quit
+SizeAccess appLeft, appTop, appHeight, appWidth
+
+End Function
+
+Public Function SizeHeightbyHalf()
+
+Dim appHeight As Long
+Dim appWidth As Long
+Dim appLeft As Long
+Dim appTop As Long
+WindowSize appWidth, appHeight, appLeft, appTop
+appHeight = (Screen.ActiveForm.WindowHeight / TwipsPerPixelY() + 90) / 2
+SizeAccess appLeft, appTop, appHeight, appWidth
+
+End Function
+
+Public Function SizeWidthbyHalf()
+
+Dim appHeight As Long
+Dim appWidth As Long
+Dim appLeft As Long
+Dim appTop As Long
+WindowSize appWidth, appHeight, appLeft, appTop
+appWidth = (Screen.ActiveForm.WindowWidth / TwipsPerPixelX() + 20) / 2
+SizeAccess appLeft, appTop, appHeight, appWidth
+
+End Function

@@ -1,0 +1,179 @@
+{
+  "tables": [
+    {
+      "name": "BillableDesign",
+      "columns": [
+        {
+          "name": "Date",
+          "type": "DATETIME",
+          "size": 19
+        },
+        {
+          "name": "Hours",
+          "type": "REAL",
+          "size": 24
+        },
+        {
+          "name": "Job",
+          "type": "INTEGER",
+          "size": 10
+        },
+        {
+          "name": "Employee",
+          "type": "VARCHAR",
+          "size": 255
+        },
+        {
+          "name": "Weekof",
+          "type": "VARCHAR",
+          "size": 255
+        },
+        {
+          "name": "Void",
+          "type": "BIT",
+          "size": 1
+        }
+      ],
+      "primary_key": []
+    },
+    {
+      "name": "Charts",
+      "columns": [
+        {
+          "name": "Counter",
+          "type": "REAL",
+          "size": 24
+        },
+        {
+          "name": "Value1",
+          "type": "CURRENCY",
+          "size": 19
+        },
+        {
+          "name": "Value2",
+          "type": "CURRENCY",
+          "size": 19
+        },
+        {
+          "name": "Date1",
+          "type": "DATETIME",
+          "size": 19
+        },
+        {
+          "name": "Date2",
+          "type": "DATETIME",
+          "size": 19
+        },
+        {
+          "name": "Text1",
+          "type": "VARCHAR",
+          "size": 255
+        },
+        {
+          "name": "Text2",
+          "type": "VARCHAR",
+          "size": 255
+        }
+      ],
+      "primary_key": []
+    },
+    {
+      "name": "CopyRight",
+      "columns": [
+        {
+          "name": "ID",
+          "type": "COUNTER",
+          "size": 10
+        },
+        {
+          "name": "CopyRight",
+          "type": "DATETIME",
+          "size": 19
+        },
+        {
+          "name": "Message",
+          "type": "VARCHAR",
+          "size": 50
+        }
+      ],
+      "primary_key": []
+    },
+    {
+      "name": "EstimateTrend",
+      "columns": [
+        {
+          "name": "TrendDate",
+          "type": "DATETIME",
+          "size": 19
+        },
+        {
+          "name": "Trend1Amount",
+          "type": "CURRENCY",
+          "size": 19
+        },
+        {
+          "name": "Trend2Amount",
+          "type": "CURRENCY",
+          "size": 19
+        },
+        {
+          "name": "Trend3Amount",
+          "type": "CURRENCY",
+          "size": 19
+        },
+        {
+          "name": "Trend4Amount",
+          "type": "CURRENCY",
+          "size": 19
+        },
+        {
+          "name": "Trend1Job",
+          "type": "VARCHAR",
+          "size": 255
+        },
+        {
+          "name": "Trend2Job",
+          "type": "VARCHAR",
+          "size": 255
+        },
+        {
+          "name": "Trend3Job",
+          "type": "VARCHAR",
+          "size": 255
+        },
+        {
+          "name": "Trend4Job",
+          "type": "VARCHAR",
+          "size": 255
+        }
+      ],
+      "primary_key": []
+    },
+    {
+      "name": "VOJCGoal",
+      "columns": [
+        {
+          "name": "TheDay",
+          "type": "INTEGER",
+          "size": 10
+        },
+        {
+          "name": "VOJC",
+          "type": "INTEGER",
+          "size": 10
+        },
+        {
+          "name": "VOJCGoal",
+          "type": "INTEGER",
+          "size": 10
+        },
+        {
+          "name": "VOJCCurrent",
+          "type": "INTEGER",
+          "size": 10
+        }
+      ],
+      "primary_key": []
+    }
+  ]
+}

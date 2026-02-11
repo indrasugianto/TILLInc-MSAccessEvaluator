@@ -1,0 +1,4 @@
+SELECT DISTINCTROW [Purchase Journal].Due, [>Resources].ID, [Purchase Journal].InvoiceDate, [Purchase Journal].InvoiceNo, [Purchase Journal].Paid, [Purchase Journal].Pay, [Purchase Journal].PO, [Purchase Journal].AccountNo, [Purchase Journal].TotalAmount, [Purchase Journal].DebitAmount, [Purchase Journal].Terms, [Purchase Journal].OK
+FROM [Purchase Journal] LEFT JOIN [>Resources] ON [Purchase Journal].SupplierID=[>Resources].Key
+WHERE ((([Purchase Journal].Paid)=False))
+ORDER BY [Purchase Journal].Due, [>Resources].ID, [Purchase Journal].InvoiceDate, [Purchase Journal].InvoiceNo, [Purchase Journal].TotalAmount, [Purchase Journal].DebitAmount;

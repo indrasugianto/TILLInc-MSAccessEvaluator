@@ -1,0 +1,3 @@
+SELECT [>Jobs].ID, [>Jobs].Key, [>Jobs].Info4, [>Jobs].Spreadsheet, [>Jobs].DesignJob, [>Jobs].Family, [>Jobs].Parent, [>Jobs].Category, [>Jobs].Info3, [MIS Personnel].Employee, [MIS Personnel_1].Employee, [>Jobs].ManagedBy, [>Jobs].SpecifiedBy
+FROM ([>Jobs] LEFT JOIN [MIS Personnel] ON [>Jobs].ManagedBy=[MIS Personnel].Key) LEFT JOIN [MIS Personnel] AS [MIS Personnel_1] ON [>Jobs].SpecifiedBy=[MIS Personnel_1].Key
+WHERE ((([>Jobs].Key)=Forms!Sales!TheJobName));

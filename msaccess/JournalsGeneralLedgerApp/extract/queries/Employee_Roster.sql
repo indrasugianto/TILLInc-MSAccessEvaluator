@@ -1,0 +1,6 @@
+SELECT DISTINCTROW IIf([ADPNetAccount]>700,1,IIf([ADPNetaccount]>600,3,2)) AS Sort, [MIS Personnel].ADPName, [MIS Personnel].Text2 AS [Position], [MIS Personnel].Rate, [MIS Personnel].EmploymentDate, [Payroll Journal].PersonnelKey AS Expr1, [MIS Personnel].ADPFile, IIf([ADPNetAccount]>700,"Office",IIf([ADPNetaccount]>600,"Install","Shop")) AS Department, 1 AS [Count]
+FROM [MIS Personnel], [Payroll Journal]
+WHERE ((([MIS Personnel].EmploymentDate)<=forms!Payroll!Todate) And ((IIf([TerminationDate] Is Null,True,IIf([TerminationDate]>=forms!Payroll!ToDate,True,False)))=True))
+GROUP BY IIf([ADPNetAccount]>700,1,IIf([ADPNetaccount]>600,3,2)), [MIS Personnel].ADPName, [MIS Personnel].Text2, [MIS Personnel].Rate, [MIS Personnel].EmploymentDate, [Payroll Journal].PersonnelKey, [MIS Personnel].ADPFile, IIf([ADPNetAccount]>700,"Office",IIf([ADPNetaccount]>600,"Install","Shop"))
+HAVING ((([MIS Personnel].ADPFile)>999))
+ORDER BY IIf([ADPNetAccount]>700,1,IIf([ADPNetaccount]>600,3,2)), [MIS Personnel].ADPName;

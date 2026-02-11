@@ -1,0 +1,5 @@
+SELECT DISTINCTROW [>Part List].SubAssembly, [>Part List].DefaultMaterial, [>Part List].Z, [>Part List].Y, [>Part List].X, [>Part List].PartProcessAlternate, [>Part List].Processes, [>Part List].PartName, Sum([>Part List].Pieces) AS SumOfPieces, [>Part List].ItemNumber, [>Part List].MaterialCategory, [>Part List].Item, [>Part List].ShowPart, [>Part List].PartPositionName, [>Part List].ProcessList
+FROM [>Part List]
+GROUP BY [>Part List].SubAssembly, [>Part List].DefaultMaterial, [>Part List].Z, [>Part List].Y, [>Part List].X, [>Part List].PartProcessAlternate, [>Part List].Processes, [>Part List].PartName, [>Part List].ItemNumber, [>Part List].MaterialCategory, [>Part List].Item, [>Part List].ShowPart, [>Part List].PartPositionName, [>Part List].ProcessList, [>Part List].ProductList, [>Part List].DisplayPart
+HAVING ((([>Part List].ProcessList)=False) And (([>Part List].ProductList)=Forms!ProductListMaster!ProductListControl!ProductListName) And (([>Part List].DisplayPart)=True))
+WITH OWNERACCESS OPTION;

@@ -1,0 +1,3 @@
+SELECT Estimates.[50], Estimates.[50Cost], Estimates.Import50, Estimates.[51], Estimates.[51Cost], Estimates.Import51, Estimates.[52], Estimates.[52Cost], Estimates.Import52, Estimates.[53], Estimates.[53Cost], Estimates.Import53, IIf(nnez(Estimates.[50])<>0 Or nnez(Estimates.[51])<>0,True,False) AS Expr1
+FROM Estimates
+WHERE (((IIf(nnez(Estimates.[50])<>0 Or nnez(Estimates.[51])<>0,True,False))=True));

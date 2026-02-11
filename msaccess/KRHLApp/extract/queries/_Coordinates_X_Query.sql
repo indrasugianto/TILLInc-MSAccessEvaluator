@@ -1,0 +1,5 @@
+SELECT DISTINCTROW [>Settings].XCoordinateDimensionCode AS Expr1, [>Settings].XCoordinateDimension AS Expr2
+FROM [>Settings]
+WHERE ((([>Settings].XCoordinateDimensionCode)=4 Or ([>Settings].XCoordinateDimensionCode)=5 Or ([>Settings].XCoordinateDimensionCode)=3 Or ([>Settings].XCoordinateDimensionCode)=2 Or ([>Settings].XCoordinateDimensionCode)=1 Or ([>Settings].XCoordinateDimensionCode)=100 Or ([>Settings].XCoordinateDimensionCode)=0 Or ([>Settings].XCoordinateDimensionCode)=101 Or ([>Settings].XCoordinateDimensionCode)=102 Or ([>Settings].XCoordinateDimensionCode)=103 Or ([>Settings].XCoordinateDimensionCode)=93 Or ([>Settings].XCoordinateDimensionCode)=91 Or ([>Settings].XCoordinateDimensionCode)=92 Or ([>Settings].XCoordinateDimensionCode)=300))
+ORDER BY [>Settings].XCoordinateDimensionCode
+WITH OWNERACCESS OPTION;

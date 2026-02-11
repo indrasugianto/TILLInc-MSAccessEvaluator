@@ -1,0 +1,4 @@
+SELECT DISTINCTROW [MIS Personnel].ADPName, [MIS Personnel].Employee, [Payroll Journal].CheckDate, [Payroll Journal].Field3, [Payroll Journal].Commission, [Field3]+[commission] AS Expr1
+FROM ([Payroll Journal] LEFT JOIN MISHoursADPFileEmployee ON [Payroll Journal].ADPFile=MISHoursADPFileEmployee.ADPFile) LEFT JOIN [MIS Personnel] ON MISHoursADPFileEmployee.Employee=[MIS Personnel].Employee
+WHERE ((([Field3]+[commission])<>0) And ((IIf([CheckDate]>=Forms!Payroll.FromDate And [CheckDate]<=Forms!Payroll.ToDate,True,False))=True))
+ORDER BY [MIS Personnel].ADPName, [Payroll Journal].CheckDate;

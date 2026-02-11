@@ -1,0 +1,4 @@
+SELECT DISTINCTROW [>Jobs].ID, [Job Agreement Sales NIC Stone].SumOfSaleAmount, [MIS Personnel].Employee AS Partner, [Job Agreement Sales NIC Stone].LastOfTheDate, [>Jobs].ProductionPhase, [>Jobs].SpecifiedBy, [>Jobs].Completed, [>Jobs].ManagedBy, [>Jobs].Audit
+FROM ([>Jobs] LEFT JOIN [MIS Personnel] ON [>Jobs].ManagedBy=[MIS Personnel].Key) INNER JOIN [Job Agreement Sales NIC Stone] ON [>Jobs].Key=[Job Agreement Sales NIC Stone].Key
+WHERE ((([Job Agreement Sales NIC Stone].SumOfSaleAmount)<>0) AND (([>Jobs].ProductionPhase)="Completed") AND (([>Jobs].Completed)>#1/1/2003#) AND (([>Jobs].Audit)=False))
+ORDER BY [>Jobs].ID;

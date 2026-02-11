@@ -1,0 +1,893 @@
+Option Compare Database
+
+Global g_Settings, g_ServerConnection As Single, g_RemoteConnection As Boolean, g_databaseChoice As String
+Global mydb  As Database
+Global Settings As DAO.Recordset
+Global LocalSettings As DAO.Recordset
+Global WorkingDirectory As String, ServerPath As String
+Global g_TheUserName
+
+Private Sub Test()
+
+'If InStr(LocalVariable("Form_MainMenu_StartUpForm"), "Time") <> 0 Then
+    DoCmd.RunCommand acCmdAppRestore
+    'docmd.RunCommand  acCmdAppSize 120,120
+    'docmd.MoveSize 0, 0, 1120, 1120
+'End If
+
+End Sub
+
+Public Sub AttachDatabase()
+
+On Error GoTo DatabasePathNotFound
+GetSettings
+
+SetLocalVariable "Revit_Restart", "No"
+SetLocalVariable "Revit_List", ""
+SetLocalVariable "NoListChoice", 0
+g_databaseChoice = ""
+If InStr(Application.CurrentProject.Path, "KRH") <> 0 Then
+    g_databaseChoice = "KRH"
+    SetLocalVariable "NoListChoice", 1
+    MsgBox Application.CurrentProject.Path
+ElseIf InStr(Application.CurrentProject.Path, "Revit") <> 0 Then
+    g_databaseChoice = "Revit"
+    SetLocalVariable "Revit_List", "Revit"
+    SetLocalVariable "NoListChoice", 1
+End If
+'DoCmd.RunCommand acCmdAppMaximize
+If Val(LocalVariable("FormMainMenu_ScreenSize")) = 1 Then DoCmd.RunCommand acCmdAppRestore
+Dim mydb As Database, KRHDB As Database, mytable As DAO.Recordset, myset As DAO.Recordset
+Dim dbs As Database, tdfs As TableDefs
+Dim fs, F
+Dim LocalApp, ServerApp
+Dim LocalAppPath, ServerAppPath
+Dim s
+ReAttach:
+TableName = "database"
+GetPathToDatabase
+Set dbs = CurrentDb
+Set tdfs = dbs.TableDefs
+EchoOn
+'g_Autosynchronize = False
+ErrorLogClear
+g_ServerConnection = ConnectedToServer
+
+If InStr(dbs.Name, "KRHListsApp.mdb") <> 0 Then
+    If g_databaseChoice <> "" Then
+        ErrorLogEntry g_databaseChoice & " lists for " & dbs.Name
+        If InStr(dbs.Name, "Copy") = 0 Then
+            On Error GoTo choiceerror
+            Dim LocalFile, ServerFile
+            Set fs = CreateObject("Scripting.FileSystemObject")
+            CopyPath = Application.CurrentProject.Path & "\Copy\"
+            OriginalPath = Application.CurrentProject.Path & "\Original\"
+            Forms!Startup.Label.Caption = "Copying " & OriginalPath & "krh.mdb" & " to " & CopyPath & "krh.mdb"
+            Forms!Startup.Repaint
+            fs.copyfile OriginalPath & "krh.mdb", CopyPath & "krh.mdb"
+            Pause 30 'MsgBox "Copied " & ServerPath & "krh.mdb" & " to " & LocalPath & "krh.mdb"
+            ' Create new instance of Microsoft Access.
+            MsgBox "KRH.mdb copied successfully."
+            SetLocalVariable "Start_" & g_databaseChoice, "True"
+
+            strDB = CopyPath & "krh.mdb"
+            Set appAccess = CreateObject("Access.Application")
+             ' Open database in Microsoft Access window.
+            'appAccess.OpenCurrentDatabase strDB
+            DoCmd.Quit
+choiceerror:
+            MsgBox Err.Description
+            DoCmd.Quit
+        End If
+        If NNEN(LocalVariable("Start_" & g_databaseChoice)) = "" Then
+            MsgBox "Replace " & Application.CurrentProject.Path
+            Quit
+        End If
+        SetLocalVariable "Start_" & g_databaseChoice, ""
+        If InStr(TheUsername, "Weeke") = 0 Then
+            GoTo ExitStartup
+        Else
+            g_databaseChoice = ""
+        End If
+    Else
+        ErrorLogEntry g_databaseChoice & "KRH and Revit lists"
+    End If
+    Set dbs = CurrentDb
+    Set tdfs = dbs.TableDefs
+        ErrorLogEntry "Checking Revit tables"
+    'check for revit tables and rename to original
+    Set tdfs = dbs.TableDefs
+    foundRevit = False
+    For i = 0 To tdfs.Count - 1
+        If tdfs(i).Name = ">Revit Products" Then
+            foundRevit = True
+            ErrorLogEntry "Renamed Revit tables"
+            If g_databaseChoice = "" Then
+                Set mytable = dbs.OpenRecordset("Select * from [>AttachRevitLists] Order by [TableName]")
+                mytable.MoveFirst
+                Do Until mytable.EOF
+                    DatabaseName = mytable!Path
+                    TableName = mytable!TableName
+                    Set tdfs = dbs.TableDefs
+                    For ii = 0 To tdfs.Count - 1
+                        If tdfs(ii).Name = DatabaseName Then
+                            tdfs(ii).Name = TableName
+                            Exit For
+                        End If
+                    Next ii
+                    mytable.MoveNext
+                Loop
+            End If
+            Exit For
+        End If
+    Next i
+        foundcorrespondence = False
+        For i = 0 To tdfs.Count - 1
+            If InStr(tdfs(i).Name, "Correspondence") <> 0 Then
+                If tdfs(i).Fields.Count <> 0 Then foundcorrespondence = True
+            End If
+        Next i
+
+    If g_RemoteConnection Then
+    ElseIf Year(Date) > 2007 Then
+    ElseIf Month(Date) > 8 Then
+    ElseIf Day(Date) > 8 Then
+    ElseIf InStr(TheUsername, "Time") <> 0 And InStr(TheUsername, "Card") <> 0 Then
+    Else
+        If Not foundcorrespondence Then
+            Set fs = CreateObject("Scripting.FileSystemObject")
+            Set F = fs.GetFile("C:\Database\Document.mdb")
+            s = F.Size
+            'If S > 1100000000 Then
+            If Not MessageOKCancel("Documents needs to be updated. Continue?") Then
+                Transferingapps = True
+                foundcorrespondence = False
+                Set dbs = DBEngine(0).OpenDatabase(ServerPath & "\Access\Database 2000\Document.mdb")
+                Set tdfs = dbs.TableDefs
+                For i = 0 To tdfs.Count - 1
+                    If InStr(tdfs(i).Name, "Correspondence") <> 0 Then
+                        If tdfs(i).Fields.Count <> 0 Then foundcorrespondence = True
+                    End If
+                Next i
+                If Not foundcorrespondence Then
+                    MsgBox "Server documents needs to be repaired. This could take a few minutes."
+                    Forms!Startup.Label.Caption = "Repairing server document.mdb...Please wait"
+                    Forms!Startup.Repaint
+                    fs.copyfile ServerPath & "\Access\Database 2000\Archive\Document.mdb", ServerPath & "\Access\Database 2000\Document.mdb"
+                    SetVariable "User " & TheUsername & "_Synchronized_" & "ServerDocument.mdb", Str(Date)
+                End If
+                Set dbs = CurrentDb
+                Forms!Startup.Label.Caption = "updating document.mdb...Please wait"
+                Forms!Startup.Repaint
+                fs.copyfile ServerPath & "\Access\Database 2000\Document.mdb", "C:\Database\Document.mdb"
+                Set tdfs = dbs.TableDefs
+                For i = 0 To tdfs.Count - 1
+                    If InStr(tdfs(i).Name, "Correspondence") <> 0 Then
+                        If tdfs(i).Fields.Count <> 0 Then foundcorrespondence = True
+                    End If
+                Next i
+                If Not foundcorrespondence Then
+                    MsgBox "Update was unsuccessful."
+                Else
+                    SetVariable "User " & TheUsername & "_Synchronized_" & "Document.mdb", Str(Date)
+                End If
+            End If
+        End If
+    End If
+    'If InStr(1, TheUsername, "Time") <> 0 And InStr(1, TheUsername, "Card") <> 0 Then
+    'ElseIf g_ServerConnection > NNEZ(Variable("SlowConnection")) Then
+        'If MessageOKCancel("You are connected to " & ServerPath & " with a slow connection." & vbCrLf & "Would you like to enable auto-synchronization for this session?") Then
+            'g_ServerConnection = 0
+        'End If
+    'End If
+    If Format(LocalVariable("Synchronization_Received"), "mm/dd/yy") = Format(Date, "mm/dd/yy") Then
+        If NNEZ(LocalVariable("KRH_UpdatedApps")) <> 0 Then
+        ErrorLogEntry "Updated apps"
+            If InStr(TheUsername, "Weeke") <> 0 Then GoTo ExitStartup
+        End If
+    End If
+End If
+If NNEZ(LocalVariable("KRH_Restarting")) <> 0 Then
+    SetLocalVariable "KRH_Restarting", False
+    If NNEZ(LocalVariable("KRH_UpdatedApps")) <> 0 Then GoTo ExitStartup
+End If
+If FIsLoaded("StartUp") Then
+    If NNEZ(LocalVariable("KRH_UpdatedApps")) <> 0 Then
+    ElseIf InStr(dbs.Name, "krh.mdb") = 0 Then
+    ElseIf Not g_RemoteConnection Or TheUsername = "Bill" Then
+        Transferingapps = True
+        LocalAppPath = "C:\Access\"
+        NetworkAppPath = ServerPath & "\Access\Access 2000\"
+        Set fs = CreateObject("Scripting.FileSystemObject")
+        For i = 1 To 9
+        'check applications to fix auto sync application
+            GetSettings
+            For ii = 1 To i
+                Settings.MoveNext
+            Next ii
+            'check if app installed
+            'update app
+            ThisApp = ""
+            If i = 7 Then
+                ThisApp = "ProjectManagerReports"
+            ElseIf i = 6 Then
+                ThisApp = "AccountingReports"
+            ElseIf i = 2 Then
+                ThisApp = "Journals"
+            ElseIf i = 1 Then
+                ThisApp = "KRHEdit"
+            End If
+            If ThisApp <> "" Then
+                LocalApp = Dir(LocalAppPath & ThisApp & ".mdb")
+                ServerApp = Dir(NetworkAppPath & ThisApp & ".mdb")
+                If LocalApp <> "" Then 'local file exists
+                    If ServerApp = LocalApp Then 'server file exists
+                        Set LocalApp = fs.GetFile(LocalAppPath & LocalApp)
+                        Set ServerApp = fs.GetFile(NetworkAppPath & ServerApp)
+                        Forms!Startup.Label.Caption = "Updating " & ThisApp & " revision " & Settings!CopyRight
+                        Forms!Startup.Repaint
+                        ErrorLogEntry "Updated " & LocalApp & " revision " & Settings!CopyRight
+                        If TheUsername <> "Bill" Then
+                            fs.copyfile ServerApp, LocalApp
+                            SetVariable "User " & TheUsername & "_Synchronized_" & ThisApp, Str(Date)
+                        End If
+                    End If
+                End If
+            End If
+            Settings.MoveNext
+        Next i
+        SetLocalVariable "KRH_UpdatedApps", True
+        Transferingapps = False
+    End If
+ResumeTransferingapps:
+    Forms!Startup.Label.Caption = "Checking Attachments"
+    Forms!Startup.Repaint
+Else
+    StatusBarMessage "Checking Attachments"
+End If
+'Set KRHDB = OpenDatabase(dbs.Name)
+        ErrorLogEntry "Checking Attachments"
+
+
+Set mytable = dbs.OpenRecordset("Select * from [>Attachments] Order by [TableName]")
+If InStr(dbs.Name, "krh.mdb") = 0 Then
+ElseIf g_databaseChoice <> "" Then
+    'GoTo FinishStartup
+ElseIf g_ServerConnection Then
+    mytable.MoveFirst
+    Do Until mytable.EOF
+        If Not IsNull(mytable!Revision) Then
+            Set mydb = OpenDatabase(WorkingDirectory & mytable!Path, False)
+            mytablepath = mytable!Path
+            For ii = 0 To mydb.TableDefs.Count - 1
+                If mydb.TableDefs(ii).Name = mytable!TableName Then
+                    If NNEN(LocalVariable("Update_APC")) = "True" And mytable!Path = "APC.mdb" Or Format(mytable!Revision, "mmddyy") <> Format(mydb.TableDefs(ii).LastUpdated, "mmddyy") Then
+                        SetLocalVariable "Update_APC", "False"
+                        MsgBox "Updating " & Format(mytable!Revision, "mm/dd/yy") & " " & mytable!TableName & " table in " & mytable!Path & " with " & Format(mydb.TableDefs(ii).LastUpdated, "mm/dd/yy") & " version on " & ServerPath
+                        On Error Resume Next
+                        mytable.MoveFirst 'unattach all tables
+                        Do Until mytable.EOF
+                            If mytable!Path = "APC.mdb" Then
+                                DoCmd.DeleteObject acTable, mytable!TableName
+                            End If
+                            mytable.MoveNext
+                        Loop
+                        Pause 0.1
+                        Set fs = CreateObject("Scripting.FileSystemObject")
+                        LocalPath = "C:\Database\"
+                        ServerPath = ServerPath & "\Access\Database 2000\"
+                        TheFile = mytablepath
+                        Forms!Startup.Label.Caption = "Updating " & LocalPath & TheFile
+                        Forms!Startup.Repaint
+                        mydb.Close
+                        fs.copyfile ServerPath & TheFile, LocalPath & TheFile
+                        MsgBox "Update was successful. KRH will be restarted"
+                        g_ThisForm = "KRH"
+                        RestartApp
+                        Exit For
+                    End If
+                End If
+            Next ii
+    End If
+    mytable.MoveNext
+    Loop
+End If
+On Error GoTo DatabasePathNotFound
+        ErrorLogEntry "Checking for valid tables"
+mytable.MoveFirst
+Set mydb = OpenDatabase(WorkingDirectory & mytable!Path, False)
+Set tdfs = dbs.TableDefs
+For i = 0 To tdfs.Count - 1
+    TableOK = True
+    For ii = 0 To tdfs(i).Properties.Count - 1
+        If InStr(tdfs(i).Properties(ii).Name, "Connect") <> 0 Then
+            If InStr(tdfs(i).Properties(ii).Value, "ODBC") <> 0 Then 'ODBC OK
+                TableOK = True
+                Exit For
+            End If
+            If InStr(tdfs(i).Properties(ii).Value, "Excel") <> 0 Then 'excel OK
+                TableOK = True
+                Exit For
+            End If
+            If InStr(tdfs(i).Properties(ii).Value, "Text") <> 0 Then 'text OK
+                TableOK = True
+                Exit For
+            End If
+            If NNEN(tdfs(i).Properties(ii).Value) <> "" Then 'linked not OK
+                TableOK = False
+                Exit For
+            End If
+        End If
+        If InStr(tdfs(i).Name, "MSys") <> 0 Then 'system OK
+            TableOK = True
+            Exit For
+        End If
+        'MsgBox tdfs(i).Name & " " & tdfs(i).Properties(ii).Value
+        If InStr(tdfs(i).Properties(ii).Name, "Replicable") <> 0 Then 'replicable OK
+            If tdfs(i).Properties(ii).Value = True Then
+                TableOK = True
+                Exit For
+            End If
+        End If
+        If InStr(tdfs(i).Properties(ii).Name, "GUID") <> 0 Then 'not linked
+            If InStr(tdfs(i).Properties(ii).Value, "GUID") <> 0 Then
+                TableOK = True
+                Exit For
+            End If
+        End If
+Nextii:
+        Next ii
+    mytable.MoveFirst
+    Do Until mytable.EOF 'check for unnecessary tables
+        'MsgBox mytable!TableName & " " & NNEN(mytable!Path)
+        If tdfs(i).Name = mytable!TableName And NNEN(mytable!Path) <> "" Then
+            TableOK = True
+            Exit Do
+        End If
+        mytable.MoveNext
+    Loop
+    If Not TableOK Then
+        If Not MessageOKCancel("Delete table " & tdfs(i).Name) Then
+            DoCmd.DeleteObject acTable, tdfs(i).Name
+        End If
+    End If
+NextI:
+Next i
+        ErrorLogEntry "Attaching necessary tables"
+mytable.MoveFirst
+On Error GoTo OtherTablesNotFound
+Do Until mytable.EOF
+    Pause 0.1
+    TheOperation = "Attaching " & mytable!Path & " " & mytable!TableName
+    If FIsLoaded("StartUp") Then
+        Forms!Startup.Label.Caption = "Attaching " & mytable!Path & " " & mytable!TableName
+        Forms!Startup.Repaint
+    Else
+        StatusBarMessage "Attaching " & mytable!Path & " " & mytable!TableName
+    End If
+    If NNEN(mytable!Path) = "" Then GoTo SkipTable
+    Set mydb = OpenDatabase(WorkingDirectory & mytable!Path, False)
+AttachTable:
+    Set myset = mydb.OpenRecordset("Select * from [" & mytable!TableName & "]")
+    FoundLinkedTable = False
+    FoundPath = False
+    DatabaseName = WorkingDirectory & mytable!Path
+    TableName = mytable!TableName
+UpDateField:
+    For i = 0 To tdfs.Count - 1
+        If tdfs(i).Name = TableName Then
+            FoundLinkedTable = True
+            If InStr(tdfs(i).Connect, "Database=") <> 0 Then
+                If InStr(tdfs(i).Connect, DatabaseName) = 0 Then
+                    FoundLinkedTable = False
+                    DoCmd.DeleteObject acTable, TableName
+                Else
+                    FoundFirstTable = True
+                End If
+            End If
+            Exit For
+        End If
+    Next i
+    If Not FoundLinkedTable Then
+        DoCmd.TransferDatabase acLink, "Microsoft Access", DatabaseName, acTable, TableName, TableName, False
+        FoundFirstTable = True
+    End If
+SkipTable:
+    mytable.MoveNext
+Loop
+
+FinishStartup:
+On Error GoTo Error
+If InStr(dbs.Name, "krh.mdb") = 0 Then
+ElseIf Format(LocalVariable("Synchronization_Received"), "mm/dd/yy") = Format(Date, "mm/dd/yy") Then
+ElseIf Not g_RemoteConnection And g_ServerConnection <> 0 Then
+    ErrorLogEntry "Checking for database synchronization"
+    NetworkPath = LocalVariable("Form_Synchronization_NetworkPath")
+    LocalDatabase = WorkingDirectory
+    If NNEN(NetworkPath) = "" Or LocalDatabase = "" Then
+    Else
+        TheDatabase = "Document"
+        If InStr(TheUsername, "Time") <> 0 And InStr(TheUsername, "Card") <> 0 Then
+        Else
+            Set fs = CreateObject("Scripting.FileSystemObject")
+            Set F = fs.GetFile("C:\Database\Document.mdb")
+            s = F.Size
+            Again = ""
+            If s > 2000000000 Then
+                If Not MessageOKCancel("Do you get the message Invalid Argument when opening this application?") Then
+                    If Not MessageOKCancel("Documents.mdb should be compacted.  This may take at least 10 minutes. Do you want to proceed?") Then
+                        Forms!Startup.Label.Caption = "Compacting document.mdb...Please wait"
+                        Forms!Startup.Repaint
+                        DBEngine.CompactDatabase "C:\Database\Document.mdb", "C:\Database\Scratch.mdb"
+                        Kill "C:\Database\Document.mdb"
+                        Name "C:\Database\Scratch.mdb" As "C:\Database\Document.mdb"
+                        Again = " again"
+                    End If
+                End If
+            End If
+            Forms!Startup.Label.Caption = "Synchronizing with " & NetworkPath & TheDatabase & ".mdb into " & LocalDatabase & TheDatabase & ".mdb"
+            Forms!Startup.Repaint
+            Set dbs = DBEngine(0).OpenDatabase(LocalDatabase & TheDatabase)
+            dbs.Synchronize NetworkPath & TheDatabase, dbRepImportChanges
+            dbs.Synchronize NetworkPath & TheDatabase, dbRepExportChanges
+            Set F = fs.GetFile("C:\Database\Document.mdb")
+            s = F.Size
+            If s > 1950000000 Then
+                dbs.Close
+                If Not MessageOKCancel("Documents.mdb needs to be compacted." & Again & " This may take at least 10 minutes. Proceed?") Then
+                    Forms!Startup.Label.Caption = "Compacting document.mdb...Please wait"
+                    Forms!Startup.Repaint
+                    DBEngine.CompactDatabase "C:\Database\Document.mdb", "C:\Database\Scratch.mdb"
+                    Kill "C:\Database\Document.mdb"
+                    Name "C:\Database\Scratch.mdb" As "C:\Database\Document.mdb"
+                End If
+            End If
+        End If
+        If InStr(TheUsername, "Time") <> 0 And InStr(TheUsername, "Card") <> 0 Then
+        Else
+            TheDatabase = "Lists"
+            Forms!Startup.Label.Caption = "Synchronizing with " & NetworkPath & TheDatabase & ".mdb into " & LocalDatabase & TheDatabase & ".mdb"
+            Forms!Startup.Repaint
+            Set dbs = DBEngine(0).OpenDatabase(LocalDatabase & TheDatabase)
+            dbs.Synchronize NetworkPath & TheDatabase, dbRepImportChanges
+        End If
+        'If InStr(TheUsername, "Jim") <> 0 Then
+        'Else
+            TheDatabase = "Products"
+            Forms!Startup.Label.Caption = "Synchronizing with " & NetworkPath & TheDatabase & ".mdb into " & LocalDatabase & TheDatabase & ".mdb"
+            Forms!Startup.Repaint
+            Set dbs = DBEngine(0).OpenDatabase(LocalDatabase & TheDatabase)
+            dbs.Synchronize NetworkPath & TheDatabase, dbRepImportChanges
+            dbs.Synchronize NetworkPath & TheDatabase, dbRepExportChanges
+        'End If
+        TheDatabase = "MIS"
+        Set dbs = DBEngine(0).OpenDatabase(LocalDatabase & TheDatabase)
+        Forms!Startup.Label.Caption = "Synchronizing with " & NetworkPath & TheDatabase & ".mdb into " & LocalDatabase & TheDatabase & ".mdb"
+        Forms!Startup.Repaint
+        dbs.Synchronize NetworkPath & TheDatabase, dbRepImportChanges
+        dbs.Synchronize NetworkPath & TheDatabase, dbRepExportChanges
+        TheDatabase = "Resource"
+        Forms!Startup.Label.Caption = "Synchronizing with " & NetworkPath & TheDatabase & ".mdb into " & LocalDatabase & TheDatabase & ".mdb"
+        Forms!Startup.Repaint
+        Set dbs = DBEngine(0).OpenDatabase(LocalDatabase & TheDatabase)
+        dbs.Synchronize NetworkPath & TheDatabase, dbRepImportChanges
+        dbs.Synchronize NetworkPath & TheDatabase, dbRepExportChanges
+        TheDatabase = "Settings"
+        Forms!Startup.Label.Caption = "Synchronizing with " & NetworkPath & TheDatabase & ".mdb into " & LocalDatabase & TheDatabase & ".mdb"
+        Forms!Startup.Repaint
+        Set dbs = DBEngine(0).OpenDatabase(LocalDatabase & TheDatabase)
+        dbs.Synchronize NetworkPath & TheDatabase, dbRepImportChanges
+        dbs.Synchronize NetworkPath & TheDatabase, dbRepExportChanges
+        Forms!Startup.Label.Caption = "Updating Calendar"
+        Forms!Startup.Repaint
+        DetermineApplication
+        SetLocalVariable "Synchronization_Received", Date
+    End If
+End If
+GoTo ExitStartup
+Error:
+    MsgBox Err.Description
+Resume resumeerror
+resumeerror:
+
+ExitStartup:
+On Error Resume Next
+g_Settings = False
+If FIsLoaded("StartUp") Then DoCmd.Close acForm, "Startup"
+If FIsLoaded("SelectDatabase") Then DoCmd.Close acForm, "SelectDatabase"
+If FIsLoaded("MainMenu") Then
+    LocalSettingsLastPath WorkingDirectory
+Else
+    DoCmd.OpenForm "MainMenu"
+End If
+Exit Sub
+
+DatabasePathNotFound:
+    'If Not mytable!Optional Then MsgBox Err.Description
+If Transferingapps Then
+    Set dbs = CurrentDb
+    SetVariable "User " & TheUsername & "_Error_" & ThisApp, Str(Date)
+    Resume ResumeTransferingapps
+Else
+    Resume ResumeDatabasePathNotFound
+End If
+ResumeDatabasePathNotFound:
+If Not mytable!Optional Then
+    InputWorkingDirectory = InputBox$("Please enter the path to the folder that contains database files or Cancel to quit:", "Path to database", WorkingDirectory)
+    If InputWorkingDirectory = "" Then
+        DoCmd.Quit
+    End If
+    SetPathToDatabase InputWorkingDirectory
+    MsgBox "You need to synchronize " & mytable!Path & " database to attach the table " & mytable!TableName
+End If
+GoTo SkipTable 'ReAttach
+
+KRHNotFound:
+Resume ResumeKRHNotFound
+ResumeKRHNotFound:
+MsgBox dbs.Name & " not found."
+Exit Sub
+
+OtherTablesNotFound:
+Resume ResumeOtherTablesNotFound
+ResumeOtherTablesNotFound:
+'''If FIsLoaded("StartUp") Then Forms!Startup.Label.Caption = "Attaching " & MyTable!TableName
+'''If InStr(MyTable.Path, "APC") And Not TriedNetwork Then 'import from server
+    '''TriedNetwork = True
+    '''NetworkPath = LocalVariable("Form_Synchronization_NetworkPath")
+    '''If NNEN(NetworkPath) = "" Then
+        '''NetworkPath = "\\KRHServer\Access\Database\"
+    '''ElseIf NNEN(NetworkPath) = "\\KRHServer\Access\" Then
+        '''NetworkPath = "\\KRHServer\Access\Database\"
+    '''End If
+    '''docmd.TransferDatabase acImport, "Microsoft Access", NetworkPath & MyTable.Path, acTable, MyTable.TableName, MyTable.TableName
+    '''docmd.TransferDatabase acExport, "Microsoft Access", WorkingDirectory & MyTable.Path, acTable, MyTable.TableName, MyTable.TableName
+    '''docmd.DeleteObject acTable, MyTable.TableName
+    'docmd.TransferDatabase acLink, "Microsoft Access", WorkingDirectory & MyTable.Path, acTable, MyTable.TableName, MyTable.TableName
+'''End If
+
+
+'TheOperation = " containing the table " & mytable.Name
+GoSub TheMessage
+If Not LocatedDatabase And Not FoundFirstTable Then
+    InputWorkingDirectory = InputBox$("Please enter the path to the folder that contains database files:", "Path to database", WorkingDirectory)
+Else
+    InputWorkingDirectory = WorkingDirectory
+End If
+On Error GoTo OtherTablesNotFound
+If InputWorkingDirectory = "" Then
+Else
+    WorkingDirectory = InputWorkingDirectory
+    LastWorkingDirectory = InputWorkingDirectory
+    'MsgBox access.Application!References.
+    DoCmd.TransferDatabase acLink, "Microsoft Access", WorkingDirectory & mytable!Path, acTable, mytable!TableName, mytable!TableName, False
+    LocatedDatabase = True
+    ErrorCounter = 0
+End If
+Exit Sub
+
+TheMessage:
+ErrorCounter = ErrorCounter + 1
+If ErrorCounter > 1 Then
+    If MessageOKCancel(TheOperation & " was not found at " & WorkingDirectory & ". Continue?") Then
+        continue = False
+    Else
+        'If Not Continue Then MsgBox "It is recommended that you synchronize data to ensure all tables are attached. If you get this error after restarting this application then note the table name and report the error."
+        continue = True
+    End If
+    If FIsLoaded("SelectDatabase") Then
+        If Not continue Then
+            If WorkingDirectory <> LastWorkingDirectory Then
+                WorkingDirectory = LastWorkingDirectory
+                GoTo ReAttach
+            Else
+                Exit Sub
+            End If
+        Else
+        'Close #2
+        'Open "C:\ACCESS\DatabasePath.TXT" For Output As #2
+        'Print #2, LastWorkingDirectory
+        'Close #2
+            GoTo SkipTable
+        End If
+    Else
+        If Not continue Then
+            DoCmd.Quit
+        Else
+            GoTo SkipTable
+        End If
+    End If
+End If
+Return
+
+End Sub
+Public Sub LocalSettingsLastPath(GetOrSet)
+
+On Error GoTo LocalSettingsLastPathError
+GetPathToDatabase
+If FIsLoaded("MainMenu") Then Forms!Mainmenu.Path = WorkingDirectory
+Exit Sub
+
+DetermineApplication
+If Not g_Settings Then
+    Set mydb = CurrentDb()
+    Set LocalSettings = mydb.OpenRecordset("Select * from [>Local Settings]")
+End If
+LocalSettings.MoveLast
+Do Until LocalSettings.RecordCount >= 7
+    LocalSettings.AddNew
+    LocalSettings.MoveLast
+Loop
+LocalSettings.FindFirst "[Key] > 0"
+For i = 1 To g_ApplicationNumber
+    LocalSettings.MoveNext
+Next i
+If GetOrSet = "Get" Then
+    WorkingDirectory = NNEN(LocalSettings!LastPath)
+    If WorkingDirectory = "" Then LocalSettingsLastPath "C:\Database\"
+Else
+    WorkingDirectory = GetOrSet
+    LocalSettings.Edit
+    LocalSettings!LastPath = GetOrSet
+    LocalSettings.Update
+End If
+ExitLocalSettingsLastPath:
+Close #2
+Open "C:\ACCESS\DatabasePath.TXT" For Output As #2
+Print #2, WorkingDirectory
+Close #2
+If FIsLoaded("MainMenu") Then Forms!Mainmenu.Path = WorkingDirectory
+Exit Sub
+
+LocalSettingsLastPathError:
+WorkingDirectory = "C:\Database\"
+Resume ExitLocalSettingsLastPath
+
+End Sub
+
+Sub GetSettings()
+
+If g_Settings Then
+    Exit Sub
+End If
+EchoOn
+Dim mytable As DAO.Recordset
+Set mydb = CurrentDb()
+TheTable = ">Local Settings"
+GetThePath:
+Set LocalSettings = mydb.OpenRecordset("Select * from [>Local Settings]", dbOpenDynaset, dbSeeChanges)
+LocalSettingsLastPath "Get"
+TheTable = ">Settings"
+Set Settings = mydb.OpenRecordset("Select * from [>Settings] where not isnull(PartPositionCode) or not isnull(RateUnits) or not isnull(MenuText) and instr(Menutext,'User')=0", dbOpenDynaset, dbSeeChanges)
+Settings.MoveLast
+Settings.CacheSize = Settings.RecordCount
+Settings.MoveFirst
+Settings.CacheStart = Settings.Bookmark
+Settings.FillCache
+Settings.FindFirst "[Key] > 0"
+g_Settings = True
+
+End Sub
+
+
+Function GetUser()
+
+On Error Resume Next
+Dim mytable As DAO.Recordset
+SetMyDB
+GetSettings
+
+End Function
+
+Sub SetMyDB()
+
+GetSettings
+
+End Sub
+
+Public Function CompactDatabase()
+
+SetMyDB
+ErrorLogClear
+LocalSettingsLastPath "Get"
+On Error GoTo CompactDatabaseError
+If MessageOKCancel("Compact databases in " & WorkingDirectory & " ?") Then Exit Function
+CloseAllForms
+TheDatabase = WorkingDirectory & "APC.MDB"
+GoSub DoCompact
+TheDatabase = WorkingDirectory & "APCSet.MDB"
+GoSub DoCompact
+TheDatabase = WorkingDirectory & "Document.MDB"
+GoSub DoCompact
+TheDatabase = WorkingDirectory & "Lists.MDB"
+GoSub DoCompact
+TheDatabase = WorkingDirectory & "MIS.MDB"
+GoSub DoCompact
+TheDatabase = WorkingDirectory & "Products.MDB"
+GoSub DoCompact
+TheDatabase = WorkingDirectory & "Resource.MDB"
+GoSub DoCompact
+TheDatabase = WorkingDirectory & "Settings.MDB"
+GoSub DoCompact
+GetSettings
+
+Exit Function
+
+DoCompact:
+    StatusBarMessage "Compacting " & TheDatabase
+    LocalSettings.Close
+    Settings.Close
+    g_Settings = False
+    DBEngine.CompactDatabase TheDatabase, WorkingDirectory & "Scratch.mdb"
+    Kill TheDatabase
+    Name WorkingDirectory & "Scratch.mdb" As TheDatabase
+    ErrorLogEntry "Compacted " & TheDatabase
+Return
+
+CompactDatabaseError:
+ErrorLogEntry Err.Description
+Resume ResumeCompactDatabaseError
+ResumeCompactDatabaseError:
+
+End Function
+
+Function PathToAttachments()
+
+On Error Resume Next
+GetPathToDatabase
+InputWorkingDirectory = InputBox$("Please enter the path to the folder that contains database files or Cancel to quit:", "Path to database", WorkingDirectory)
+If InputWorkingDirectory = "" Then
+    DoCmd.Quit
+End If
+SetPathToDatabase InputWorkingDirectory
+AttachDatabase
+Exit Function
+
+
+
+GetSettings
+If g_Settings Then
+    On Error GoTo PathToAttachmentsError
+    If FIsLoaded("SelectDatabase") Then DoCmd.SelectObject A_FORM, "SelectDatabase"
+    If Not (FIsLoaded("SelectDatabase")) Then DoCmd.OpenForm "SelectDatabase"
+End If
+
+Exit Function
+
+PathToAttachmentsError:
+Resume ResumePathToAttachmentsError
+ResumePathToAttachmentsError:
+MsgBox "An error occured which may require that you manually attach the table Local Settings from the APCSet.MDB database in your Access Folder.", 64, "Select Database"
+
+End Function
+
+Public Function GetPathToVisio() As String
+'path to visio.exe
+Dim VisioPath As String
+On Error GoTo GetPathToVisioError
+Close #2
+Open "C:\ACCESS\VisioPath.TXT" For Input As #2
+Input #2, VisioPath
+Close #2
+If NNEN(VisioPath) = "" Then
+    GetPathToVisio = "C:\Program Files\Microsoft Office\Visio10\Visio.exe"
+Else
+    GetPathToVisio = VisioPath & "Visio.exe"
+End If
+
+Exit Function
+
+GetPathToVisioError:
+Resume ResumeGetPathToVisioError
+ResumeGetPathToVisioError:
+GetPathToVisio = "C:\Program Files\Microsoft Office\Visio10\Visio.exe"
+
+End Function
+
+
+
+Function GetPathToDatabase()
+
+On Error GoTo GetPathToDatabaseError
+TheDatabaseFile = CurrentDb().Properties("Name")
+Close #2
+Open "C:\ACCESS\" & ConditionName(TheDatabaseFile) & ".TXT" For Input As #2
+Input #2, WorkingDirectory
+Close #2
+If InStr(TheDatabaseFile, "krh.mdb") <> 0 Then
+    Open "C:\ACCESS\DatabasePath.TXT" For Output As #2
+    Print #2, WorkingDirectory
+    Close #2
+End If
+GetPathToDatabase = WorkingDirectory
+GetPathToServer
+
+Exit Function
+
+GetPathToDatabaseError:
+Resume ResumeGetPathToDatabaseError
+ResumeGetPathToDatabaseError:
+On Error GoTo GetPathToDatabaseError2
+WorkingDirectory = "C:\Database\"
+Close #2
+Open "C:\ACCESS\" & ConditionName(TheDatabaseFile) & ".TXT" For Output As #2
+Print #2, WorkingDirectory
+Close #2
+Exit Function
+
+GetPathToDatabaseError2:
+    MsgBox Err.Description & " while setting database file " & "C:\ACCESS\" & ConditionName(TheDatabaseFile) & ".TXT"
+Resume ResumeGetPathToDatabaseError2
+ResumeGetPathToDatabaseError2:
+
+End Function
+
+Function SetPathToDatabase(TheString) As Boolean
+
+On Error GoTo SetPathToDatabaseError
+TheDatabaseFile = CurrentDb().Properties("Name")
+TheDatabaseFile = ConditionName(TheDatabaseFile)
+Close #2
+Open "C:\ACCESS\" & TheDatabaseFile & ".TXT" For Output As #2
+Print #2, TheString
+Close #2
+Open "C:\ACCESS\DatabasePath.TXT" For Output As #2
+Print #2, TheString
+Close #2
+WorkingDirectory = TheString
+SetPathToDatabase = True
+
+Exit Function
+
+SetPathToDatabaseError:
+    MsgBox Err.Description & " while setting database file " & "C:\ACCESS\" & TheDatabaseFile & ".TXT"
+Resume ResumeSetPathToDatabaseError
+ResumeSetPathToDatabaseError:
+
+
+End Function
+
+Function SetPathToServer()
+
+On Error GoTo SetPathToServerError
+TheServerPath = InputBox$("Please enter the path to the server that contains database files: (Example: \\Name", "Path to server", ServerPath)
+If TheServerPath <> "" Then
+    Close #2
+    Open "C:\ACCESS\ServerPath.TXT" For Output As #2
+    Print #2, TheServerPath
+    Close #2
+End If
+
+Exit Function
+
+
+
+SetPathToServerError:
+    MsgBox Err.Description
+Resume ResumeSetPathToServerError
+ResumeSetPathToServerError:
+
+End Function
+
+Function GetPathToServer()
+
+On Error GoTo GetPathToServerError
+TheDatabaseFile = CurrentDb().Properties("Name")
+Close #2
+Open "C:\ACCESS\ServerPath.TXT" For Input As #2
+Input #2, ServerPath
+Close #2
+
+Exit Function
+
+GetPathToServerError:
+Resume ResumeGetPathToServerError
+ResumeGetPathToServerError:
+ServerPath = "\\cmsbs"
+Close #2
+Open "C:\ACCESS\ServerPath.TXT" For Output As #2
+Print #2, ServerPath
+Close #2
+'SetPathToServer
+
+End Function

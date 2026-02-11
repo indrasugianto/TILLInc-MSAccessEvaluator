@@ -1,0 +1,5 @@
+SELECT DISTINCTROW ProjectSchedule.*, Workflow.*, [>Jobs].ID, [MIS Personnel].Employee, [MIS Personnel_1].Text1, [MIS Personnel_2].Text1, [>Jobs].Key, ProjectSchedule.PageNumber
+FROM ((((ProjectSchedule LEFT JOIN [>Jobs] ON ProjectSchedule.Job=[>Jobs].Key) LEFT JOIN [MIS Personnel] ON ProjectSchedule.EntryBy=[MIS Personnel].Key) LEFT JOIN Workflow ON ProjectSchedule.WorkFlowKey=Workflow.Key) LEFT JOIN [MIS Personnel] AS [MIS Personnel_1] ON [>Jobs].ManagedBy=[MIS Personnel_1].Key) LEFT JOIN [MIS Personnel] AS [MIS Personnel_2] ON [>Jobs].SpecifiedBy=[MIS Personnel_2].Key
+WHERE ((([>Jobs].Estimate)=False) AND (([>Jobs].Closed)=False) AND (([>Jobs].ProductionPhase)<>"Completed" And ([>Jobs].ProductionPhase)<>"Archived"))
+ORDER BY ProjectSchedule.PageNumber, ProjectSchedule.TaskID
+WITH OWNERACCESS OPTION;

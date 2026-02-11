@@ -1,0 +1,4 @@
+SELECT DISTINCTROW [Purchase Journal].CheckNumber, [Purchase Journal].Key, [Purchase Journal].Due, [Purchase Journal].InvoiceDate, [>Resources].ID, [Purchase Journal].InvoiceNo, [Purchase Journal].Paid, [Purchase Journal].Pay, [Purchase Journal].SupplierID, [Purchase Journal].AccountNo, [Purchase Journal].TotalAmount, [Purchase Journal].DebitAmount, [Purchase Journal].Terms, [Purchase Journal].OK, [>Resources].CompanyName, [>Resources].Address, [>Resources].State, [>Resources].Zip, [>Resources].TheName
+FROM [Purchase Journal] LEFT JOIN [>Resources] ON [Purchase Journal].SupplierID=[>Resources].Key
+WHERE ((([Purchase Journal].Paid)=False) AND (([Purchase Journal].Pay)=Yes) AND ((NNEN([PO]))<>"Automatic Debit"))
+ORDER BY [Purchase Journal].CheckNumber;

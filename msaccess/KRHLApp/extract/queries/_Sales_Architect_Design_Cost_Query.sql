@@ -1,0 +1,6 @@
+SELECT DISTINCTROW [>Sales Architect Total Query].SumOfSumOfSaleAmount, [>Resources].ID AS ResourceID, [>Sales Architect Total Query].Key, [>Jobs].ID AS JobID, [>Jobs].ManagedBy, [>Jobs].SpecifiedBy, [Job Agreement Sales NIC Stone].SumOfSaleAmount, [>Jobs].ProductionPhase, [Job Agreement Sales NIC Stone].LastOfTheDate, [Job Project Hours].TotalCost, [Job Cabinet Hours].TotalCost
+FROM ([>Sales Architect Total Query] LEFT JOIN ((([>Jobs] LEFT JOIN [Job Project Hours] ON [>Jobs].Key=[Job Project Hours].Key) LEFT JOIN [Job Cabinet Hours] ON [>Jobs].Key=[Job Cabinet Hours].Key) LEFT JOIN [Job Agreement Sales NIC Stone] ON [>Jobs].Key=[Job Agreement Sales NIC Stone].Key) ON [>Sales Architect Total Query].Key=[>Jobs].Architect) LEFT JOIN [>Resources] ON [>Sales Architect Total Query].Key=[>Resources].Key
+WHERE ((([>Jobs].Estimate)=False))
+GROUP BY [>Sales Architect Total Query].SumOfSumOfSaleAmount, [>Resources].ID, [>Sales Architect Total Query].Key, [>Jobs].ID, [>Jobs].ManagedBy, [>Jobs].SpecifiedBy, [Job Agreement Sales NIC Stone].SumOfSaleAmount, [>Jobs].ProductionPhase, [Job Agreement Sales NIC Stone].LastOfTheDate, [Job Project Hours].TotalCost, [Job Cabinet Hours].TotalCost
+HAVING ((([Job Agreement Sales NIC Stone].SumOfSaleAmount)<>0))
+ORDER BY [>Sales Architect Total Query].SumOfSumOfSaleAmount DESC;

@@ -1,0 +1,3 @@
+SELECT DISTINCTROW [Receivables GL Report Aged Query].MaxOfTransactionDate, [Receivables GL Report Aged Query].[>Jobs].ID, [Receivables GL Report Aged Query].SumOfDebitAmount, [Receivables GL Report Aged Query].SumOfCreditAmount, [Receivables GL Report Aged Query].[>Resources].ID, IIf(DateDiff("d",[maxoftransactiondate],Forms!GeneralLedger.ToDate)<=30,1,IIf(DateDiff("d",[maxoftransactiondate],Forms!GeneralLedger.ToDate)<=90,2,3)) AS Aged
+FROM [Receivables GL Report Aged Query]
+ORDER BY [Receivables GL Report Aged Query].MaxOfTransactionDate DESC;

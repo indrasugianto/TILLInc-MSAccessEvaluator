@@ -1,0 +1,4 @@
+SELECT [Payroll Journal].*, [MIS Personnel].WitholdingAccount, [MIS Personnel].Text2, [MIS Personnel].TerminationDate, nnez([Field3])+nnez([Roth]) AS Retirement, [MIS Personnel].BonusPlan, [MIS Personnel].Closed, [MIS Personnel].EmploymentDate, [MIS Personnel].Rate, [MIS Personnel].ADPName
+FROM [Payroll Journal] LEFT JOIN [MIS Personnel] ON [Payroll Journal].ADPFile=[MIS Personnel].ADPFile
+WHERE ((([MIS Personnel].ADPName)=IIf(Forms!Payroll!SelectPayee,Forms!Payroll!SelectedPayee,[ADPName])) And (([MIS Personnel].ADPNetAccount)=IIf(Forms!Payroll!SelectADPNet,Forms!Payroll!ADPNetAccount,[ADPNetAccount])) And ((IIf([CheckDate]>=Forms!Payroll.FromDate And [CheckDate]<=Forms!Payroll.ToDate,True,False))=True) And (([Payroll Journal].Void)=False))
+ORDER BY [Payroll Journal].CheckDate DESC , [Payroll Journal].Closed DESC , [Payroll Journal].CheckNumber DESC , [Payroll Journal].Employee DESC;

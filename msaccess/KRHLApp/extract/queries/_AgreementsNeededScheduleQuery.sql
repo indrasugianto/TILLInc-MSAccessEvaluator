@@ -1,0 +1,5 @@
+SELECT [>Jobs].ID, [>Jobs].Customer, SalesSummarybyJob.SumOfSaleAmount AS Sale, ScheduleQueryMonth.EstimatedShipDate AS MinofMonth, InvoicesIssuedQuery.SumOfInvoiceAmount AS Invoices, PaymentsQuery.SumOfAmount AS Payments, [MIS Personnel].Employee, [>Jobs].ProductionPhase, [>Settings].Phase, [>Jobs].Estimate, [>Settings].PhaseSort
+FROM ScheduleQueryMonth, PaymentsQuery, InvoicesIssuedQuery, SalesSummarybyJob, ([>Jobs] LEFT JOIN [MIS Personnel] ON [>Jobs].ManagedBy = [MIS Personnel].Key) LEFT JOIN [>Settings] ON [>Jobs].ProductionPhase = [>Settings].Phase
+WHERE ((([>Jobs].Closed)=False) AND (([>Jobs].Owner)=False))
+GROUP BY [>Jobs].ID, [>Jobs].Customer, SalesSummarybyJob.SumOfSaleAmount, ScheduleQueryMonth.EstimatedShipDate, InvoicesIssuedQuery.SumOfInvoiceAmount, PaymentsQuery.SumOfAmount, [MIS Personnel].Employee, [>Jobs].ProductionPhase, [>Settings].Phase, [>Jobs].Estimate, [>Settings].PhaseSort, PaymentsQuery.SumOfAmount, ScheduleQueryMonth.Job
+HAVING ((([>Settings].PhaseSort)<4));

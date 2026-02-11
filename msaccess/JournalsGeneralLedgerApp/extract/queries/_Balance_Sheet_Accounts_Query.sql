@@ -1,0 +1,4 @@
+SELECT DISTINCTROW [>Settings].MenuText, [>Settings].MenuCategory, [MIS Accounts].*
+FROM [MIS Accounts] LEFT JOIN [>Settings] ON [MIS Accounts].BalanceSheetCategorySort=[>Settings].Key
+WHERE (((IIf(InStr(localvariable("ScratchPad"),"Balance")<>0 And [Number]<300,True,IIf(InStr(localvariable("ScratchPad"),"Income")<>0 And [number]>299,True,False)))=True))
+ORDER BY [>Settings].MenuText, [>Settings].MenuCategory, IIf(InStr(localvariable("ScratchPad"),"Balance")<>0 And [Number]<300,True,IIf(InStr(localvariable("ScratchPad"),"Income")<>0 And [number]>299,True,False)), [MIS Accounts].Heading1 DESC;

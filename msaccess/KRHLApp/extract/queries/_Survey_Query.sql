@@ -1,0 +1,2 @@
+SELECT Survey.*
+FROM Survey;

@@ -1,0 +1,2 @@
+SELECT [Pay]+nnez([Overtime])+[KRHContribution] AS Total, Format([sumofGross]-NNEZ([sumofBonus]),"$#,#") AS [Your Pay], Format([KRHContribution],"$#,#") AS Benefits, Format([KRHContribution],"$#,#") AS [KRH Contribution], Format([Sumofsocialsecurity]+[sumofmedicare]+nnez([medicalAmount])+NNEZ([retirement]+nnez([FSA])+NNEZ([AFLAC])),"$#,#") AS [Your Contribution]
+FROM [Compensation Report Query];

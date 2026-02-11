@@ -1,0 +1,4 @@
+SELECT DISTINCTROW [>General Ledger Query].Key, [>General Ledger Query].AccountNumber, [>General Ledger Query].TransactionDate, [>General Ledger Query].SourceJournal, [>General Ledger Query].DebitAmount, [>General Ledger Query].CreditAmount
+FROM [>General Ledger Query] LEFT JOIN [>Resources] ON [>General Ledger Query].SourceOperative=[>Resources].Key
+WHERE ((([>General Ledger Query].AccountNumber)=Forms!BalanceSheet.SelectedAccount2) And (([>General Ledger Query].TransactionDate)>=Forms!BalanceSheet.FromDate Or ([>General Ledger Query].TransactionDate)<=Forms!BalanceSheet.ToDate))
+ORDER BY [>General Ledger Query].AccountNumber, [>General Ledger Query].TransactionDate, [>General Ledger Query].SourceJournal;

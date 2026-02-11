@@ -1,0 +1,3 @@
+SELECT [SumofCreditamount] AS 305Sales, 1 AS sort, Sum([General Ledger].CreditAmount) AS SumOfCreditAmount, Sum([General Ledger].DebitAmount) AS SumOfDebitAmount
+FROM [General Ledger] INNER JOIN [>Jobs] ON [General Ledger].Job=[>Jobs].Key
+WHERE (((IIf([AccountNumber]=305,True,False))=True) And (([General Ledger].TransactionDate)>=forms!Generalledger!fromdate And ([General Ledger].TransactionDate)<=forms!generalledger!todate));

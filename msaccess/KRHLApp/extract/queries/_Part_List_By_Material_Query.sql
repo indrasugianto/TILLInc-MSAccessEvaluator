@@ -1,0 +1,5 @@
+SELECT DISTINCTROW [>Part List].*, Activity.Activity, Components.Component, IIf(Forms!PartsList!SelectComponent And nnez([Processcomponent])<>Forms!PartsList!ComponentSort,False,True) AS ComponentSelect
+FROM ([>Part List] LEFT JOIN Activity ON [>Part List].ProcessActivity=Activity.Key) LEFT JOIN Components ON [>Part List].ProcessComponent=Components.key
+WHERE ((([>Part List].ProductList)=Forms!ProductListMaster!ProductListControl!ProductListName) And (([>Part List].DisplayPart)=True Or ([>Part List].DisplayPart)=False) And ((IIf(Forms!PartsList!ViewCNC And [cncsize] Or Forms!PartsList!ViewNonCNC And Not [CNCSize] Or forms!PartsList!ViewMaterialProcessCost And nnez([MaterialCost])<>0 Or forms!PartsList!ViewMaterialProcessCost And nnez([ProcessCost])<>0,True,False))=True) And ((IIf(Forms!PartsList!SelectComponent And nnez([Processcomponent])<>Forms!PartsList!ComponentSort,False,True))=True))
+ORDER BY [>Part List].SubAssembly, [>Part List].DefaultMaterial, [>Part List].Z DESC , [>Part List].Y DESC , [>Part List].X DESC , [>Part List].ItemNumber
+WITH OWNERACCESS OPTION;

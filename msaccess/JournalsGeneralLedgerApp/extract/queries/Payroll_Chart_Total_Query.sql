@@ -1,0 +1,5 @@
+SELECT DISTINCTROW [>Payroll Query].CheckDate, Sum(IIf(Left([ADPNetAccount],1)=5,[Gross]-[Bonus],0)) AS [Shop Total], Sum(IIf(Left([ADPNetAccount],1)=6,[Gross]-[Bonus],0)) AS [Install Total], Sum(IIf(Left([ADPNetAccount],1)=7,[Gross]-[Bonus],0)) AS [Office Total]
+FROM [>Payroll Query] LEFT JOIN [MIS Personnel] ON [>Payroll Query].ADPFile=[MIS Personnel].ADPFile
+WHERE ((([>Payroll Query].Void)=False) And (([MIS Personnel].ADPNetAccount)=IIf(Forms!Payroll!SelectADPNet,Forms!Payroll!ADPNetAccount,[ADPNetAccount])) And (([>Payroll Query].ADPFile)>2) And ((IIf(LocalVariable("ScratchPad")="Shop" And Left([mis personnel].ADPNetAccount,1)=5,True,IIf(LocalVariable("ScratchPad")="Install" And Left([mis personnel].ADPNetAccount,1)=6,True,IIf(LocalVariable("ScratchPad")="Office" And Left([mis personnel].ADPNetAccount,1)=7,True,IIf(LocalVariable("ScratchPad")="All",True,False)))))=True))
+GROUP BY [>Payroll Query].CheckDate
+ORDER BY [>Payroll Query].CheckDate;

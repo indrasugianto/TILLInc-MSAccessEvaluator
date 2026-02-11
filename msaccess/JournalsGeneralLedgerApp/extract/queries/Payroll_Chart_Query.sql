@@ -1,0 +1,4 @@
+SELECT DISTINCTROW [>Payroll Query].CheckDate, Sum([Gross]-[overtime]-[Bonus]) AS [Base Pay], Sum([>Payroll Query].OverTime) AS OT, Sum([>Payroll Query].Bonus) AS [Annual Bonus]
+FROM [>Payroll Query] LEFT JOIN [MIS Personnel] ON [>Payroll Query].ADPFile=[MIS Personnel].ADPFile
+WHERE ((([>Payroll Query].Void)=False) And (([>Payroll Query].ADPFile)>2) And (([MIS Personnel].ADPNetAccount)=IIf(Forms!Payroll!SelectADPNet,Forms!Payroll!ADPNetAccount,[ADPNetAccount])) And ((IIf(LocalVariable("ScratchPad")="Shop" And Left([mis personnel].ADPNetAccount,1)=5,True,IIf(LocalVariable("ScratchPad")="Install" And Left([mis personnel].ADPNetAccount,1)=6,True,IIf(LocalVariable("ScratchPad")="Office" And Left([mis personnel].ADPNetAccount,1)=7,True,IIf(LocalVariable("ScratchPad")="All",True,False)))))=True))
+GROUP BY [>Payroll Query].CheckDate;

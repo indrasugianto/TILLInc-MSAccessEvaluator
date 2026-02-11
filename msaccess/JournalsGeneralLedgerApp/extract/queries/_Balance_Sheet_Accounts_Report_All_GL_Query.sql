@@ -1,0 +1,2 @@
+SELECT [>Balance Sheet Accounts Query].Number, nnez([SumOfCreditAmount]) AS Credit, nnez([SumOfDebitAmount]) AS Debit, nnez([PreviousCreditAmount]) AS PreviousCredit, nnez([PreviousDebitAmount]) AS PreviousDebit
+FROM ([>Balance Sheet Accounts Query] LEFT JOIN [>Balance Sheet Accounts Report GL Query] ON [>Balance Sheet Accounts Query].Number=[>Balance Sheet Accounts Report GL Query].AccountNumber) LEFT JOIN [>Balance Sheet Accounts Report Previous GL Query] ON [>Balance Sheet Accounts Query].Number=[>Balance Sheet Accounts Report Previous GL Query].PreviousAccountNumber;

@@ -1,0 +1,3 @@
+SELECT Sum([Purchase Journal].DebitAmount) AS SumOfDebitAmount
+FROM [Purchase Journal]
+WHERE ((([Purchase Journal].Posted)=True) And (([Purchase Journal].CheckDate)>=forms!APChecksEntry!FromDate Or ([Purchase Journal].CheckDate) Is Null) And (([Purchase Journal].InvoiceDate)<forms!APChecksEntry!FromDate) And ((IIf(Forms!APChecksEntry!SelectPayee,IIf(Forms!APChecksEntry!SelectedPayee=[SupplierID],True,False),True))=True) And ((IIf(forms!APChecksEntry!PayableAccount=[PayablesAccount],True,False))=True));

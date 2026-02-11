@@ -1,0 +1,2 @@
+SELECT [WIP Shop Phase Total Query].SumOfSumOfSaleAmount, [WIP Design Phase Total Query].SumOfSumOfSaleAmount, [WIP Stored Phase Total Query].SumOfSumOfSaleAmount, [WIP Installation Phase Total Query].SumOfSumOfSaleAmount
+FROM [WIP Shop Phase Total Query], [WIP Design Phase Total Query], [WIP Stored Phase Total Query], [WIP Installation Phase Total Query];

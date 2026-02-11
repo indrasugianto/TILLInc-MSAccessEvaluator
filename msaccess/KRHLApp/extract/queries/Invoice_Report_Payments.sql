@@ -1,0 +1,3 @@
+SELECT [Receipts Journal].Amount, [Receipts Journal].Job, IIf([Parent],[>jobs].ID,"") AS JobID, [Receipts Journal].CheckDate, [>Resources].ID
+FROM ([>Jobs] LEFT JOIN [Receipts Journal] ON [>Jobs].Key=[Receipts Journal].Job) LEFT JOIN [>Resources] ON [>Jobs].Agreement=[>Resources].Key
+WHERE ((([Receipts Journal].Amount)<>0) And ((IIf(Not forms!Sales!Family And [Receipts Journal].Job=forms!Sales!Jobname,True,IIf(forms!Sales!Family And [Parent]=Forms!Sales!JobName Or forms!Sales!Family And [Receipts Journal].Job=Forms!Sales!JobName,True,False)))=True));

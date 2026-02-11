@@ -1,0 +1,4 @@
+SELECT DISTINCTROW [>CNC].Key, [>CNC].ProductList, [>CNC].Item, [>CNC].Trace, [>CNC].Sequence, [>CNC].Subassembly, [>CNC].Function, [>CNC].Tool, [>CNC].X, [>CNC].Y, [>CNC].Z, [>CNC].ZPos, [>CNC].XPos, [>CNC].YPos, [>CNC].Command, [>CNC].DXF, [>CNC].Visible, [>CNC].Machine, [>CNC].DesignKey, [>CNC].PartDescription, [>CNC].Quantity, [>CNC].GrainFlag, [>CNC].FaceIdentifier, [>CNC].FaceDependency, [>CNC].MaterialSpec, [>CNC].Mirror, [>CNC].MaterialKey, [>CNC].CNCRotate, [>Product List].Item AS PLItem
+FROM [>CNC] LEFT JOIN [>Product List] ON [>CNC].Item=[>Product List].Key
+WHERE ((([>CNC].ProductList)=Forms!ProductListMaster!ProductListControl!ProductListName) And (([>CNC].Visible)=True) And (([>CNC].Machine)=Forms!CNC!CNCMachine))
+ORDER BY [>Product List].Item, [>CNC].Subassembly, [>CNC].Sequence, [>CNC].DesignKey;

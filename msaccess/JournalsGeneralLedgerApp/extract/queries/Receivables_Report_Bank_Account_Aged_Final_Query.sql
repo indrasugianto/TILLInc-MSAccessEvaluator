@@ -1,0 +1,3 @@
+SELECT DISTINCTROW [Receivables Report Aged Query].MaxOfTransactionDate, [Receivables Report Last Invoice].LastInvoice, [Receivables Report Aged Query].[>Jobs].ID AS TheJob, [Receivables Report Aged Query].SumOfDebitAmount, [Receivables Report Aged Query].SumOfCreditAmount, [Receivables Report Aged Query].[>Resources].ID, IIf(DateDiff("d",[MaxofTransactiondate],Date())<=30,1,IIf(DateDiff("d",[Maxoftransactiondate],Date())<=90,2,3)) AS Aged
+FROM [Receivables Report Aged Query] LEFT JOIN [Receivables Report Last Invoice] ON [Receivables Report Aged Query].[>Jobs].ID=[Receivables Report Last Invoice].JobName
+ORDER BY [Receivables Report Aged Query].MaxOfTransactionDate DESC;

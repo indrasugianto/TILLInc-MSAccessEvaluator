@@ -1,0 +1,5 @@
+SELECT DISTINCTROW [>Jobs].ID, [MIS Hours].Activity, Sum(IIf([ADPNetAccount]>=700,variable("office hrly cost estimate")*[Hours],variable("shop hrly cost estimate")*[Hours])) AS CostPlus, [MIS Hours].[Job ID], Sum(IIf([ADPNetAccount]>=700,variable("office hrly cost estimate")*[Hours],variable("shop hrly cost estimate")*[Hours])) AS HourlyCost, Sum([MIS Hours].Hours) AS SumOfHours
+FROM ([MIS Hours] LEFT JOIN [>Jobs] ON [MIS Hours].[Job ID]=[>Jobs].Key) LEFT JOIN [MIS Personnel] ON [MIS Hours].ADPFile=[MIS Personnel].ADPFile
+WHERE (((InStr(1,[Activity],"Rework",0))<>0) And (([MIS Hours].Date)>=Forms!Hours!DateSort And ([MIS Hours].Date)<=forms!Hours!ToDate))
+GROUP BY [>Jobs].ID, [MIS Hours].Activity, [MIS Hours].[Job ID]
+ORDER BY [MIS Hours].Activity, Sum(IIf([ADPNetAccount]>=700,variable("office hrly cost estimate")*[Hours],variable("shop hrly cost estimate")*[Hours])) DESC;

@@ -1,0 +1,3 @@
+SELECT DISTINCTROW [>Jobs].Key, Date()-[MaxofDue] AS Days, NNEZ([invoices])-NNEZ([payments])+NNEZ([DebitAmount]) AS Owed
+FROM ((([>Jobs] LEFT JOIN [*InvoicesQuery2] ON [>Jobs].ID=[*InvoicesQuery2].ID) LEFT JOIN [MIS Personnel] ON [>Jobs].ManagedBy=[MIS Personnel].Key) LEFT JOIN [*RefundQuery] ON [>Jobs].ID=[*RefundQuery].ID) LEFT JOIN [*PaymentsQuery2] AS [*PaymentsQuery2_1] ON [>Jobs].ID=[*PaymentsQuery2_1].ID
+WHERE (((NNEZ([invoices])-NNEZ([payments])+NNEZ([DebitAmount]))>100) AND (([>Jobs].Estimate)=False) AND (([>Jobs].Closed)=False));

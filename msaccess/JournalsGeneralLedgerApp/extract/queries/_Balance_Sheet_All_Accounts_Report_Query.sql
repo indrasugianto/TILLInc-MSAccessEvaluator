@@ -1,0 +1,4 @@
+SELECT DISTINCTROW [>Balance Sheet Heading Query].MenuCategory AS [Order], [>Balance Sheet Heading Query].MacroToRun AS Heading, [MIS Accounts].Account AS SubHeading, [MIS Accounts].Number AS Account, IIf(InStr(localvariable("ScratchPad"),"Prior")=0,[Balance],[FY5]) AS BeginningBalance, [MIS Accounts].FY5 AS PreviousBalance
+FROM ([>Balance Sheet Heading Query] LEFT JOIN [MIS Accounts] ON [>Balance Sheet Heading Query].Key=[MIS Accounts].BalanceSheetCategorySort) LEFT JOIN [General Ledger] ON [MIS Accounts].Number=[General Ledger].AccountNumber
+GROUP BY [>Balance Sheet Heading Query].MenuCategory, [>Balance Sheet Heading Query].MacroToRun, [MIS Accounts].Account, [MIS Accounts].Number, IIf(InStr(localvariable("ScratchPad"),"Prior")=0,[Balance],[FY5]), [MIS Accounts].FY5
+ORDER BY [>Balance Sheet Heading Query].MenuCategory, [MIS Accounts].Account DESC;

@@ -1,0 +1,3 @@
+SELECT DISTINCTROW [>Product Parts].DrawXRelativeTo AS Expr1, [>Product Parts].DrawXFactor AS Expr2, [>Product Parts].DrawX AS Expr3, [>Product Parts].DrawXOffsetFactor AS Expr4, [>Product Parts].DrawXOffsetMaterial AS Expr5, [>Product Parts].DrawYRelativeTo AS Expr6, [>Product Parts].DrawYFactor AS Expr7, [>Product Parts].DrawY AS Expr8, [>Product Parts].DrawYOffsetFactor AS Expr9, [>Product Parts].DrawYOffsetMaterial AS Expr10, [>Product Parts].DrawZRelativeTo AS Expr11, [>Product Parts].DrawZFactor AS Expr12, [>Product Parts].DrawZ AS Expr13, [>Product Parts].DrawZOffsetFactor AS Expr14, [>Product Parts].DrawZOffsetMaterial AS Expr15, [>Product Parts].Key
+FROM [>Product Parts]
+WHERE ((([>Product Parts].Key)=Forms!ProductParts.Key));

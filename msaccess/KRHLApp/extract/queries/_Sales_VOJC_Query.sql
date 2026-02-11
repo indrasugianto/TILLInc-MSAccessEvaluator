@@ -1,0 +1,5 @@
+SELECT [MIS Personnel_1].Employee, [Sales Journal].TheDate, [>Jobs].ID, [MIS Personnel].Employee, Sum([Sales Journal].SaleAmount) AS SumOfSaleAmount, [MIS Personnel_1].Text2, [MIS Personnel_1].Key, [>Jobs].SpecifiedBy, [>Jobs].ManagedBy
+FROM [Sales Journal] LEFT JOIN (([>Jobs] LEFT JOIN [MIS Personnel] AS [MIS Personnel_1] ON [>Jobs].ManagedBy=[MIS Personnel_1].Key) LEFT JOIN [MIS Personnel] ON [>Jobs].SpecifiedBy=[MIS Personnel].Key) ON [Sales Journal].Job=[>Jobs].Key
+GROUP BY [MIS Personnel_1].Employee, [Sales Journal].TheDate, [>Jobs].ID, [MIS Personnel].Employee, [MIS Personnel_1].Text2, [MIS Personnel_1].Key, [>Jobs].SpecifiedBy, [>Jobs].ManagedBy
+HAVING ((([Sales Journal].TheDate) Is Not Null And ([Sales Journal].TheDate)>=#1/1/2000#) AND ((Sum([Sales Journal].SaleAmount))<>0))
+ORDER BY [MIS Personnel_1].Employee, [Sales Journal].TheDate, [>Jobs].ID;

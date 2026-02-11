@@ -1,0 +1,4 @@
+SELECT [>Jobs].ID, [>Jobs].Key, IIf([sumofsaleamount]<>0,Format([sumofsaleamount],"#,#"),IIf([lastofproposal]<>0,Format([lastofproposal],"#,#") & " Proposal","")) AS SaleorProposal, IIf([sumofsaleamount]<>0,[sumofsaleamount],IIf([lastofproposal]<>0,[lastofproposal],0)) AS Amount, SalesSaleSummarybyJob.MaxOfTheDate
+FROM ([>Jobs] LEFT JOIN SalesProposalSummarybyJob ON [>Jobs].Key=SalesProposalSummarybyJob.Job) LEFT JOIN SalesSaleSummarybyJob ON [>Jobs].Key=SalesSaleSummarybyJob.Job
+GROUP BY [>Jobs].ID, [>Jobs].Key, IIf([sumofsaleamount]<>0,Format([sumofsaleamount],"#,#"),IIf([lastofproposal]<>0,Format([lastofproposal],"#,#") & " Proposal","")), IIf([sumofsaleamount]<>0,[sumofsaleamount],IIf([lastofproposal]<>0,[lastofproposal],0)), SalesSaleSummarybyJob.MaxOfTheDate
+ORDER BY [>Jobs].ID;

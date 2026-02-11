@@ -1,0 +1,4 @@
+SELECT [Sales Journal].*, [>Jobs].ProductionPhase, [MIS Personnel].Text1, [>Jobs].ID, [MIS Personnel].Employee, [>Jobs].SpecifiedBy
+FROM ([Sales Journal] INNER JOIN [>Jobs] ON [Sales Journal].Job=[>Jobs].Key) LEFT JOIN [MIS Personnel] ON [>Jobs].SpecifiedBy=[MIS Personnel].Key
+WHERE ((([>Jobs].ProductionPhase)<>"Archive" And ([>Jobs].ProductionPhase)<>"Completed") And (([MIS Personnel].Employee)=Forms!Sales.Manager) And (([>Jobs].Estimate)=False) And (([>Jobs].Closed)=False) And (([Sales Journal].Journal)="Sale") And (([Sales Journal].Category)="Cabinet"))
+ORDER BY [MIS Personnel].Text1, [>Jobs].ID;

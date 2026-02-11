@@ -1,0 +1,3 @@
+SELECT DISTINCTROW [>Sales Incomplete Query].ID, [>Sales Incomplete Query].MaxOfTheDate, [>Sales Incomplete Query].SumOfSaleAmount, [MIS Personnel].Employee
+FROM ([>Sales Incomplete Query] LEFT JOIN [>Jobs] ON [>Sales Incomplete Query].Key=[>Jobs].Key) LEFT JOIN [MIS Personnel] ON [>Jobs].ManagedBy=[MIS Personnel].Key
+GROUP BY [>Sales Incomplete Query].ID, [>Sales Incomplete Query].MaxOfTheDate, [>Sales Incomplete Query].SumOfSaleAmount, [MIS Personnel].Employee;

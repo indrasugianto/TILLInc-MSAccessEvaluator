@@ -1,0 +1,1350 @@
+'------------------------------------------------------------------------
+'
+' MODULE
+'
+'   General Form Utilities
+'
+' PURPOSE
+'
+'   Provides generic routines used with many of the forms (and reports)
+'   in KR+H.MDB.
+'
+'------------------------------------------------------------------------
+
+Global g_SaveProductList
+Global g_PasteEnable
+Global g_ReportFlag
+Global Const OLE_AUTOMATIC = 0
+Global Const OLE_FROZEN = 1
+Global Const OLE_MANUAL = 2
+Global SaveNote
+Global SaveOption
+Global SaveDesign
+Global LastCategorySort
+Global TheTime
+Global YesButton
+Global NoButton
+Dim TheNumber As Single
+Dim TheOperator(1 To 49)
+Dim TheOperand(1 To 49)
+Dim XGapFill As Variant
+Global g_BeginPoint
+Global g_EndPoint
+Global g_CenterPoint
+Global g_HeightOfArc
+Global g_DegreesOfArc
+Global SaveProductParts
+Global AskToCalculateZ  As Integer
+Global AskToCalculateY  As Integer
+Global LastDrawingYBegin
+Global LastDrawingYEnd
+Global LastDrawingZBegin
+Global LastDrawingZEnd
+'Global DefaultOption1
+''Global DefaultOption2
+Global DefaultOption3
+Global Alternate As String
+Global InProgress As String
+Global LastForm As String
+Global ThisForm As String
+Global RecalculateListInProgress
+Global RecordedCategory As String
+Global RecordedControlName As String
+Global RecordedID As String
+Global RecordedKey As Single
+Global RecordedLastPopUp As String
+Global TheOption As String
+Global UpdatingAlternate As String
+Option Compare Database   'Use database order for string comparisons
+
+
+
+
+
+Public Function TheTotalJobCost()
+
+SetMyDB
+Dim myset As DAO.Recordset, mytable As DAO.Recordset
+Set myset = mydb.OpenRecordset("Select * from [>Product Lists] where [Job] = " & NNEZ(LocalVariable("FormJobs_JobName")) & " ")
+If myset.RecordCount <> 0 Then
+    myset.MoveFirst
+    Do Until myset.EOF
+        Set mytable = mydb.OpenRecordset("Select * from [>Product List] where [ProductListKey] = " & myset!Key & " ")
+        If mytable.RecordCount <> 0 Then
+            mytable.MoveFirst
+            Do Until mytable.EOF
+                TheTotal = TheTotal + NNEZ(mytable!TotalCost) + NNEZ(mytable!PremiumCost)
+                mytable.MoveNext
+            Loop
+        End If
+        myset.MoveNext
+    Loop
+End If
+TheTotalJobCost = NNEZ(TheTotal)
+
+End Function
+
+Function CategoryUpdate()
+
+Dim mytable As DAO.Recordset
+SetMyDB
+If LastForm = "Material" Then
+    Set mytable = mydb.OpenRecordset(">Product List")
+    mytable.MoveFirst
+    Do Until mytable.EOF
+    If mytable!Material1 = Screen.ActiveForm.ID And mytable!Material1Type = RecordedCategory Then
+        mytable.Edit
+        mytable!Material1Type = Screen.ActiveForm!Category
+        mytable.Update
+    End If
+    If mytable!Material2 = Screen.ActiveForm.ID And mytable!Material2Type = RecordedCategory Then
+        mytable.Edit
+        mytable!Material2Type = Screen.ActiveForm!Category
+        mytable.Update
+    End If
+    If mytable!Material3 = Screen.ActiveForm.ID And mytable!Material3Type = RecordedCategory Then
+        mytable.Edit
+        mytable!Material3Type = Screen.ActiveForm!Category
+        mytable.Update
+    End If
+    If mytable!Material4 = Screen.ActiveForm.ID And mytable!Material4Type = RecordedCategory Then
+        mytable.Edit
+        mytable!Material4Type = Screen.ActiveForm!Category
+        mytable.Update
+    End If
+    If mytable!Material5 = Screen.ActiveForm.ID And mytable!Material5Type = RecordedCategory Then
+        mytable.Edit
+        mytable!Material5Type = Screen.ActiveForm!Category
+        mytable.Update
+    End If
+    If mytable!Material6 = Screen.ActiveForm.ID And mytable!Material6Type = RecordedCategory Then
+        mytable.Edit
+        mytable!Material6Type = Screen.ActiveForm!Category
+        mytable.Update
+    End If
+    If mytable!Material7 = Screen.ActiveForm.ID And mytable!Material7Type = RecordedCategory Then
+        mytable.Edit
+        mytable!Material7Type = Screen.ActiveForm!Category
+        mytable.Update
+    End If
+    If mytable!Material8 = Screen.ActiveForm.ID And mytable!Material8Type = RecordedCategory Then
+        mytable.Edit
+        mytable!Material8Type = Screen.ActiveForm!Category
+        mytable.Update
+    End If
+    If mytable!Material9 = Screen.ActiveForm.ID And mytable!Material9Type = RecordedCategory Then
+        mytable.Edit
+        mytable!Material9Type = Screen.ActiveForm!Category
+        mytable.Update
+    End If
+    If mytable!Material10 = Screen.ActiveForm.ID And mytable!Material10Type = RecordedCategory Then
+        mytable.Edit
+        mytable!Material10Type = Screen.ActiveForm!Category
+        mytable.Update
+    End If
+    If mytable!Material11 = Screen.ActiveForm.ID And mytable!Material11Type = RecordedCategory Then
+        mytable.Edit
+        mytable!Material11Type = Screen.ActiveForm!Category
+        mytable.Update
+    End If
+    If mytable!Material12 = Screen.ActiveForm.ID And mytable!Material12Type = RecordedCategory Then
+        mytable.Edit
+        mytable!Material12Type = Screen.ActiveForm!Category
+        mytable.Update
+    End If
+    If mytable!Material13 = Screen.ActiveForm.ID And mytable!Material13Type = RecordedCategory Then
+        mytable.Edit
+        mytable!Material13Type = Screen.ActiveForm!Category
+        mytable.Update
+    End If
+    If mytable!Material14 = Screen.ActiveForm.ID And mytable!Material14Type = RecordedCategory Then
+        mytable.Edit
+        mytable!Material14Type = Screen.ActiveForm!Category
+        mytable.Update
+    End If
+    If mytable!Material15 = Screen.ActiveForm.ID And mytable!Material15Type = RecordedCategory Then
+        mytable.Edit
+        mytable!Material15Type = Screen.ActiveForm!Category
+        mytable.Update
+    End If
+    If mytable!Material16 = Screen.ActiveForm.ID And mytable!Material16Type = RecordedCategory Then
+        mytable.Edit
+        mytable!Material16Type = Screen.ActiveForm!Category
+        mytable.Update
+    End If
+    mytable.MoveNext
+    Loop
+    mytable.Close
+End If
+
+End Function
+
+
+Function CheckMonitor() As Integer
+
+Exit Function
+ListWidth = 8.25
+ListHeight = 7.05
+'If IfXGA() Then ListHeight = 5.3
+'If Not IfXGA() Then ListHeight = 7.05
+ If IsZero(ProductListHeight) Then ProductListHeight = ListHeight
+On Error Resume Next
+DoCmd.MoveSize 0, 0, ListWidth * 1440, ListHeight * 1440
+DoCmd.DoMenuItem 0, 0, 2
+
+End Function
+
+
+
+Function ControlType(C As Control) As String
+    ControlType = "#Error#"
+    If TypeOf C Is BoundObjectFrame Then
+        ControlType = "BoundObjectFrame"
+    ElseIf TypeOf C Is CheckBox Then
+        ControlType = "CheckBox"
+    ElseIf TypeOf C Is ComboBox Then
+        ControlType = "ComboBox"
+    ElseIf TypeOf C Is CommandButton Then
+        ControlType = "CommandButton"
+    ElseIf TypeOf C Is Label Then
+        ControlType = "Label"
+    ElseIf TypeOf C Is Line Then
+        ControlType = "Line"
+    ElseIf TypeOf C Is ListBox Then
+        ControlType = "ListBox"
+    ElseIf TypeOf C Is ObjectFrame Then
+        ControlType = "ObjectFrame"
+    ElseIf TypeOf C Is OptionButton Then
+        ControlType = "OptionButton"
+    ElseIf TypeOf C Is OptionGroup Then
+        ControlType = "OptionGroup"
+    ElseIf TypeOf C Is PageBreak Then
+        ControlType = "PageBreak"
+    ElseIf TypeOf C Is Rectangle Then
+        ControlType = "Rectangle"
+    ElseIf TypeOf C Is SubForm Then
+        ControlType = "Subform"
+    ElseIf TypeOf C Is SubReport Then
+        ControlType = "SubReport"
+    ElseIf TypeOf C Is TextBox Then
+        ControlType = "TextBox"
+    ElseIf TypeOf C Is ToggleButton Then
+        ControlType = "ToggleButton"
+    Else
+        ControlType = "Rectangle"
+    End If
+End Function
+
+
+Function DeletePLFile()
+
+SaveRecord
+DoCmd.OpenForm "DeleteProductList"
+Screen.ActiveForm.PLs = Forms!productlistmaster!ProductListControl!ProductList
+
+End Function
+
+
+Function EmptyProductList()
+
+If IsNull(Forms!productlistmaster!ProductListControl!ProductListName) Then
+    On Error Resume Next
+    MsgBox "A Product List has not been selected." & Chr$(13) & "To open an existing list select from the menu at the top of the list.  " + Chr$(13) + "To create a new list select New from the File Menu.", 64
+    EmptyProductList = True
+    DoCmd.DoMenuItem 0, 1, 1
+    Exit Function
+End If
+
+End Function
+Function FControlExists(stFrm$, stCtl$) As Integer
+    If (FIsLoaded(stFrm$)) Then
+        For i = 0 To Forms(stFrm$).Count - 1
+            If (Forms(stFrm$)(i).ControlName = stCtl$) Then
+                FControlExists = True
+                Exit Function
+            End If
+        Next i
+    End If
+    FControlExists = False
+End Function
+
+Function FEditableControl(C As Control) As Integer
+    stType$ = ControlType(C)
+    F% = False
+    F% = F% Or (stType$ = "BoundObjectFrame")
+    F% = F% Or (stType$ = "CheckBox")
+    F% = F% Or (stType$ = "ComboBox")
+    F% = F% Or (stType$ = "ListBox")
+    F% = F% Or (stType$ = "ObjectFrame")
+    F% = F% Or (stType$ = "OptionButton")
+    F% = F% Or (stType$ = "OptionGroup")
+    F% = F% Or (stType$ = "Subform")
+    F% = F% Or (stType$ = "TextBox")
+    F% = F% Or (stType$ = "ToggleButton")
+    FEditableControl = F%
+End Function
+
+Function FindCustomer()
+
+If LastForm = "Correspondence" Then
+    On Error Resume Next
+    DoCmd.GoToControl "CategorySort"
+    Forms!Resources!CategorySort = CorrespondenceCategorySort
+    CategorySort.Requery
+    DoCmd.Requery
+    PLCustomer = CorrespondenceCategory
+    DoCmd.GoToControl "Key"
+    If NotZero(PLCustomer) Then DoCmd.FindRecord PLCustomer
+End If
+
+End Function
+
+
+Function FormatWholeNumber(TheValue)
+
+FormatWholeNumber = Format(NNEZ(TheValue), "###,##0;-###,##0")
+
+End Function
+
+Function FormName(TheFormName)
+
+If LastForm = TheFormName Then FormName = True
+
+End Function
+
+Sub GapFill()
+
+If Not Forms!productlistmaster!ProductListControl!GreenLight.Visible Then Exit Sub
+'EchoOn
+'If NNEZ(LocalVariable("Form_DrawingSetup_Debug")) <> 0 Then
+    'ErrorLogClear
+    'ElapsedTime = Timer + 30 \ 1
+'Else
+    EchoOn
+    On Error GoTo GapFillError
+    ElapsedTime = Timer \ 1
+'End If
+Dim PLSetY As Single
+Dim RecomputeAtItem(1 To 99)
+Dim RecomputedItem(1 To 99)
+Dim XPosVariable(1 To 99) As Boolean
+Dim XPosItem(1 To 99) As Single
+Dim XPosSkip(1 To 99) As Boolean
+Dim XPosKey(1 To 99) As Long
+Dim XPosX(1 To 99)
+Dim XPosY(1 To 99)
+Dim XPosZ(1 To 99)
+Dim XPosDrawingXBegin(1 To 99) As Single
+Dim XPosDrawingZBegin(1 To 99) As Single
+Dim XPosXCumulative(1 To 99) As Single
+Dim XPosZCumulative(1 To 99) As Single
+Dim XPosAbsoluteXEnd(1 To 99) As Boolean
+Dim XPosAbsoluteXBegin(1 To 99) As Boolean
+Dim XPosAbsoluteZBegin(1 To 99) As Boolean
+Dim XPosPosition(1 To 99) As Long
+Dim XPosZBeginPosition(1 To 99) As Long
+Dim XPosZEndPosition(1 To 99) As Long
+Dim myset As DAO.Recordset
+SetMyDB
+Set myset = mydb.OpenRecordset("Select [Key] from [>Products] Where Right([Description], 5) = ' Wall' ")
+If myset.RecordCount = 0 Then MsgBox "No wall product found": Exit Sub
+WallProduct = myset!Key
+If Screen.ActiveControl.ControlName = "X" Then
+ElseIf Screen.ActiveControl.ControlName = "XBeginBeginning" Then
+ElseIf Screen.ActiveControl.ControlName = "XEndBeginning" Then
+ElseIf Screen.ActiveControl.ControlName = "Y" Then
+ElseIf InStr(Screen.ActiveControl.ControlName, "Z") <> 0 Then
+ElseIf Right(ProductName(Forms!productlistmaster!ProductListControl!Product), 5) = " Wall" Then
+ElseIf Left(Screen.ActiveControl.ControlName, 7) = "Drawing" Then
+ElseIf Left(Screen.ActiveControl.ControlName, 8) = "Absolute" Then
+ElseIf Screen.ActiveControl.ControlName = "XBeginPosition" Then
+ElseIf Screen.ActiveControl.ControlName = "Skip" Then
+ElseIf Screen.ActiveControl.ControlName = "CenterX" Then
+ElseIf Screen.ActiveControl.ControlName = "Product" Then
+Else
+    Exit Sub
+End If
+DoY = False 'InStr(1, Screen.ActiveControl.ControlName, "Y")
+AskToCalculateY = 0 'disable Y
+If InStr(Screen.ActiveControl.ControlName, "Z") <> 0 Then DoZ = True Else DoZ = False
+If Not DoY And Not DoZ Then DoX = True Else DoX = False
+Set myset = mydb.OpenRecordset("SELECT* from [>Product List] WHERE [ProductListKey] = " & Forms!productlistmaster!ProductListControl!ProductListName & " Order by [Item] ")
+myset.MoveLast
+TheLastItem = myset!Key
+'find first wall
+myset.FindFirst "[Key] = " & Forms!productlistmaster!ProductListControl!Key & ""
+Do Until myset.BOF
+    If myset!Product = WallProduct Then
+        Beginning = myset!Key
+        Exit Do
+    End If
+    myset.MovePrevious
+Loop
+If Beginning = TheLastItem Then Exit Sub
+If Beginning = 0 Then
+    ErrorLogEntry "No wall was found as an auto dimension beginning reference."
+    ErrorLogReport 1
+    Exit Sub
+End If
+TheLastItem = myset!Key
+'find last item
+myset.MoveNext
+Do Until myset.EOF
+    If myset!Product = WallProduct Then Exit Do
+    TheLastItem = myset!Key
+    myset.MoveNext
+Loop
+DoCmd.Hourglass True
+BeginGapFill:
+Recompute = False
+myset.FindFirst "[Key] = " & Beginning & " "
+i = 1
+PLSetY = 0
+Do Until myset.EOF
+    XPosKey(i) = myset!Key
+    XPosItem(i) = NNEZ(myset!Item)
+    If Not NNEZ(myset!AbsoluteXEnd) Then
+        XPosVariable(i) = False
+    Else
+        XPosVariable(i) = True
+    End If
+    XPosPosition(i) = NNEZ(myset!Position)
+    XPosZBeginPosition(i) = NNEZ(myset!ZBeginPosition)
+    XPosZEndPosition(i) = NNEZ(myset!ZEndPosition)
+    XPosAbsoluteXBegin(i) = NNEZ(myset!AbsoluteXBegin)
+    XPosAbsoluteXEnd(i) = NNEZ(myset!AbsoluteYEnd)
+    XPosSkip(i) = myset!Skip
+    XPosDrawingXBegin(i) = NNEZ(myset!DrawingXBegin)
+    XPosDrawingZBegin(i) = NNEZ(myset!DrawingZBegin)
+    XPosX(i) = NNEZ(myset!X)
+    XPosZ(i) = NNEZ(myset!Z)
+    If NNEZ(myset!DrawingDegrees) <> 0 Then
+        TheAngle = NNEZ(myset!DrawingDegrees) * ((4 * Atn(1)) / 180)
+        PLSetX = NNEZ(myset!X)
+        RotZ PLSetX, 0, TheAngle 'linear X
+        If PLSetX < 0 Then PLSetX = PLSetX * -1
+        XPosX(i) = NNEZ(PLSetX)
+    End If
+    If myset!AbsoluteYBegin Then
+        PLSetY = NNEZ(myset!Y)
+    Else
+        PLSetY = PLSetY + NNEZ(myset!Y)
+    End If
+    XPosY(i) = PLSetY
+    If i = 1 Then
+        XPosX(i) = NNEZ(myset!X)
+        XPosXCumulative(i) = 0
+        XPosZCumulative(i) = 0
+        XPosDrawingXBegin(i) = 0
+    End If
+    If i = 2 And NNEZ(myset!Position) = 0 Then
+        myset.Edit
+        myset!Position = XPosKey(1)
+        myset.Update
+    End If
+    If myset!Key = TheLastItem Then Exit Do
+    myset.MoveNext
+    i = i + 1
+Loop
+
+'establish X absolute positions
+theCurrentItem = 99
+If Not DoX Then theCurrentItem = 1
+Do Until theCurrentItem = 1
+    If Not XPosVariable(theCurrentItem) And XPosKey(theCurrentItem) <> 0 Then
+        NextPosition = XPosPosition(theCurrentItem)
+        NextPositionXBegin = XPosAbsoluteXBegin(theCurrentItem)
+        FoundEnd = False
+        XCumulative = 0
+        i = 99
+        Do Until i = 0
+            If XPosKey(i) = XPosKey(theCurrentItem) Then FoundEnd = True
+            If FoundEnd And Not XPosVariable(i) Then
+                'next absolute dimensions if not skip
+                If Not XPosSkip(i) And NextPosition = XPosKey(i) Then
+                'If NextPosition = XPosKey(I) Then
+                    XCumulative = XCumulative + XPosDrawingXBegin(i)
+                    If NextPositionXBegin Then
+                        XCumulative = XCumulative + XPosX(i)
+                    End If
+                End If
+                'next relative dimensions if not skip and not current item
+                If NextPosition = 0 And Not XPosSkip(i) And XPosKey(i) <> XPosKey(theCurrentItem) And i <> 1 Then
+                    XCumulative = XCumulative + XPosX(i) + XPosDrawingXBegin(i)
+                End If
+                'current item XBegin
+                If XPosKey(i) = XPosKey(theCurrentItem) Then
+                    XCumulative = XCumulative + XPosDrawingXBegin(theCurrentItem)
+                End If
+                'look for next position
+                If XPosKey(i) = NextPosition Then
+                    NextPosition = 0
+                    NextPositionXBegin = False
+                End If
+                'setup next position if not skip and not current item
+                If XPosPosition(i) <> 0 And NextPosition = 0 And Not XPosSkip(i) And XPosKey(i) <> XPosKey(theCurrentItem) Then
+                    NextPosition = XPosPosition(i)
+                    NextPositionXBegin = XPosAbsoluteXBegin(i)
+                End If
+            End If
+            i = i - 1
+        Loop
+        XPosXCumulative(theCurrentItem) = XCumulative
+    End If
+    theCurrentItem = theCurrentItem - 1
+Loop
+
+
+'establish Z begin positions
+theCurrentItem = 99
+If Not DoZ Then theCurrentItem = 1
+Do Until theCurrentItem = 1
+    If XPosZBeginPosition(theCurrentItem) <> 0 Then
+        NextPosition = XPosZBeginPosition(theCurrentItem)
+        NextPositionZBegin = XPosAbsoluteZBegin(theCurrentItem)
+        FoundEnd = False
+        ZCumulative = 0
+        i = 99
+        Do Until i = 0
+            If XPosKey(i) = XPosKey(theCurrentItem) Then FoundEnd = True
+            If FoundEnd Then
+                'next position
+                If NextPosition = XPosKey(i) Then
+                    ZCumulative = ZCumulative + XPosDrawingZBegin(i)
+                    If NextPositionZBegin Then
+                        ZCumulative = ZCumulative + XPosZ(i)
+                    End If
+                End If
+                'reinitialize
+                If XPosKey(i) = NextPosition Then
+                    NextPosition = 0
+                    NextPositionZBegin = False
+                End If
+                'setup next position
+                If XPosPosition(i) <> 0 And NextPosition = 0 Then
+                    NextPosition = XPosPosition(i)
+                    NextPositionZBegin = XPosAbsoluteZBegin(i)
+                End If
+                'found last position
+                If XPosPosition(i) = 0 And NextPosition = 0 Then
+                    ZCumulative = ZCumulative + XPosDrawingZBegin(i)
+                    Exit Do
+                End If
+            End If
+            i = i - 1
+        Loop
+        XPosZCumulative(theCurrentItem) = ZCumulative
+    Else
+        XPosZCumulative(theCurrentItem) = XPosDrawingZBegin(theCurrentItem)
+    End If
+    theCurrentItem = theCurrentItem - 1
+Loop
+myset.FindFirst "[Key] = " & Beginning & " "
+myset.MoveNext
+Do Until myset.EOF
+    If myset!Item > lastitem Then
+        Dots$ = Dots$ & "->" & myset!Item
+        lastitem = myset!Item
+        StatusBarMessage "Computing " & Dots$
+    End If
+    If Timer \ 1 - ElapsedTime > 15 Then
+        Exit Do
+    ElseIf Timer \ 1 - ElapsedTime > 4 Then
+        ErrorLogEntry "Processing loop at item # " & myset!Item
+    ElseIf Timer \ 1 - ElapsedTime > 3 Then
+        ErrorLogClear
+        ElapsedTime = ElapsedTime - 1
+    End If
+    If Recompute Then GoTo BeginGapFill
+    AutoDimText = Null
+    If NNEZ(myset!AbsoluteXEnd) <> 0 Then AutoDimText = "Auto X"
+    If NNEZ(myset!ZEndPosition) <> 0 Then
+        If IsNull(AutoDimText) Then
+            AutoDimText = "Auto Z"
+        Else
+            AutoDimText = "Auto X Z"
+        End If
+    End If
+    If NNEN(myset!AutoDimension) <> NNEN(AutoDimText) Then
+        myset.Edit
+        myset!AutoDimension = AutoDimText
+        myset.Update
+    End If
+    XCompute = True
+    XGapFill = 0
+    DrawingDegrees = 0
+    XCumulative = 0
+    
+    'centered in X
+    If myset!CenterX Then
+        For i = 1 To 99
+            If XPosKey(i) = myset!Position Then
+                CenterAmount = XPosX(i)
+                CenterXCumulative = XPosXCumulative(i)
+                Exit For
+            End If
+        Next
+        For i = 1 To 99
+            If XPosKey(i) = myset!Key Then
+                TheCenter = Val(CenterAmount / 2 - myset!X / 2)
+                If Val(NNEZ(myset!DrawingXBegin)) <> Val(NNEZ(TheCenter)) Then
+                    myset.Edit
+                    Changes = Changes + 1
+                    myset!DrawingXBegin = TheCenter
+                    If myset!DrawingXBegin = 0 Then myset!DrawingXBegin = Null
+                    myset.Update
+                    For M = 1 To 99
+                        If NNEZ(RecomputeAtItem(M)) = 0 Or RecomputeAtItem(M) = myset!Key Then
+                            RecomputeAtItem(M) = myset!Key
+                            Exit For
+                        End If
+                    Next
+                End If
+                XPosDrawingXBegin(i) = NNEZ(myset!DrawingXBegin)
+                XPosXCumulative(i) = CenterXCumulative + NNEZ(myset!DrawingXBegin)
+                Exit For
+            End If
+        Next
+        GoTo ComputeXDimensions
+    End If
+    
+    'floater
+    If NNEZ(myset!Position) = 0 And NNEZ(myset!AbsoluteXEnd) = 0 Then
+        'begin cumulative
+        For i = 1 To 99
+            If XPosKey(i) = myset!Key And i <> 1 Then
+                XPosXCumulative(i) = XPosXCumulative(i - 1) + XPosX(i - 1) + XPosDrawingXBegin(i)
+                Exit For
+            End If
+        Next
+    End If
+    
+    'variable
+    If NNEZ(myset!DrawingXPercent) <> 0 Then 'NNEZ(MySet!Position) <> 0 And NNEZ(MySet!AbsoluteXEnd) <> 0 Then
+        XCompute = True
+    'ErrorLogEntry MySet!Item
+        KeepLooking = False
+        Additional = 0
+        'begin cumulative
+        For i = 1 To 99
+            If NNEZ(myset!Position) <> 0 Then
+                'begin position
+                If XPosKey(i) = myset!Position Then
+                    FirstXCumulative = XPosXCumulative(i)
+                    FirstYCumulative = XPosY(i)
+                    If NNEZ(myset!AbsoluteXBegin) Then FirstXCumulative = FirstXCumulative + XPosX(i)
+                    Exit For
+                End If
+            Else
+                'no begin position
+                If XPosKey(i) = myset!Key Then
+                    FirstYCumulative = XPosY(i)
+FindLastX:
+                    i = i - 1
+                    If Not XPosSkip(i) Then
+                        FirstXCumulative = XPosXCumulative(i)
+                        If i <> 1 Then FirstXCumulative = FirstXCumulative + XPosX(i)
+                    Else
+                        If i > 1 Then GoTo FindLastX
+                         FirstXCumulative = 0
+                    End If
+                    Exit For
+                End If
+            End If
+        Next
+        'end cumulative
+        For i = 1 To 99
+            If XPosKey(i) = myset!AbsoluteXEnd Or KeepLooking Then
+                If XPosPosition(i) = 0 And i <> 1 And XPosKey(i) <> TheLastItem And myset!Item < XPosItem(i) Then
+                    KeepLooking = True
+                    If Not XPosSkip(i) Then Additional = Additional + XPosX(i) + XPosDrawingXBegin(i)
+                Else
+                    LastXCumulative = XPosXCumulative(i) - Additional
+                    LastYCumulative = XPosY(i)
+                    If myset!AbsoluteYEnd Then LastXCumulative = LastXCumulative + XPosX(i)
+                    If XPosVariable(i) And XPosItem(i) > myset!Item Then
+                        For M = 1 To 99
+                            If NNEZ(RecomputeAtItem(M)) = 0 Or RecomputeAtItem(M) = XPosKey(i) Then
+                                RecomputeAtItem(M) = XPosKey(i)
+                                Exit For
+                            End If
+                        Next
+                    End If
+                    Exit For
+                End If
+            End If
+            If NNEZ(XPosKey(i)) = 0 Then Exit For
+        Next
+        XGapFill = LastXCumulative - FirstXCumulative - NNEZ(myset!DrawingXBegin) + NNEZ(myset!DrawingXEnd)
+        XCumulative = FirstXCumulative + NNEZ(myset!DrawingXBegin)
+        'ErrorLogEntry MySet!Item & " " & XGapFill & " " & XCumulative & " " & LastXCumulative & " " & FirstXCumulative
+        'rotated
+        If NNEZ(myset!DrawingDegrees) <> 0 Then
+            TheAngle = NNEZ(myset!DrawingDegrees) * ((4 * Atn(1)) / 180)
+            PLSetX = LastXCumulative - FirstXCumulative
+            PLSetY = FirstYCumulative - LastYCumulative
+            If PLSetX >= 0 Then TheX = PLSetX Else TheX = -PLSetX
+            If PLSetY >= 0 Then TheY = PLSetY Else TheY = -PLSetY
+            XGapFill = Hundredths(Sqr(TheX * TheX + TheY * TheY))
+            If PLSetX = 0 Then
+                If PLSetY > 0 Then Ang = 90 Else Ang = -90
+            Else
+                Ang = Atn(TheY / TheX) * 180 / pi() \ 1
+            End If
+            If PLSetX = 0 And PLSetY = 0 Then
+                Ang = 0
+            ElseIf PLSetX > 0 And PLSetY >= 0 Then
+            ElseIf PLSetX > 0 And PLSetY < 0 Then
+                Ang = -Ang
+            ElseIf PLSetX < 0 And PLSetY = 0 Then
+                Ang = 180
+            ElseIf PLSetX < 0 And PLSetY < 0 Then
+                Ang = -180 + Ang
+            ElseIf PLSetX < 0 And PLSetY > 0 Then
+                Ang = 180 - Ang
+            End If
+            DrawingDegrees = Ang
+        End If
+    Else
+        XCompute = False
+    End If
+    
+ComputeXDimensions:
+    If DoX And XCompute And NNEZ(myset!DrawingXPercent) <> 0 Then
+        XGapFill = Hundredths(XGapFill * myset!DrawingXPercent / 100)
+        For i = 1 To 99
+            If XPosKey(i) = myset!Key Then
+                XPosXCumulative(i) = XCumulative
+                XPosX(i) = XGapFill
+                Exit For
+            End If
+        Next
+        'If Not MySet!Skip Then
+            If Val(NNEZ(myset!X)) <> Val(NNEZ(XGapFill)) Then
+                myset.Edit
+                Changes = Changes + 1
+                myset!X = XGapFill
+                myset.Update
+            End If
+            If Val(NNEZ(myset!DrawingDegrees)) <> Val(NNEZ(DrawingDegrees)) Then
+                myset.Edit
+                Changes = Changes + 1
+                myset!DrawingDegrees = DrawingDegrees
+                If DrawingDegrees = 0 Then myset!DrawingDegrees = Null
+                myset.Update
+            End If
+        'End If
+    End If
+    
+    'Y
+    
+    'Z
+    If DoZ Then
+        ZCompute = False
+        'Variable
+        If NNEZ(myset!ZEndPosition) <> 0 Then
+            'begin cumulative
+            ZCompute = True
+            For i = 1 To 99
+                If NNEZ(myset!ZBeginPosition) <> 0 Then
+                    If XPosKey(i) = myset!ZBeginPosition Then
+                        FirstZCumulative = XPosZCumulative(i) + NNEZ(myset!DrawingZBegin)
+                        If myset!AbsoluteZBegin Then FirstZCumulative = FirstZCumulative + XPosZ(i)
+                        Exit For
+                    End If
+                Else
+                    If XPosKey(i) = myset!Key Then
+                        If Not myset!AbsoluteZBegin Then
+                            FirstZCumulative = XPosZCumulative(i - 1) + NNEZ(myset!DrawingZBegin)
+                        Else
+                            FirstZCumulative = NNEZ(myset!DrawingZBegin)
+                        End If
+                        Exit For
+                    End If
+                End If
+            Next
+            'end cumulative
+            For i = 1 To 99
+                If XPosKey(i) = myset!ZEndPosition Then
+                    LastZCumulative = XPosZCumulative(i)
+                    If myset!AbsoluteZEnd Then LastZCumulative = LastZCumulative + XPosZ(i)
+                    Exit For
+                End If
+            Next
+            ZGapFill = LastZCumulative - FirstZCumulative + NNEZ(myset!DrawingZEnd)
+            ZCumulative = FirstZCumulative '+ NNEZ(MySet!DrawingZBegin)
+            For i = 1 To 99
+                If XPosKey(i) = myset!Key Then
+                    XPosZCumulative(i) = ZCumulative
+                    Exit For
+                End If
+            Next
+        End If
+        'ErrorLogEntry MySet!Item & " " & ZGapFill
+    End If
+    If DoZ And ZCompute Then
+        If Val(NNEZ(myset!Z)) <> Val(NNEZ(ZGapFill)) Then
+            myset.Edit
+            myset!Z = ZGapFill
+            Changes = Changes + 1
+            myset.Update
+        End If
+    End If
+    
+    For i = 1 To 99
+        If NNEZ(RecomputeAtItem(i)) = 0 Then Exit For
+        If myset!Key = RecomputeAtItem(i) And Not RecomputedItem(i) Then
+            Recompute = True
+            RecomputeAtEnd = True
+            RecomputedItem(i) = True
+        End If
+    Next
+    If myset!Key = TheLastItem Then
+        If RecomputeAtEnd Then
+            Recompute = True
+            RecomputeAtEnd = False
+        Else
+            Exit Do
+        End If
+    End If
+    If Not Recompute Then myset.MoveNext
+Loop
+RecalculateListInProgress = False
+AskToCalculateY = 0
+AskToCalculateZ = 0
+DoCmd.Hourglass False
+ElapsedTime = Hundredths(Timer - ElapsedTime)
+If ElapsedTime > 4 Then ErrorLogReport 1
+If NNEZ(Changes) > 0 Then
+    If Changes > 1 Then
+        Forms!productlistmaster!ProductListControl!Changes.Caption = Changes & " changes"
+    Else
+        Forms!productlistmaster!ProductListControl!Changes.Caption = Changes & " change"
+    End If
+Else
+    Forms!productlistmaster!ProductListControl!Changes.Caption = ""
+End If
+DoCmd.Hourglass False
+'ErrorLogEntry "Autodimension elapsed time " & ElapsedTime & " seconds"
+
+Exit Sub
+
+GapFillError:
+MsgBox Err.Description
+Resume ResumeGapFillError
+ResumeGapFillError:
+DoCmd.Hourglass False
+
+End Sub
+
+
+Function CloseForms()
+
+Exit Function
+On Error Resume Next
+If Screen.ActiveForm.FormName <> "Sales" Then DoCmd.Close acForm, "Sales"
+If Screen.ActiveForm.FormName <> "Correspondence" Then DoCmd.Close acForm, "Correspondence"
+If Screen.ActiveForm.FormName <> "Resources" And FIsLoaded("Resources") Then Forms!Resources.Visible = False  'DoCmd.Close acForm, "Resources"
+If Screen.ActiveForm.FormName <> "Drawings" Then DoCmd.Close acForm, "Drawings"
+If Screen.ActiveForm.FormName <> "Spreadsheets" Then DoCmd.Close acForm, "Spreadsheets"
+If Screen.ActiveForm.FormName <> "Material" Then DoCmd.Close acForm, "Material"
+If Screen.ActiveForm.FormName <> "HoursEntry" Then DoCmd.Close acForm, "HoursEntry"
+If Screen.ActiveForm.FormName <> "Products" Then DoCmd.Close acForm, "Products"
+If Screen.ActiveForm.FormName <> "Job" Then DoCmd.Close acForm, "Job"
+''If Screen.ActiveForm.FormName = "ProductListMaster" Then
+    ''If Forms!Options.Visible Or Forms!Note.Visible Then RequeryPopups
+''End If
+If Screen.ActiveForm.FormName = "PartsList" Then DoCmd.Close A_FORM, "CNC"
+If Screen.ActiveForm.FormName = "CNC" Then DoCmd.Close A_FORM, "PartsList"
+'ErrorLogEntry Tenths(Timer - LocalVariable("ElapsedTime")) & " to open " & Screen.ActiveForm.FormName
+
+End Function
+
+Public Function GetNote(Key)
+
+On Error GoTo Error:
+Dim mytable As DAO.Recordset
+SetMyDB
+Set mytable = mydb.OpenRecordset("SELECT [ID], [Note] from [>Note] WHERE [ProductListKey] = " & Key & " Order by [ID] asc", dbOpenDynaset, dbSeeChanges)
+If mytable.RecordCount <> 0 Then
+    mytable.MoveFirst
+    Do Until mytable.EOF
+        If NNEN(TheText) = "" Then
+            TheText = "> " & mytable!ID & ": " & mytable!Note & "."
+        Else
+            TheText = TheText & Chr$(13) & Chr$(10) & "> " & mytable!ID & ": " & mytable!Note & "."
+        End If
+        mytable.MoveNext
+    Loop
+    GetNote = TheText
+End If
+Exit Function
+
+Error:
+Resume resumeerror
+resumeerror:
+
+End Function
+
+Function HideWindow()
+
+Exit Function
+On Error Resume Next
+If Screen.ActiveForm.FormName = "MainMenu" Then
+Else
+    Screen.ActiveForm.Visible = False
+End If
+
+End Function
+
+Function IDCategoryWarning()
+
+If InProgress = "Import" Then Exit Function
+TheForm = Screen.ActiveForm.Caption
+DynasetForm = ">" & TheForm
+If Screen.ActiveForm.ID = "" Then Exit Function
+If Screen.ActiveControl = "ID" Then
+    MsgBox "Please enter a unique Identification name.", 64, "ID"
+    DoCmd.GoToControl "Field1"
+    DoCmd.GoToControl "ID"
+End If
+InProgress = "IDCategoryWarning"
+If IsNull(Screen.ActiveForm!Category) Then
+    Screen.ActiveForm!Category = Screen.ActiveForm!CategorySort
+    Screen.ActiveForm.Type = Screen.ActiveForm!ProductType
+End If
+SaveRecord 'send keys doesn't work!
+On Error GoTo IDCategoryWarningErrorRoutine
+TheID = Screen.ActiveForm.ID
+TheCategory = Screen.ActiveForm!Category
+Dim myset As DAO.Recordset
+SetMyDB
+If TheForm = "Products" Then
+    Set myset = mydb.OpenRecordset("SELECT [ID] from  [>Products]  WHERE [ID] = '" & TheID & "' And [Category] = '" & TheCategory & "';")
+ElseIf TheForm = "Material" Then
+    Set myset = mydb.OpenRecordset("SELECT [ID] from  [>Material]  WHERE [ID] = '" & TheID & "' And [Category] = '" & TheCategory & "';")
+ElseIf TheForm = "Processes" Then
+    Set myset = mydb.OpenRecordset("SELECT [ID] from  [>Processes]  WHERE [ID] = '" & TheID & "' And [Category] = '" & TheCategory & "';")
+End If
+myset.MoveLast
+TheRecordCount = myset.RecordCount
+If TheRecordCount < 2 Then
+    myset.Close
+    If Screen.ActiveForm.ID = RecordedID Then 'duplicate entry
+    ElseIf RecordedID = "ID" Then 'new entry
+    ElseIf TheForm = "Material" Then
+    End If
+    InProgress = ""
+    Exit Function
+End If
+
+MsgBox "The identification name:" + Chr$(13) + Screen.ActiveForm.ID + Chr$(13) + "is in use.  Please enter a unique Identification name.", 64, "ID"
+myset.Close
+Screen.ActiveForm.ID = RecordedID
+DoCmd.GoToControl "ID"
+SendKeys "+{ENTER}", True
+InProgress = ""
+Exit Function
+
+EndIDCategoryWarning:
+InProgress = ""
+Exit Function
+
+IDCategoryWarningErrorRoutine:
+Resume EndIDCategoryWarning
+
+End Function
+
+Function IDCheck()
+
+On Error Resume Next
+If InProgress = "Import" Then Exit Function
+Category.Requery
+TheForm = Screen.ActiveForm.Caption
+If IsNull(Screen.ActiveControl) Then
+    DoCmd.DoMenuItem 0, 1, 1
+    DoCmd.Hourglass False
+    Exit Function
+End If
+DoCmd.Hourglass True
+If Screen.ActiveControl = "ID" Then
+    MsgBox "Please enter a unique Identification name.", 64, "ID"
+    DoCmd.GoToControl "ID"
+    DoCmd.Hourglass False
+    Exit Function
+End If
+If NNEN(Screen.ActiveForm!Category) = "" Then
+    MsgBox "Please select a Category.", 64, "ID"
+    DoCmd.DoMenuItem 0, 1, 1
+    DoCmd.GoToControl "CategorySort"
+    DoCmd.Hourglass False
+    Exit Function
+End If
+SaveRecord
+TheControl = Screen.ActiveControl.ControlName
+TheCategory = Screen.ActiveForm!Category
+TheID = Screen.ActiveForm.ID
+theKey = Screen.ActiveForm!Key
+If Screen.ActiveControl.ControlName = "Category" Then
+    Screen.ActiveForm!CategorySort = Screen.ActiveForm!Category
+    CategorySort.Requery
+    DoCmd.Requery
+End If
+Dim myset As DAO.Recordset
+SetMyDB
+If TheForm = "Resources" Then Set myset = Forms!Resources.RecordsetClone
+If TheForm = "Material" Then Set myset = Forms!Material.RecordsetClone
+If TheForm = "Products" Then Set myset = Forms!Products.RecordsetClone
+If TheForm = "Processes" Then Set myset = Forms!Processes.RecordsetClone
+If TheForm = "Jobs" Then Set myset = Forms!Jobs.RecordsetClone
+'On Error GoTo IDCheckErrorRoutine
+If myset.RecordCount = 0 Then
+    DoCmd.Hourglass False
+    Exit Function
+End If
+myset.MoveFirst
+TheRecordCount = 0
+Do Until myset.EOF
+If myset!ID = TheID Then TheRecordCount = TheRecordCount + 1
+myset.MoveNext
+Loop
+myset.Close
+If TheRecordCount > 1 Then
+    If TheControl = "Category" Then
+        DoCmd.GoToControl "ID"
+        DoCmd.FindRecord TheID
+    End If
+    If TheRecordCount = 1 Then
+        PluralVerb = "is"
+        PluralEnd = ""
+    Else
+        PluralVerb = "are"
+        PluralEnd = "s"
+    End If
+    If MessageOKCancel("There " & PluralVerb & " " & TheRecordCount & " other record" & PluralEnd & " with the identification name " & TheID & " in use.") Then
+        Screen.ActiveForm.ID = RecordedID
+        DoCmd.CancelEvent 'DoMenuItem 0, 1, 1
+        'DoCmd GoToControl "ID"
+        myset.Close
+        DoCmd.Hourglass False
+        Exit Function
+    End If
+End If
+If TheControl = "Category" Then
+    DoCmd.GoToControl "ID"
+    DoCmd.FindRecord TheID
+End If
+If IsNull(Screen.ActiveForm!Category) Then Screen.ActiveForm!Category = Screen.ActiveForm!CategorySort
+If TheForm = "Products" Then
+    If IsNull(Screen.ActiveForm.Type) Then Screen.ActiveForm.Type = Screen.ActiveForm!ProductType
+    If IsNull(Screen.ActiveForm.Description) Then Screen.ActiveForm.Description = Screen.ActiveForm.ID
+    Forms!Products!CategorySort = Forms!Products.ID
+End If
+If TheForm = "Material" Then
+    If IsNull(Screen.ActiveForm.Description) Then Screen.ActiveForm.Description = Screen.ActiveForm.ID
+End If
+If TheForm = "Jobs" Then
+    JobName.Requery
+End If
+
+EndIDCheck:
+DoCmd.Hourglass False
+Exit Function
+
+IDCheckErrorRoutine:
+Resume EndIDCheck
+
+End Function
+
+Function IDWarning() As Integer
+    
+If InProgress = "Import" Or InProgress = "IDCategoryWarning" Then Exit Function
+TheForm = Screen.ActiveForm.Caption
+If Screen.ActiveForm.ID = "" Then Exit Function
+If Screen.ActiveControl = "ID" Then
+    MsgBox "Please enter a unique Identification name.", 64, "ID"
+    DoCmd.GoToControl "Field1"
+    DoCmd.GoToControl "ID"
+End If
+Dim mytable As DAO.Recordset
+SetMyDB
+Set mytable = mydb.OpenRecordset(">" + TheForm)
+On Error GoTo ErrorRoutine
+mytable.MoveFirst
+Do Until mytable.EOF
+If TheForm = "Material" Then
+    If mytable!ID = Screen.ActiveForm.ID And mytable!Key <> Screen.ActiveForm!Key And mytable!Category = Screen.ActiveForm!Category Then
+        MsgBox "The identification name:" + Chr$(13) + Screen.ActiveForm.ID + Chr$(13) + "is in use. Please enter a unique Identification name.", 64, "ID"
+        Screen.ActiveForm.ID = RecordedID
+        DoCmd.GoToControl "Field1"
+        DoCmd.GoToControl "ID"
+        DoCmd.DoMenuItem 0, 1, 1
+        mytable.Close
+        Exit Function
+    End If
+Else
+    If mytable!ID = Screen.ActiveForm.ID And mytable!Key <> Screen.ActiveForm!Key And mytable!Category = Screen.ActiveForm!Category Then
+        MsgBox "The identification name:" + Chr$(13) + Screen.ActiveForm.ID + Chr$(13) + "is in use. Please enter a unique Identification name.", 64, "ID"
+        Screen.ActiveForm.ID = RecordedID
+        DoCmd.GoToControl "Field1"
+        DoCmd.GoToControl "ID"
+        DoCmd.DoMenuItem 0, 1, 1
+        mytable.Close
+        Exit Function
+    End If
+End If
+mytable.MoveNext
+Loop
+mytable.Close
+If Screen.ActiveForm.ID <> RecordedID Then
+    SendKeys "+{ENTER}", False
+End If
+
+On Error GoTo ErrorRoutine
+
+
+EndIDWarning:
+Exit Function
+
+ErrorRoutine:
+Resume EndIDWarning
+End Function
+
+
+Function IsControl(TheControl)
+
+If TheControl = Screen.ActiveControl.ControlName Then IsControl = True
+
+End Function
+
+Function IsTrue(TheValue)
+
+MsgBox TheValue
+IsTrue = False
+If IsNull(TheValue) Then Exit Function
+If TheValue Then IsTrue = True
+
+End Function
+
+Function IsZero(TheNumber)
+
+If TheNumber = 0 Or IsNull(TheNumber) Or TheNumber = "" Then IsZero = True
+
+End Function
+
+
+
+
+Function NotInProgress(X)
+
+NotInProgress = True
+
+End Function
+
+Function NotZero(TheNumber)
+
+On Error GoTo NotZeroError
+If NNEZ(TheNumber) = 0 Or TheNumber = 0 Or IsNull(TheNumber) Or TheNumber = "" Then Exit Function
+NotZero = True
+Exit Function
+NotZeroError:
+Resume Next
+
+End Function
+
+Function OpenParts()
+
+On Error Resume Next
+DoCmd.OpenQuery ">" + Screen.ActiveControl + " Query"
+
+End Function
+
+Function OpenProducts() As Integer
+
+On Error Resume Next
+If Screen.ActiveControl = "" Then Exit Function
+DoCmd.OpenQuery ">" + Screen.ActiveControl + " Query"
+
+End Function
+
+
+Function SelectMainMenu()
+
+Forms!Mainmenu.SetFocus
+
+End Function
+
+
+
+Sub SubDefaultDimensions()
+
+If InProgress = "Dimension" Then Exit Sub
+If TheItemType = "Product" Then 'get new default information
+    Dim mytable As DAO.Recordset
+    OptionID = Forms!productlistmaster!ProductListControl!Product
+    'get full name and requirement
+    Description = ""
+    SetMyDB
+    Set mytable = mydb.OpenRecordset(">Products", dbOpenDynaset, dbSeeChanges)
+    mytable.FindFirst "[Key] = " & Val(OptionID) & ""
+    If mytable.NoMatch Then
+    Else
+        Description = NNEN(mytable!Description)
+        DefaultX = NNEN(mytable!DefaultX)
+        DefaultY = NNEN(mytable!DefaultY)
+        DefaultZ = NNEN(mytable!DefaultZ)
+        DefaultOption1 = NNEN(mytable!DefaultOption1)
+        DefaultOption2 = NNEN(mytable!DefaultOption2)
+        DefaultOption3 = NNEN(mytable!DefaultOption3)
+    End If
+End If
+If NNEN(Forms!productlistmaster!ProductListControl!X) <> "" Or NNEN(Forms!productlistmaster!ProductListControl!Y) <> "" Or NNEN(Forms!productlistmaster!ProductListControl!Z) <> "" Then
+    If Not MessageOKCancel("Replace existing dimensions with default values?") Then GoSub SaveDefaultDimensions
+Else
+    GoSub SaveDefaultDimensions
+End If
+Exit Sub
+
+SaveDefaultDimensions:
+    If DefaultX <> "?" Then
+        Forms!productlistmaster!ProductListControl!X = DefaultX
+    Else
+            Forms!productlistmaster!ProductListControl!X = InputBox("Value of X?", "Product Value")
+    End If
+    If DefaultY <> "?" Then
+        Forms!productlistmaster!ProductListControl!Y = DefaultY
+    Else
+            Forms!productlistmaster!ProductListControl!Y = InputBox("Value of Y?", "Product Value")
+    End If
+    If DefaultZ <> "?" Then
+        Forms!productlistmaster!ProductListControl!Z = DefaultZ
+    Else
+            Forms!productlistmaster!ProductListControl!Z = InputBox("Value of Z?", "Product Value")
+    End If
+    Forms!productlistmaster!ProductListControl!DrawingYBegin = NNEN(mytable!DefaultYBegin)
+    Forms!productlistmaster!ProductListControl!DrawingZBegin = NNEN(mytable!DefaultZBegin)
+    Forms!productlistmaster!ProductListControl!AbsoluteYBegin = NNEN(mytable!DefaultAbsoluteYBegin)
+    Forms!productlistmaster!ProductListControl!AbsoluteZBegin = NNEN(mytable!DefaultAbsoluteZBegin)
+    Forms!productlistmaster!ProductListControl!HideItemInList = NNEN(mytable!HideInPLList)
+    SaveRecord
+Return
+
+End Sub
+
+Function TheUser(UserName)
+
+TheUsername = CurrentUser()
+If TheUsername = UserName Then TheUser = True
+
+End Function
+
+Public Function OptionNameFormat(TheOption, TheRequirement)
+
+On Error Resume Next
+If TheOption = "" Then
+ElseIf TheRequirement = "" Then
+    OptionNameFormat = Chr$(183) & TheOption
+Else
+    OptionNameFormat = Chr$(183) & TheOption & "  " & TheRequirement
+End If
+
+End Function
+
+Public Function ReportProductDrawings(TheReport)
+
+If TheReport = "CoverPage" Then
+    If Not FIsLoaded("ProductListMaster") Then
+        MsgBox "Product List must be open to run this report"
+        Exit Function
+    End If
+    If NNEZ(Forms!productlistmaster!ProductListControl!JobName) = 0 Then
+        MsgBox "Product List must have a Job run this report"
+        Exit Function
+    End If
+    DoCmd.OpenReport "Product List Cover Page", acPreview
+    Exit Function
+
+'Specifications
+ElseIf TheReport = "Specs" Then
+    If Not FIsLoaded("ProductListMaster") Then
+        MsgBox "Product List must be open to run this report"
+        Exit Function
+    End If
+    SetLocalVariable "ScratchPad", ">Product List Specs Report"
+    DoCmd.OpenReport "Product Specs", acPreview
+    Exit Function
+
+ElseIf TheReport = "AllSpecs" Then
+    SetLocalVariable "ScratchPad", ">Product All Specs Report"
+    DoCmd.OpenReport "Product Specs", acPreview
+    Exit Function
+
+ElseIf TheReport = "DetailedSpecs" Then
+    If Not FIsLoaded("ProductListMaster") Then
+        MsgBox "Product List must be open to run this report"
+        Exit Function
+    End If
+    SetLocalVariable "ScratchPad", ">Product List Detailed Specs Report"
+    DoCmd.OpenReport "Product Specs", acPreview
+    Exit Function
+
+ElseIf TheReport = "AllDetailedSpecs" Then
+    SetLocalVariable "ScratchPad", ">Product All Detailed Specs Report"
+    DoCmd.OpenReport "Product Specs", acPreview
+    Exit Function
+
+'Drawings
+
+ElseIf TheReport = "Drawings" Then
+    If Not FIsLoaded("ProductListMaster") Then
+        MsgBox "Product List must be open to run this report"
+        Exit Function
+    End If
+    SetLocalVariable "ScratchPad", ">Product List Drawings Report"
+
+ElseIf TheReport = "Selection" Then
+    If IsNull(Forms!Products!ProductDrawing) Then
+        MsgBox "No " & Forms!Products.Description & " Product Drawing available"
+        Exit Function
+    End If
+    SetLocalVariable "ScratchPad", ">Products Report Drawing Query"
+
+ElseIf TheReport = "All" Then
+    SetLocalVariable "ScratchPad", ">Products Report All Drawing Query"
+End If
+DoCmd.OpenReport "Product Drawings", acPreview
+
+End Function
+
+Public Function DrawingReport(TheReport)
+
+On Error Resume Next
+SaveRecord
+If TheReport = "Customer" Then
+    SetLocalVariable "ScratchPad", ">Drawing Customer Query"
+ElseIf TheReport = "Install" Then
+    SetLocalVariable "ScratchPad", ">Drawing Installation Query"
+ElseIf TheReport = "Shop" Then
+    SetLocalVariable "ScratchPad", ">Drawing Shop Query"
+ElseIf TheReport = "Selection" Then
+    SetLocalVariable "ScratchPad", ">Drawing Query"
+ElseIf TheReport = "All" Then
+    SetLocalVariable "ScratchPad", ">Drawing All Query"
+End If
+DoCmd.OpenReport "Drawing", acPreview
+
+
+End Function
+
+Public Function ClosePopups()
+
+On Error Resume Next
+DoCmd.Close acForm, "ProductDrawings"
+If Screen.ActiveForm.FormName = "Resources" And FIsLoaded("Jobs") Then Forms!Jobs.Visible = False 'DoCmd.Close acForm, "Resources"
+'DoCmd.Close acForm, "Jobs"
+DoCmd.Close acForm, "Designs"
+DoCmd.Close acForm, "Materials"
+'DoCmd.Close acForm, "Parser"
+Screen.ActiveForm.Repaint
+
+End Function

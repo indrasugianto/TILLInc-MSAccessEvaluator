@@ -1,0 +1,4 @@
+SELECT "/C" AS [Transaction Type], [>Resources].SageID AS [Vendor ID], Left([>Resources.ID],20) AS [Invoice #], Format([TransactionDate],"MM/DD/YY") AS [Adjustment Date], Format(-[CreditAmount],"#.00") AS [Adjustment Amount], [>General Ledger Query].SourceTransaction AS Reference, [Purchase Journal].AccountNo AS [1st Distribution Account], Format(-[CreditAmount],"#.00") AS [1st Distribution Amount]
+FROM ([>General Ledger Query] LEFT JOIN [Purchase Journal] ON [>General Ledger Query].SourceKey=[Purchase Journal].Key) LEFT JOIN [>Resources] ON [Purchase Journal].SupplierID=[>Resources].Key
+WHERE (((Format(-[CreditAmount],"#.00"))>0) And (([>General Ledger Query].AccountNumber)=201) And (([>General Ledger Query].TransactionDate)>=forms!generalledger.fromdate And ([>General Ledger Query].TransactionDate)<=forms!generalledger!todate) And (([>General Ledger Query].SourceJournal)="Purchase"))
+ORDER BY Format([TransactionDate],"MM/DD/YY");

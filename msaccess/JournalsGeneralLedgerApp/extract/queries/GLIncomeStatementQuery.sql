@@ -1,0 +1,2 @@
+SELECT [General Ledger Income Statement].Index, [General Ledger Income Statement].Heading, [General Ledger Income Statement].SubHeading, [General Ledger Income Statement].SubSubHeading, [General Ledger Income Statement].[Account Range from], [General Ledger Income Statement].[Account Range to], [General Ledger Income Statement].[Index Income], [General Ledger Income Statement].[Index Expense], AccountBalance([Account Range From],[Account Range To]) AS AccountBalance
+FROM [General Ledger Income Statement];

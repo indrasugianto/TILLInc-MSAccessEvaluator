@@ -1,0 +1,4 @@
+SELECT DISTINCTROW [>Product List Whole Query].PremiumCost, [>Product List Whole Query].OfficeHours, [>Product List Whole Query].ShopHours, [>Product List Whole Query].FinishHours, [>Product List Whole Query].AssemblyHours, [>Product List Whole Query].InstallHours, [>Product List Whole Query].Inventory, [>Product List Whole Query].SpecialMaterials, [>Product List Whole Query].TotalCost, [>Product List Whole Query].Category
+FROM [>Product List Whole Query]
+WHERE ((([>Product List Whole Query].ProductListKey)=Forms!ProductListMaster.Form.ProductListControl!ProductListName))
+WITH OWNERACCESS OPTION;

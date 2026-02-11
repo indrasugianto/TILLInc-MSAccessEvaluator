@@ -1,0 +1,4 @@
+SELECT DISTINCTROW [MIS Hours].Employee, [MIS Hours].Date, [MIS Hours].[Job ID], [MIS Hours].Activity, [MIS Hours].Archive, [MIS Hours].ADPFile, [MIS Hours].EntryDate AS Expr1, [MIS Hours].Charge, [MIS Hours].Hours, [MIS Hours].Rate, [MIS Hours].Cost, [MIS Hours].Monday, [MIS Hours].Tuesday, [MIS Hours].Wednesday, [MIS Hours].Thursday, [MIS Hours].Friday, [MIS Hours].Saturday, [MIS Hours].Sunday, [MIS Hours].Key
+FROM [MIS Hours] LEFT JOIN [>Jobs] ON [MIS Hours].[Job ID]=[>Jobs].Key
+WHERE ((([MIS Hours].Employee)=Forms!HoursEntryLocked!EmpName) And (([MIS Hours].Date)=Forms!HoursEntryLocked!Week) And (([MIS Hours].Activity) Is Not Null))
+ORDER BY [>Jobs].ID, [MIS Hours].Activity;

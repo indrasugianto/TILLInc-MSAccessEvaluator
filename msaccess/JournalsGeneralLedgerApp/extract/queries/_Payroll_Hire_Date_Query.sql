@@ -1,0 +1,4 @@
+SELECT DISTINCTROW [MIS Personnel].ADPName, [MIS Personnel].EmploymentDate, [MIS Personnel].TerminationDate, [MIS Personnel].Closed, [MIS Personnel].Rate, [MIS Personnel].CompensationChange, [MIS Personnel].ADPFile, Format([EmploymentDate],"mm") AS [Month], Format([EmploymentDate],"dd") AS [Day], Format([EmploymentDate],"yyyy") AS [Year], Format(DateDiff("d",[EmploymentDate],Now())/365,"#.0") AS Years, Format([EmploymentDate],"mmmm") AS TheMonth, IIf(Year([employmentDate])<Year(Now()),Format(DateDiff("d",[CompensationChange],Now())/365,"#.0"),Null) AS ReviewYears, IIf([ReviewYears]>=1,[ReviewYears] & " yr.","") AS ReviewDue, Format(Now(),"m") AS ThisMonth
+FROM [MIS Personnel]
+WHERE ((([MIS Personnel].TerminationDate) Is Null) AND (([MIS Personnel].Closed)=False) AND (([MIS Personnel].Rate)<>0) AND (([MIS Personnel].ADPFile)>5 And ([MIS Personnel].ADPFile)<>3002))
+ORDER BY [MIS Personnel].ADPName;

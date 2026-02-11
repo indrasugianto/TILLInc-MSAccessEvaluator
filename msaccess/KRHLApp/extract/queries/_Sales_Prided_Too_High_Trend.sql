@@ -1,0 +1,2 @@
+SELECT [>Estimates Closed Query].Due, [Sales Journal].SaleAmount, [>Sales Priced Too High Query].SaleAmount
+FROM ([>Estimates Closed Query] LEFT JOIN [>Sales Priced Too High Query] ON [>Estimates Closed Query].Key=[>Sales Priced Too High Query].Key) LEFT JOIN [Sales Journal] ON [>Estimates Closed Query].Key=[Sales Journal].Job;

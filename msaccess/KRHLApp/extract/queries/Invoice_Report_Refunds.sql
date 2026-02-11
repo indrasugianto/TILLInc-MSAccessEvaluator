@@ -1,0 +1,4 @@
+SELECT [Cash Disbursements Journal].CheckDate, [Cash Disbursements Journal].DebitAmount, [Cash Disbursements Journal].Job, [>Resources].ID, [Cash Disbursements Journal].Void
+FROM ([Cash Disbursements Journal] INNER JOIN [Receipts Journal] ON ([Cash Disbursements Journal].Job=[Receipts Journal].Job) AND ([Cash Disbursements Journal].SupplierID=[Receipts Journal].Payor)) INNER JOIN [>Resources] ON [Cash Disbursements Journal].SupplierID=[>Resources].Key
+GROUP BY [Cash Disbursements Journal].CheckDate, [Cash Disbursements Journal].DebitAmount, [Cash Disbursements Journal].Job, [>Resources].ID, [Cash Disbursements Journal].Void
+HAVING ((([Cash Disbursements Journal].Job)=Forms!Sales!TheJobName) And (([Cash Disbursements Journal].Void)=False));

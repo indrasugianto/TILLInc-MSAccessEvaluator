@@ -1,0 +1,4 @@
+SELECT ProjectSchedule.Task, ProjectSchedule.TaskEnd, [>Jobs].ID, ProjectSchedule.PercentComplete, [>Jobs].ProductionPhase, [MIS Personnel].Text1, [>Jobs].SpecifiedBy, ProjectSchedule.Drawing, [>Jobs].Key, [MIS Personnel].Employee
+FROM ProjectSchedule LEFT JOIN (([>Jobs] LEFT JOIN [MIS Personnel] AS [MIS Personnel_1] ON [>Jobs].ManagedBy=[MIS Personnel_1].Key) LEFT JOIN [MIS Personnel] ON [>Jobs].SpecifiedBy=[MIS Personnel].Key) ON ProjectSchedule.Job=[>Jobs].Key
+WHERE (((ProjectSchedule.PercentComplete)<100) And (([>Jobs].ProductionPhase)<>"Archive" And ([>Jobs].ProductionPhase)<>"Completed") And (([MIS Personnel].Employee)=forms!Sales.Manager) And ((ProjectSchedule.TaskDuration)=0) And (([>Jobs].Estimate)=False) And (([>Jobs].Closed)=False))
+ORDER BY Left([Task],1), ProjectSchedule.TaskEnd, [>Jobs].ID, [MIS Personnel].Text1;

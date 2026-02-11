@@ -1,0 +1,5 @@
+SELECT DISTINCTROW [>Product List Note ID Match Query].ID, [>Product List Note ID Match Query].Note, [>Product Lists].ProductList, [>Product List].Item, IIf(nnen(Forms!NoteSearch!SearchList)="",True,IIf(Forms!NoteSearch!SearchList=[>Product Lists].ProductList,True,False)) AS Expr2
+FROM [>Product List Note ID Match Query] LEFT JOIN ([>Product List] LEFT JOIN [>Product Lists] ON [>Product List].ProductListKey=[>Product Lists].Key) ON [>Product List Note ID Match Query].ProductListKey=[>Product List].Key
+WHERE ((([>Product Lists].ProductList) Is Not Null) And ((IIf(nnen(Forms!NoteSearch!SearchList)="",True,IIf(Forms!NoteSearch!SearchList=[>Product Lists].ProductList,True,False)))=True))
+ORDER BY [>Product List Note ID Match Query].ID, [>Product Lists].ProductList, [>Product List].Item
+WITH OWNERACCESS OPTION;

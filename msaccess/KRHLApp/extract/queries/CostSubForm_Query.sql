@@ -1,0 +1,4 @@
+SELECT [>Jobs].ID, [Job Project Hours].TotalCost, [Job Agreement Sales].SumOfSaleAmount-NNEZ([Job Stone Sales].sumofsaleamount) AS TotalSales, [MIS Personnel].Key, [MIS Personnel_1].Key, [>Jobs].DesignJob, [>Jobs].Closed, [>Jobs].Key AS JobKey, [TotalCost]/[TotalSales] AS Percentage, [>Jobs].ProductionPhase
+FROM ((((([>Jobs] LEFT JOIN [Job Project Hours] ON [>Jobs].Key=[Job Project Hours].Key) LEFT JOIN [MIS Personnel] ON [>Jobs].SpecifiedBy=[MIS Personnel].Key) LEFT JOIN [MIS Personnel] AS [MIS Personnel_1] ON [>Jobs].ManagedBy=[MIS Personnel_1].Key) LEFT JOIN [Job Agreement Sales] ON [>Jobs].Key=[Job Agreement Sales].Key) LEFT JOIN [Job Stone Sales] ON [>Jobs].Key=[Job Stone Sales].Key) LEFT JOIN [>Settings] ON [>Jobs].ProductionPhase=[>Settings].Phase
+WHERE ((([>Jobs].DesignJob)=False) AND (([>Jobs].Closed)=False) AND (([>Jobs].Estimate)=False))
+ORDER BY [>Settings].PhaseSort, [>Jobs].ID;
