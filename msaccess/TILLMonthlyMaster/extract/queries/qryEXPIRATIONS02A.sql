@@ -1,0 +1,1 @@
+ALTER TABLE tempstaff ADD CONSTRAINT tempstaffconstraint PRIMARY KEY (EMPLOYID)

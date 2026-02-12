@@ -1,0 +1,2 @@
+DELETE tblPhoneDirectory.*
+FROM tblPhoneDirectory;

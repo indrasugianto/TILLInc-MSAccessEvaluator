@@ -1,0 +1,2 @@
+SELECT tblPeopleClientsAutismServices.*
+FROM tblPeopleClientsAutismServices;

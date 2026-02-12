@@ -1,0 +1,2 @@
+SELECT tblStaffEvalsAndSupervisions.*
+FROM tblStaffEvalsAndSupervisions;

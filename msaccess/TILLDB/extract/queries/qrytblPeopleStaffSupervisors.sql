@@ -1,0 +1,2 @@
+SELECT tblPeopleStaffSupervisors.*
+FROM tblPeopleStaffSupervisors;

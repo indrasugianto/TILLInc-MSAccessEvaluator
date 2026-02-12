@@ -1,0 +1,84 @@
+Version,Date,Changes
+7.00,2022-10-03 00:00:00,"•  Streamlined a lot of the code.
+•  Changed the Section 8 report to include summary client counts.
+•  Add e-fax email address to the Places page."
+7.01,2022-10-05 00:00:00,•  Fixed a compiler error.
+7.02,2022-10-19 00:00:00,•  Updated Rep Payee Follow-up letters to reflect SSA rate increase.
+7.03,2022-10-20 00:00:00,"•  Modified Section 8 report to provide more meaninful summary client counts.
+•  Changed the sort of programs in the Section 8 report to display all residences first then CLOs."
+7.04,2022-11-10 00:00:00,•  Added new export that provides donations for individual donors within a time range.
+7.05,2022-11-30 00:00:00,•  Changed Victoria's EBT Cards billing report to J'neen.
+7.06,2022-12-09 00:00:00,•  Updated Rep Payee Follow-up and Individual Finance Letters to reflect new year.
+7.07,2022-12-15 00:00:00,"•  Changed Amendments report to show bottom line totals.
+•  Changed Individual Finance letters to automatically update rep payee fee from the AppParameters table."
+7.08,2022-12-20 00:00:00,•  Changed all reports signed by the Client Benefits manager to use a parameterized name and email address instead of hard coding them into the report.
+7.09,2023-01-26 00:00:00,•  Fixed logic bugs in client record deletion processes.
+7.10,2023-02-08 00:00:00,•  Applied some client letter changes requested by Perla.
+7.11,2023-02-10 00:00:00,•  Repaired a logic bug in Expiration Dates and Red Report processing.
+7.12,2023-02-27 00:00:00,•  Fixed bug in Contracts Amendments report.
+7.13,2023-03-03 00:00:00,•  Added listing of supervisors' direct reports to the Financial Reports menu.
+7.14,2023-03-09 00:00:00,• Added staff supervisor information to a staff person's People page.
+7.15,2023-03-17 00:00:00,• Fixed a query bug in the Expirations Dates report.
+7.16,2023-04-14 00:00:00,• Updated Individual Finance letters to reflect new CFO.
+7.17,2023-05-01 00:00:00,• Added SNAP Agency ID to the Demographics page.
+7.18,2023-05-03 00:00:00,• Enabled ability to flag deceased family members.
+7.19,2023-05-15 00:00:00,• Added Date of Last Rent Increase to HA data for Residential and CLO.  Added this data item to the Section 8 report.
+7.20,2023-05-17 00:00:00,"• Fixed the Maximum Obligations spreadsheet export that was generating wrong values; only needed to be recompiled.
+• Added a summary spreadsheet of the Contracts in Works report to the Financial Letters menu."
+7.21,2023-05-30 00:00:00,• Changed formatting of Expiration Dates report.
+7.22,2023-06-15 00:00:00,• Fixed an incorrect data field in the Contracts in Works summary spreadsheet.
+7.23,2023-06-29 00:00:00,• Changed Cluster Maintenance form to reflect organizational changes.
+7.24,2023-07-19 00:00:00,• Applied general maintenance to support tables.
+7.25,2023-07-21 00:00:00,"• Removed PCA as a program.
+• Family/Guardian new entries will enable TILLegram as the default setting."
+7.26,2023-07-26 00:00:00,• Fixed reporting error for contract amendments.
+7.27,2023-07-27 00:00:00,• Change available month range for Financial Reports.
+7.28,2023-07-27 00:00:00,•  Fixed a Financial Reports logic bug introduced in 7.27.
+7.29,2023-08-03 00:00:00,•  Changed Client Mailings export to include county of residence.
+7.30,2023-08-16 00:00:00,•  Changed Expiration Dates report to make pending TB tests more prominent in the report.
+8.00,2024-01-12 00:00:00,•  Database recovery.
+8.01,2024-01-16 00:00:00,•  Fixed fallout from email password changes.
+8.02,2024-01-22 00:00:00,•  Pared the list of contract staff.
+8.03,2022-01-22 00:00:00,•  Pared another list of contract staff.
+8.04,2024-02-16 00:00:00,•  Resolved data sync errors affecting Staff Evals and Supervisions and Expiration Dates.
+8.05,2024-02-22 00:00:00,•  Added fields to the NH Residential form.
+8.06,2024-04-10 00:00:00,•  Repaired field display logic for the Monthly Master maintenance form.
+8.07,2024-04-18 00:00:00,"•  Fixed a logic bug when the People form is opened.
+•  Fixed a data validation error when entering a new donation."
+8.08,2024-04-23 00:00:00,"•  Changed the Donor Appeal export to more easily identify family and interested parties.
+•  Added an Excel export for government accounts for residential clients."
+8.09,2024-04-30 00:00:00,•  Updated contract info that referenced Julie Wilson.
+8.10,2024-05-08 00:00:00,•  Changed the content of the Donor Appeal exports.
+8.11,2024-05-30 00:00:00,"•  Added SSN and Rep Payee info to the Client Mailings export.
+•  Changed email notification process to support new authorization method.
+•  Changed spreadsheet export process.  Due to changes made by Microsoft, the ability to open Excel after an export is no longer supported."
+8.12,2024-07-19 00:00:00,•  Changed the EMM maintenance page to better identify changes made.
+8.13,2024-07-23 00:00:00,"•  Hide supervision data in the Expiration Dates report.
+•  Fixed a bug that throws a (harmless) query error when certain navigation actions are taken."
+8.14,2024-07-30 00:00:00,•  Added phone numbers to the Client Mailings export.
+8.15,2024-07-31 00:00:00,•  Changed the layout of the DDS Residential Contacts report.
+8.16,2024-08-13 00:00:00,•  Restored supervision data in the Expiration Dates report.
+8.17,2024-08-20 00:00:00,•  Fixed an error generated because of a bad email password.
+8.18,2024-09-09 00:00:00,•  Added a blank Individuals Finances letter for ABI clients.
+8.19,2024-09-11 00:00:00,•  Changed trigger for Evaluation Due in the Red Report.
+8.2,2025-02-07 00:00:00,•  Edited the content of the Day Program Disaster Recovery Plans.
+8.20,2024-10-07 00:00:00,•  Modified the Contracts in Works report to support different ranges of contracts.
+8.21,2024-10-15 00:00:00,"•  Changed the criteria for identifying ""Contract Staff""."
+8.22,2024-10-16 00:00:00,•  Added room and board amounts to the Charges for Care Methods report.
+8.23,2024-10-23 00:00:00,•  Changed  the Individual Finances letters to remove references to the Rep Payee fee.
+8.24,2024-11-25 00:00:00,•  Changed  the Individual Finances letters to reflect new wording.
+8.25,2024-12-03 00:00:00,"•  Changed the touch point for ""Julie's Billings"" to ""Nada's Billings"" to reflect change of responsibility."
+8.26,2025-01-29 00:00:00,•  Updated Disaster Recovery Contacts Reports.
+8.27,2025-02-07 00:00:00,•  	Edited the descriptive content of the Day Programs Disaster Recovery plans to reflect current organizational structure.
+8.28,2025-02-12 00:00:00,•  	Made several changes for ISP reporting.
+8.29,2025-02-20 00:00:00,"•  	Updated ""Nada's Billings"" report."
+8.30,2025-03-05 00:00:00,"•  Added ""MassHealth Service Level"" field for the Day Programs in response to new requirements from MassHeath."
+8.31,2025-03-06 00:00:00,•  Added a large font version of the Contacts Directory (i.e. the phone book).
+8.32,2025-04-16 00:00:00,•  Made changes necessary to support the new Residential Services hierarchy.
+8.33,2025-04-17 00:00:00,•  Additinoal changes  to support the new Residential Services hierarchy
+8.34,2025-04-18 00:00:00,•  Updated the client counts display from the People form.
+8.35,2025-05-07 00:00:00,•  Re-assigned Marcos' billings report to Farah.
+8.36,2025-05-28 00:00:00,•  Provided additional data fields for Day Clients to reflect when MassHealth level was changed and who made the change.
+8.37,2025-06-30 00:00:00,•  Fixed bug in Receptionists List.
+8.38,2025-08-07 00:00:00,•  Changed the Springboard export to include home and mobile phone numbers.
+8.39,2025-09-10 00:00:00,"•  Added a new ""Red Report"" that shows only late last supervisions."

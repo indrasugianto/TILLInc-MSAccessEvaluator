@@ -1,0 +1,2 @@
+UPDATE temptbl RIGHT JOIN tblStaffEvalsAndSupervisions ON temptbl.EMPLOYID = tblStaffEvalsAndSupervisions.EmployeeID SET tblStaffEvalsAndSupervisions.DeleteFlag = -1
+WHERE (((temptbl.EMPLOYID) Is Null));

@@ -1,0 +1,2 @@
+DELETE tblExpirations.*
+FROM tblExpirations;

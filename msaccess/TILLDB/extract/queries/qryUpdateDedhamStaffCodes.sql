@@ -1,0 +1,2 @@
+UPDATE qrytblStaffDedhamManagers INNER JOIN tblLocations ON qrytblStaffDedhamManagers.IndexedName = tblLocations.StaffPrimaryContactIndexedName SET tblLocations.GPName = [qrytblStaffDedhamManagers].[NewLocation]
+WHERE (((tblLocations.CityTown)="HQ"));

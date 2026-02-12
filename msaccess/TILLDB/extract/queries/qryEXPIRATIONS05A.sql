@@ -1,0 +1,1 @@
+ALTER TABLE tempstaffskills ADD CONSTRAINT tempstaffskillsconstraint PRIMARY KEY (EMPID_I,SKILLNUMBER_I)

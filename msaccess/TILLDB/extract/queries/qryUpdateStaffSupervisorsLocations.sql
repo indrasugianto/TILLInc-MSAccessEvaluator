@@ -1,0 +1,2 @@
+UPDATE qrytblPeopleStaffSupervisors INNER JOIN tblPeople ON qrytblPeopleStaffSupervisors.INDEXEDNAME = tblPeople.IndexedName SET qrytblPeopleStaffSupervisors.LOCATION = tblPeople.OfficeCityTown & " - " & tblPeople.OfficeLocationName
+WHERE (((tblPeople.OfficeCityTown) IS NOT NULL));

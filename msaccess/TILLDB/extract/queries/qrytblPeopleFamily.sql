@@ -1,0 +1,2 @@
+SELECT tblPeopleFamily.*
+FROM tblPeopleFamily;

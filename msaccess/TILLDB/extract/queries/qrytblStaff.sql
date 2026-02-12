@@ -1,0 +1,2 @@
+SELECT tblStaff.*
+FROM tblStaff;

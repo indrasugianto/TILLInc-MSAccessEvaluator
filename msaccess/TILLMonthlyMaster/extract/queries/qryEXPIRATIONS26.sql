@@ -1,0 +1,2 @@
+DELETE [~TempSuperCodes].*
+FROM [~TempSuperCodes];

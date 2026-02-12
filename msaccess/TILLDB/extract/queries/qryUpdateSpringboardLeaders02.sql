@@ -1,0 +1,1 @@
+UPDATE tblPeopleClientsSpringboardServices SET tblPeopleClientsSpringboardServices.LeaderIndexedName = Null, tblPeopleClientsSpringboardServices.Leader = Null;

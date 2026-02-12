@@ -1,0 +1,2 @@
+SELECT tblExpirations.*
+FROM tblExpirations;

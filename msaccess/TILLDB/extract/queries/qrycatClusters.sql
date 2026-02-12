@@ -1,0 +1,2 @@
+SELECT catClusters.*
+FROM catClusters;

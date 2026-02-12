@@ -1,0 +1,2 @@
+SELECT tblPeopleClientsDemographics.*
+FROM tblPeopleClientsDemographics;

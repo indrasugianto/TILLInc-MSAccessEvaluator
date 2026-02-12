@@ -1,0 +1,2 @@
+UPDATE (tblPeople INNER JOIN tblPeopleClientsResidentialServices ON tblPeople.IndexedName = tblPeopleClientsResidentialServices.IndexedName) INNER JOIN tblPeopleClientsVendors ON tblPeople.IndexedName = tblPeopleClientsVendors.IndexedName SET tblPeopleClientsVendors.LivingWithParentOrGuardian = False
+WHERE (((tblPeopleClientsVendors.LivingWithParentOrGuardian)=True) AND ((tblPeople.IsClientRes)=True) AND ((tblPeopleClientsResidentialServices.Inactive)=False));

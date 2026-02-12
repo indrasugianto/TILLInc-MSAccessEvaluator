@@ -1,0 +1,25 @@
+{
+  "tables": [
+    {
+      "name": "temptbl",
+      "columns": [
+        {
+          "name": "SearchFullName",
+          "type": "VARCHAR",
+          "size": 255
+        },
+        {
+          "name": "idABA",
+          "type": "COUNTER",
+          "size": 10
+        },
+        {
+          "name": "LastAccessedBy",
+          "type": "LONGCHAR",
+          "size": 1073741823
+        }
+      ],
+      "primary_key": []
+    }
+  ]
+}

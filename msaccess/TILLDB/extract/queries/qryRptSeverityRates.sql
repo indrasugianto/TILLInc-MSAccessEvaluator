@@ -1,0 +1,1 @@
+UPDATE temptbl SET temptbl.Rate = DLookUp("MedicaidRate","catSeverityRates","Severity='" & [temptbl].[Sev] & "'");

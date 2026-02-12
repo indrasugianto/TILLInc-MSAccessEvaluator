@@ -1,0 +1,199 @@
+Option Compare Database
+Option Explicit
+
+Public SubformCriteria As Variant, ExportFileName As String, CurrentLoggedOnUser As Variant, DontUpdateLastAccess As Boolean
+
+Public Function OpenSubform(FormName As Variant) As Boolean
+    OpenSubform = True: DoCmd.OpenForm FormName, , , SubformCriteria
+End Function
+
+Public Function CloseAllServiceSubforms(Service As Variant) As Boolean
+    CloseAllServiceSubforms = True
+    Select Case Service
+        Case "ABA"
+            If CurrentProject.AllForms("frmShowABA_ParentGuardian").IsLoaded Then DoCmd.Close acForm, "frmShowABA_ParentGuardian", acSaveYes
+            If CurrentProject.AllForms("frmShowABA_PCPInsurance").IsLoaded Then DoCmd.Close acForm, "frmShowABA_PCPInsurance", acSaveYes
+            If CurrentProject.AllForms("frmShowABA_UploadFile").IsLoaded Then DoCmd.Close acForm, "frmShowABA_UploadFile", acSaveYes
+        Case "ASC"
+            If CurrentProject.AllForms("frmShowASC_ParentGuardian").IsLoaded Then DoCmd.Close acForm, "frmShowASC_ParentGuardian", acSaveYes
+            If CurrentProject.AllForms("frmShowASC_ContactInfo").IsLoaded Then DoCmd.Close acForm, "frmShowASC_ContactInfo", acSaveYes
+        Case "Employment"
+            If CurrentProject.AllForms("frmShowEmployment_Education").IsLoaded Then DoCmd.Close acForm, "frmShowEmployment_Education", acSaveYes
+            If CurrentProject.AllForms("frmShowEmployment_Employment").IsLoaded Then DoCmd.Close acForm, "frmShowEmployment_Employment", acSaveYes
+            If CurrentProject.AllForms("frmShowEmployment_UploadFile").IsLoaded Then DoCmd.Close acForm, "frmShowEmployment_UploadFile", acSaveYes
+            If CurrentProject.AllForms("frmShowEmployment_WritingSample").IsLoaded Then DoCmd.Close acForm, "frmShowEmployment_WritingSample", acSaveYes
+        Case "IHBS"
+            If CurrentProject.AllForms("frmShowIHBS_CareGiverInfo").IsLoaded Then DoCmd.Close acForm, "frmShowIHBS_CareGiverInfo", acSaveYes
+            If CurrentProject.AllForms("frmShowIHBS_ClinicalAreasOfConcern").IsLoaded Then DoCmd.Close acForm, "frmShowIHBS_ClinicalAreasOfConcern", acSaveYes
+            If CurrentProject.AllForms("frmShowIHBS_Insurance").IsLoaded Then DoCmd.Close acForm, "frmShowIHBS_Insurance", acSaveYes
+            If CurrentProject.AllForms("frmShowIHBS_ServiceDelivery").IsLoaded Then DoCmd.Close acForm, "frmShowIHBS_ServiceDelivery", acSaveYes
+            If CurrentProject.AllForms("frmShowIHBS_UploadFile").IsLoaded Then DoCmd.Close acForm, "frmShowIHBS_UploadFile", acSaveYes
+        Case "ISO"
+            If CurrentProject.AllForms("frmShowISO_FundingSource").IsLoaded Then DoCmd.Close acForm, "frmShowISO_FundingSource", acSaveYes
+            If CurrentProject.AllForms("frmShowISO_Ideal").IsLoaded Then DoCmd.Close acForm, "frmShowISO_Ideal", acSaveYes
+            If CurrentProject.AllForms("frmShowISO_ParentGuardian").IsLoaded Then DoCmd.Close acForm, "frmShowISO_ParentGuardian", acSaveYes
+            If CurrentProject.AllForms("frmShowISO_ReferralSource").IsLoaded Then DoCmd.Close acForm, "frmShowISO_ReferralSource", acSaveYes
+            If CurrentProject.AllForms("frmShowISO_Supports").IsLoaded Then DoCmd.Close acForm, "frmShowISO_Supports", acSaveYes
+            If CurrentProject.AllForms("frmShowISO_UploadFile").IsLoaded Then DoCmd.Close acForm, "frmShowISO_UploadFile", acSaveYes
+        Case "PCA"
+            If CurrentProject.AllForms("frmShowPCA_Contacts").IsLoaded Then DoCmd.Close acForm, "frmShowPCA_Contacts", acSaveYes
+            If CurrentProject.AllForms("frmShowPCA_Eligibility").IsLoaded Then DoCmd.Close acForm, "frmShowPCA_Eligibility", acSaveYes
+            If CurrentProject.AllForms("frmShowPCA_ParentGuardian").IsLoaded Then DoCmd.Close acForm, "frmShowPCA_ParentGuardian", acSaveYes
+            If CurrentProject.AllForms("frmShowPCA_PCP").IsLoaded Then DoCmd.Close acForm, "frmShowPCA_PCP", acSaveYes
+        Case "SI"
+            If CurrentProject.AllForms("frmShowSI_Client").IsLoaded Then DoCmd.Close acForm, "frmShowSI_Client", acSaveYes
+            If CurrentProject.AllForms("frmShowSI_OtherInfo").IsLoaded Then DoCmd.Close acForm, "frmShowSI_OtherInfo", acSaveYes
+            If CurrentProject.AllForms("frmShowSI_ParentGuardian").IsLoaded Then DoCmd.Close acForm, "frmShowSI_ParentGuardian", acSaveYes
+        Case "STRATTUS"
+            If CurrentProject.AllForms("frmShowSTRATTUS_Client").IsLoaded Then DoCmd.Close acForm, "frmShowSTRATTUS_Client", acSaveYes
+            If CurrentProject.AllForms("frmShowSTRATTUS_ParentGuardian").IsLoaded Then DoCmd.Close acForm, "frmShowSTRATTUS_ParentGuardian", acSaveYes
+        Case Else
+    End Select
+End Function
+
+Public Function IsObjectOpen(strName As String, Optional intObjectType As Integer = acForm) As Boolean
+' intObjectType can be: acTable (value 0), acQuery (value 1), acForm (value 2) Default, acReport (value 3), acMacro (value 4), acModule (value 5)
+' Returns True if strName is open, False otherwise.
+On Error Resume Next
+' Use SysCmd to determine if the file is open.
+    IsObjectOpen = (SysCmd(acSysCmdGetObjectState, intObjectType, strName) <> 0)
+'
+    If Err <> 0 Then IsObjectOpen = False
+End Function
+
+Public Function IsTableQuery(TName As String) As Boolean
+On Error Resume Next
+    Dim D As Database, T As String
+' Initialize.
+    IsTableQuery = False: Set D = CurrentDb()
+' See if the name is in the Tables collection.
+    T = D.TableDefs(TName).Name
+    If Err <> 3265 Then
+        IsTableQuery = True: D.Close: Exit Function
+    End If
+' Reset the error variable.
+    Err = 0
+    ' See if the name is in the Queries collection.
+    T = D.QueryDefs(TName$).Name
+    If Err <> 3265 Then
+        IsTableQuery = True: D.Close: Exit Function
+    End If
+End Function
+
+Public Sub EmptyTemptbl()
+    Dim WebForms As Database
+    
+    If Not IsTableQuery("temptbl") Then Exit Sub
+    Set WebForms = CurrentDb
+    WebForms.Execute "DELETE temptbl.* FROM temptbl;", dbSeeChanges
+    WebForms.Close: Set WebForms = Nothing
+End Sub
+
+Public Sub RepaintMainMenu()
+' Recalculate the record counters on the main menu and repaint the form.
+    Form_frmMainMenu.NRecsABA.Requery: Form_frmMainMenu.NRNewABA.Requery
+    Form_frmMainMenu.NRecsASC.Requery: Form_frmMainMenu.NRNewASC.Requery
+    Form_frmMainMenu.NRecsEmployment.Requery: Form_frmMainMenu.NRNewEmployment.Requery
+    Form_frmMainMenu.NRecsIHBS.Requery: Form_frmMainMenu.NRNewIHBS.Requery
+    Form_frmMainMenu.NRecsISO.Requery: Form_frmMainMenu.NRNewISO.Requery
+    Form_frmMainMenu.NRecsPCA.Requery: Form_frmMainMenu.NRNewPCA.Requery
+    Form_frmMainMenu.NRecsSI.Requery: Form_frmMainMenu.NRNewSI.Requery
+    Form_frmMainMenu.NRecsSTRATTUS.Requery: Form_frmMainMenu.NRNewSTRATTUS.Requery
+    Form_frmMainMenu.Repaint
+End Sub
+
+Public Function ExportSpreadsheet(ExportDescription As Variant, TableName As String) As Boolean
+    Dim CommandLine As String
+
+    ExportSpreadsheet = True
+    ExportFileName = Application.CurrentProject.Path & "\" & "TILLDB-Export-" & ExportDescription & "-" & Format(Date, "yyyymmdd") & ".xls"
+    If IsFileOpen(ExportFileName) Then
+        If MsgBox(ExportFileName & " is already open.  Please close it and click OK to continue or Cancel to abort.", vbOKCancel, "ERROR!") = vbCancel Then
+            MsgBox "Export aborted.", vbOKOnly, "Aborted"
+            Exit Function
+        End If
+    End If
+    If Dir(ExportFileName) <> "" Then Kill ExportFileName
+    DoCmd.TransferSpreadsheet acExport, acSpreadsheetTypeExcel9, TableName, ExportFileName
+    MsgBox "The requested information has been exported to " & ExportFileName & "." & vbCrLf & vbCrLf & "This export may contain information that is protected under HIPAA and other privacy laws.  This export must be securely stored at all times and must be deleted when no longer being used.", _
+        vbOKOnly, "Export Complete"
+End Function
+
+Public Function IsFileOpen(FileName As String)
+On Error Resume Next
+    Dim iFilenum As Long, iErr As Long
+     
+    iFilenum = FreeFile()
+    Open FileName For Input Lock Read As #iFilenum
+    Close iFilenum
+    iErr = Err
+    
+On Error GoTo 0
+    Select Case iErr
+        Case 0, 53: IsFileOpen = False
+        Case 70:    IsFileOpen = True
+        Case Else:  Error iErr
+    End Select
+End Function
+
+Public Function CloseMainForm(FormName As String) As Boolean
+    CloseMainForm = True
+' Close other open forms.
+    Select Case FormName
+        Case "frmShowABA":            Call CloseAllServiceSubforms("ABA")
+        Case "frmShowASC":            Call CloseAllServiceSubforms("ASC")
+        Case "frmShowEmployment":     Call CloseAllServiceSubforms("Employment")
+        Case "frmShowIHBS":           Call CloseAllServiceSubforms("IHBS")
+        Case "frmShowISO":            Call CloseAllServiceSubforms("ISO")
+        Case "frmShowPCA":            Call CloseAllServiceSubforms("PCA")
+        Case "frmShowSI":             Call CloseAllServiceSubforms("SI")
+        Case "frmShowSTRATTUS":       Call CloseAllServiceSubforms("STRATTUS")
+    End Select
+' Requery the main menu to refresh the application counters.
+    Call RepaintMainMenu
+' Close me.
+    DoCmd.Close acForm, FormName
+End Function
+
+Public Function PrintReport(ReportName As String, RecordID As Long) As Boolean
+    PrintReport = True
+    Select Case ReportName
+        Case "rpt_ABA_v2"
+            If Form_frmShowABA.Dirty Then Form_frmShowABA.Dirty = False
+            DoCmd.OpenReport ReportName, acViewPreview, , "idABA=" & RecordID
+        Case "rpt_ASC_v2"
+            If Form_frmShowASC.Dirty Then Form_frmShowASC.Dirty = False
+            DoCmd.OpenReport ReportName, acViewPreview, , "idASC=" & RecordID
+        Case "rpt_Employment_v2"
+            If Form_frmShowEmployment.Dirty Then Form_frmShowEmployment.Dirty = False
+            DoCmd.OpenReport ReportName, acViewPreview, , "idEmployment=" & RecordID
+        Case "rpt_IHBS_v2"
+            If Form_frmShowIHBS.Dirty Then Form_frmShowIHBS.Dirty = False
+            DoCmd.OpenReport ReportName, acViewPreview, , "idIHBS=" & RecordID
+        Case "rpt_ISO_v2"
+            If Form_frmShowISO.Dirty Then Form_frmShowISO.Dirty = False
+            DoCmd.OpenReport ReportName, acViewPreview, , "idISO=" & RecordID
+        Case "rpt_PCA_v2"
+            If Form_frmShowPCA.Dirty Then Form_frmShowPCA.Dirty = False
+            DoCmd.OpenReport ReportName, acViewPreview, , "idPCA=" & RecordID
+        Case "rpt_SI_v2"
+            If Form_frmShowSI.Dirty Then Form_frmShowSI.Dirty = False
+            DoCmd.OpenReport ReportName, acViewPreview, , "idSI=" & RecordID
+        Case "rpt_Strattus_v2"
+            If Form_frmShowSTRATTUS.Dirty Then Form_frmShowSTRATTUS.Dirty = False
+            DoCmd.OpenReport ReportName, acViewPreview, , "idSTRATTUS=" & RecordID
+    End Select
+End Function
+
+Public Sub BriefDelay(Optional Secs As Integer = 1)
+    Dim S As Variant
+    
+    S = Timer
+    Do While Timer < S + Secs: DoEvents: Loop
+End Sub
+
+Public Sub LoopUntilClosed(strName As String, ObjectType As Integer)
+    Do While IsObjectOpen(strName, ObjectType)
+        DoEvents
+    Loop
+End Sub

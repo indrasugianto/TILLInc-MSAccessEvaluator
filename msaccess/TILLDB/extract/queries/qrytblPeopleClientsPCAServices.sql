@@ -1,0 +1,2 @@
+SELECT tblPeopleClientsPCAServices.*
+FROM tblPeopleClientsPCAServices;

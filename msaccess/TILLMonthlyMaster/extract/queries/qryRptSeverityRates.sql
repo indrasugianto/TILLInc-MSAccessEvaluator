@@ -1,0 +1,1 @@
+UPDATE tblPeopleDayAttendance SET tblPeopleDayAttendance.Rate = DLookUp("MedicaidRate","catSeverityRates","Severity='" & [tblPeopleDayAttendance].[Sev] & "'");

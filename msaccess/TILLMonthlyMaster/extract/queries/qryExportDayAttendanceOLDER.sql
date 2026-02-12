@@ -1,0 +1,4 @@
+SELECT tblPeopleDayAttendance.ClientID, tblPeopleDayAttendance.LastName, tblPeopleDayAttendance.FirstName, tblPeopleDayAttendance.MiddleInitial, tblPeopleDayAttendance.City, tblPeopleDayAttendance.Loc, tblPeopleDayAttendance.Prf, tblPeopleDayAttendance.Sev, tblPeopleDayAttendance.Rate, tblPeopleDayAttendance.Fund, tblPeopleDayAttendance.SpecialFundingCode, tblPeopleDayAttendance.STM, tblPeopleDayAttendance.IsDeceased, tblPeopleDayAttendance.CostCenter, tblPeopleDayAttendance.UnitsMO, tblPeopleDayAttendance.UnitsTU, tblPeopleDayAttendance.UnitsWE, tblPeopleDayAttendance.UnitsTH, tblPeopleDayAttendance.UnitsFR, tblPeopleDayAttendance.WeekEnding INTO temptbl0
+FROM tblPeopleDayAttendance
+WHERE (((tblPeopleDayAttendance.City) Is Not Null) AND ((tblPeopleDayAttendance.Loc) Is Not Null))
+ORDER BY tblPeopleDayAttendance.City, tblPeopleDayAttendance.Loc, tblPeopleDayAttendance.LastName, tblPeopleDayAttendance.FirstName;

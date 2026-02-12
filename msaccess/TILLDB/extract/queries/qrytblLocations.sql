@@ -1,0 +1,2 @@
+SELECT tblLocations.*
+FROM tblLocations;

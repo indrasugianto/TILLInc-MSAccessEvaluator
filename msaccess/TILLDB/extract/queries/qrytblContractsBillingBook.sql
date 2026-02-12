@@ -1,0 +1,2 @@
+SELECT tblContractsBillingBook.*
+FROM tblContractsBillingBook;

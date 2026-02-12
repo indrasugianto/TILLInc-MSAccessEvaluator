@@ -1,0 +1,1189 @@
+{
+  "tables": [
+    {
+      "name": "catLogonAs",
+      "columns": [
+        {
+          "name": "LogonAs",
+          "type": "VARCHAR",
+          "size": 255
+        }
+      ],
+      "primary_key": []
+    },
+    {
+      "name": "RedReport",
+      "columns": [
+        {
+          "name": "EMPID_I",
+          "type": "VARCHAR",
+          "size": 8
+        },
+        {
+          "name": "SKILLNUMBER_I",
+          "type": "INTEGER",
+          "size": 10
+        },
+        {
+          "name": "Skill",
+          "type": "VARCHAR",
+          "size": 25
+        },
+        {
+          "name": "EXPIREDSKILL_I",
+          "type": "DATETIME",
+          "size": 19
+        },
+        {
+          "name": "LASTNAME",
+          "type": "VARCHAR",
+          "size": 30
+        },
+        {
+          "name": "FRSTNAME",
+          "type": "VARCHAR",
+          "size": 30
+        },
+        {
+          "name": "StaffName",
+          "type": "VARCHAR",
+          "size": 255
+        },
+        {
+          "name": "LocationName",
+          "type": "VARCHAR",
+          "size": 100
+        },
+        {
+          "name": "SUPERVISORCODE_I",
+          "type": "VARCHAR",
+          "size": 6
+        },
+        {
+          "name": "SupervisorIndexedName",
+          "type": "VARCHAR",
+          "size": 160
+        },
+        {
+          "name": "SupervisorName",
+          "type": "VARCHAR",
+          "size": 255
+        },
+        {
+          "name": "RedFlag",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "OnLeave",
+          "type": "BIT",
+          "size": 1
+        }
+      ],
+      "primary_key": []
+    },
+    {
+      "name": "tblDBChangeHistoryOLD",
+      "columns": [
+        {
+          "name": "Version",
+          "type": "VARCHAR",
+          "size": 12
+        },
+        {
+          "name": "Date",
+          "type": "DATETIME",
+          "size": 19
+        },
+        {
+          "name": "Changes",
+          "type": "LONGCHAR",
+          "size": 1073741823
+        }
+      ],
+      "primary_key": []
+    },
+    {
+      "name": "tblLocationsDedhamManagers",
+      "columns": [
+        {
+          "name": "CityTown",
+          "type": "VARCHAR",
+          "size": 50
+        },
+        {
+          "name": "LocationName",
+          "type": "VARCHAR",
+          "size": 80
+        },
+        {
+          "name": "RecordAddedDate",
+          "type": "VARCHAR",
+          "size": 19
+        },
+        {
+          "name": "RecordAddedBy",
+          "type": "VARCHAR",
+          "size": 20
+        },
+        {
+          "name": "GPName",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "Department",
+          "type": "VARCHAR",
+          "size": 30
+        },
+        {
+          "name": "CostCenter",
+          "type": "VARCHAR",
+          "size": 4
+        },
+        {
+          "name": "Cluster",
+          "type": "SMALLINT",
+          "size": 5
+        },
+        {
+          "name": "ABI",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "NumClients",
+          "type": "SMALLINT",
+          "size": 5
+        },
+        {
+          "name": "RESTILLOwned",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "ResCapacity",
+          "type": "SMALLINT",
+          "size": 5
+        },
+        {
+          "name": "EmailAddress",
+          "type": "VARCHAR",
+          "size": 50
+        },
+        {
+          "name": "Address",
+          "type": "VARCHAR",
+          "size": 50
+        },
+        {
+          "name": "City",
+          "type": "VARCHAR",
+          "size": 25
+        },
+        {
+          "name": "State",
+          "type": "VARCHAR",
+          "size": 2
+        },
+        {
+          "name": "ZIP",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "County",
+          "type": "VARCHAR",
+          "size": 20
+        },
+        {
+          "name": "AddressValidated",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "PhoneNumber",
+          "type": "VARCHAR",
+          "size": 15
+        },
+        {
+          "name": "DID",
+          "type": "INTEGER",
+          "size": 10
+        },
+        {
+          "name": "SpeedDial",
+          "type": "INTEGER",
+          "size": 10
+        },
+        {
+          "name": "FaxNumber",
+          "type": "VARCHAR",
+          "size": 15
+        },
+        {
+          "name": "FaxEmailAddress",
+          "type": "VARCHAR",
+          "size": 255
+        },
+        {
+          "name": "DDSArea",
+          "type": "VARCHAR",
+          "size": 40
+        },
+        {
+          "name": "DDSRegion",
+          "type": "VARCHAR",
+          "size": 20
+        },
+        {
+          "name": "StaffPrimaryContactIndexedName",
+          "type": "VARCHAR",
+          "size": 160
+        },
+        {
+          "name": "StaffPrimaryContactLastName",
+          "type": "VARCHAR",
+          "size": 25
+        },
+        {
+          "name": "StaffPrimaryContactFirstName",
+          "type": "VARCHAR",
+          "size": 25
+        },
+        {
+          "name": "StaffPrimaryContactMiddleInitial",
+          "type": "VARCHAR",
+          "size": 1
+        },
+        {
+          "name": "Leader",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "LOTR",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "ManagerLogonID",
+          "type": "VARCHAR",
+          "size": 40
+        },
+        {
+          "name": "StaffSecondaryContactIndexedName",
+          "type": "VARCHAR",
+          "size": 160
+        },
+        {
+          "name": "StaffSecondaryContactLastName",
+          "type": "VARCHAR",
+          "size": 25
+        },
+        {
+          "name": "StaffSecondaryContactFirstName",
+          "type": "VARCHAR",
+          "size": 25
+        },
+        {
+          "name": "StaffSecondaryContactMiddleInitial",
+          "type": "VARCHAR",
+          "size": 1
+        },
+        {
+          "name": "StaffTertiaryContactIndexedName",
+          "type": "VARCHAR",
+          "size": 160
+        },
+        {
+          "name": "StaffTertiaryContactLastName",
+          "type": "VARCHAR",
+          "size": 25
+        },
+        {
+          "name": "StaffTertiaryContactFirstName",
+          "type": "VARCHAR",
+          "size": 25
+        },
+        {
+          "name": "StaffTertiaryContactMiddleInitial",
+          "type": "VARCHAR",
+          "size": 1
+        },
+        {
+          "name": "CommunityRNIndexedName",
+          "type": "VARCHAR",
+          "size": 160
+        },
+        {
+          "name": "CommmunityRNName",
+          "type": "VARCHAR",
+          "size": 40
+        },
+        {
+          "name": "LPN1IndexedName",
+          "type": "VARCHAR",
+          "size": 160
+        },
+        {
+          "name": "LPN1Name",
+          "type": "VARCHAR",
+          "size": 40
+        },
+        {
+          "name": "LPN2IndexedName",
+          "type": "VARCHAR",
+          "size": 160
+        },
+        {
+          "name": "LPN2Name",
+          "type": "VARCHAR",
+          "size": 40
+        },
+        {
+          "name": "LastVehicleChecklistCompleted",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "MostRecentAsleepFireDrill",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "NextRecentAsleepFireDrill",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "DAYStaffTrainedInPrivacyBefore",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "DAYAllPlansReviewedByStaffBefore",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "DAYQtrlySafetyChecklistDueBy",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "HouseSafetyPlanExpires",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "HousePlansReviewedByStaffBefore",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "MAPChecklistCompleted",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "HumanRightsOfficer",
+          "type": "VARCHAR",
+          "size": 50
+        },
+        {
+          "name": "HROTrainsStaffBefore",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "HROTrainsIndividualsBefore",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "FireSafetyOfficer",
+          "type": "VARCHAR",
+          "size": 50
+        },
+        {
+          "name": "FSOTrainsStaffBefore",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "FSOTrainsIndividualsBefore",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "ReportExpirations",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "ResettlementCityTown",
+          "type": "VARCHAR",
+          "size": 50
+        },
+        {
+          "name": "ResettlementLocation",
+          "type": "VARCHAR",
+          "size": 80
+        },
+        {
+          "name": "Comments",
+          "type": "LONGCHAR",
+          "size": 1073741823
+        },
+        {
+          "name": "SSMA_TimeStamp",
+          "type": "VARBINARY",
+          "size": 8
+        }
+      ],
+      "primary_key": []
+    },
+    {
+      "name": "tblTILLMonthlyMasterArchive",
+      "columns": [
+        {
+          "name": "RecID",
+          "type": "COUNTER",
+          "size": 10
+        },
+        {
+          "name": "RecordUpdatedDate",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "RecordUpdatedByUser",
+          "type": "VARCHAR",
+          "size": 25
+        },
+        {
+          "name": "NoChange",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "IndexedName",
+          "type": "VARCHAR",
+          "size": 160
+        },
+        {
+          "name": "ProgramType",
+          "type": "VARCHAR",
+          "size": 15
+        },
+        {
+          "name": "ProgramCity",
+          "type": "VARCHAR",
+          "size": 50
+        },
+        {
+          "name": "ProgramLocation",
+          "type": "VARCHAR",
+          "size": 80
+        },
+        {
+          "name": "StaffPrimaryContactLastName",
+          "type": "VARCHAR",
+          "size": 25
+        },
+        {
+          "name": "StaffPrimaryContactFirstName",
+          "type": "VARCHAR",
+          "size": 25
+        },
+        {
+          "name": "LastName",
+          "type": "VARCHAR",
+          "size": 25
+        },
+        {
+          "name": "FirstName",
+          "type": "VARCHAR",
+          "size": 25
+        },
+        {
+          "name": "MiddleInitial",
+          "type": "VARCHAR",
+          "size": 1
+        },
+        {
+          "name": "ClientIsDeceased",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "ClientIsDeceasedChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "ClientDeceasedDate",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "ClientDeceasedDateChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "ClientIsInactive",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "ClientIsInactiveChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "PhysicalAddress",
+          "type": "VARCHAR",
+          "size": 50
+        },
+        {
+          "name": "PhysicalAddressChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "PhysicalCity",
+          "type": "VARCHAR",
+          "size": 25
+        },
+        {
+          "name": "PhysicalCityChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "PhysicalState",
+          "type": "VARCHAR",
+          "size": 2
+        },
+        {
+          "name": "PhysicalStateChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "PhysicalZIP",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "PhysicalZIPChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "MailingAddress",
+          "type": "VARCHAR",
+          "size": 50
+        },
+        {
+          "name": "MailingAddressChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "MailingCity",
+          "type": "VARCHAR",
+          "size": 25
+        },
+        {
+          "name": "MailingCityChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "MailingState",
+          "type": "VARCHAR",
+          "size": 2
+        },
+        {
+          "name": "MailingStateChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "MailingZIP",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "MailingZIPChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "HomePhone",
+          "type": "VARCHAR",
+          "size": 15
+        },
+        {
+          "name": "HomePhoneChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "WorkPhone",
+          "type": "VARCHAR",
+          "size": 15
+        },
+        {
+          "name": "WorkPhoneChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "MobilePhone",
+          "type": "VARCHAR",
+          "size": 15
+        },
+        {
+          "name": "MobilePhoneChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "EmailAddress",
+          "type": "VARCHAR",
+          "size": 60
+        },
+        {
+          "name": "EmailAddressChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "ResidentialVendor",
+          "type": "VARCHAR",
+          "size": 30
+        },
+        {
+          "name": "ResidentialVendorChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "ResVendorAddress",
+          "type": "VARCHAR",
+          "size": 40
+        },
+        {
+          "name": "ResVendorAddressChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "ResVendorCity",
+          "type": "VARCHAR",
+          "size": 25
+        },
+        {
+          "name": "ResVendorCityChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "ResVendorState",
+          "type": "VARCHAR",
+          "size": 2
+        },
+        {
+          "name": "ResVendorStateChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "ResVendorZIP",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "ResVendorZIPChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "ResidentialVendorPhoneNumber",
+          "type": "VARCHAR",
+          "size": 15
+        },
+        {
+          "name": "ResidentialVendorPhoneNumberChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "LivingWithParentOrGuardian",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "LivingWithParentOrGuardianChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "LivingIndependently",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "LivingIndependentlyChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "DayVendor",
+          "type": "VARCHAR",
+          "size": 30
+        },
+        {
+          "name": "DayVendorChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "DayVendorAddress",
+          "type": "VARCHAR",
+          "size": 40
+        },
+        {
+          "name": "DayVendorAddressChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "DayVendorCity",
+          "type": "VARCHAR",
+          "size": 25
+        },
+        {
+          "name": "DayVendorCityChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "DayVendorState",
+          "type": "VARCHAR",
+          "size": 2
+        },
+        {
+          "name": "DayVendorStatechanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "DayVendorZIP",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "DayVendorZIPChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "DayVendorPhoneNumber",
+          "type": "VARCHAR",
+          "size": 15
+        },
+        {
+          "name": "DayVendorPhoneNumberChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "PCPName",
+          "type": "VARCHAR",
+          "size": 50
+        },
+        {
+          "name": "PCPNameChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "PCPOffice",
+          "type": "VARCHAR",
+          "size": 50
+        },
+        {
+          "name": "PCPOfficeChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "PCPAddress",
+          "type": "VARCHAR",
+          "size": 50
+        },
+        {
+          "name": "PCPAddressChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "PCPCity",
+          "type": "VARCHAR",
+          "size": 25
+        },
+        {
+          "name": "PCPCityChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "PCPState",
+          "type": "VARCHAR",
+          "size": 2
+        },
+        {
+          "name": "PCPStateChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "PCPZIP",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "PCPZIPChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "PCPPhoneNumber",
+          "type": "VARCHAR",
+          "size": 15
+        },
+        {
+          "name": "PCPPhoneNumberchanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "PCPFaxNumber",
+          "type": "VARCHAR",
+          "size": 15
+        },
+        {
+          "name": "PCPFaxNumberChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "PCPEmailAddress",
+          "type": "VARCHAR",
+          "size": 60
+        },
+        {
+          "name": "PCPEmailAddressChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "PCPHospitalAffiliation",
+          "type": "VARCHAR",
+          "size": 50
+        },
+        {
+          "name": "PCPHospitalAffiliationChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "PCPNPI",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "PCPNPIChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "FamilyLN",
+          "type": "VARCHAR",
+          "size": 25
+        },
+        {
+          "name": "FamilyFN",
+          "type": "VARCHAR",
+          "size": 25
+        },
+        {
+          "name": "FamilyMI",
+          "type": "VARCHAR",
+          "size": 1
+        },
+        {
+          "name": "FamilyIsDeceased",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "FamilyIsDeceasedChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "FamilyDeceasedDate",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "FamilyDeceasedDateChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "FamilyIsInactive",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "FamilyIsInactiveChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "FamilyPhysicalAddress",
+          "type": "VARCHAR",
+          "size": 50
+        },
+        {
+          "name": "FamilyPhysicalAddressChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "FamilyPhysicalCity",
+          "type": "VARCHAR",
+          "size": 25
+        },
+        {
+          "name": "FamilyPhysicalCityChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "FamilyPhysicalState",
+          "type": "VARCHAR",
+          "size": 2
+        },
+        {
+          "name": "FamilyPhysicalStateChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "FamilyPhysicalZIP",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "FamilyPhysicalZIPChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "FamilyMailingAddress",
+          "type": "VARCHAR",
+          "size": 50
+        },
+        {
+          "name": "FamilyMailingAddressChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "FamilyMailingCity",
+          "type": "VARCHAR",
+          "size": 25
+        },
+        {
+          "name": "FamilyMailingCityChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "FamilyMailingState",
+          "type": "VARCHAR",
+          "size": 2
+        },
+        {
+          "name": "FamilyMailingStateChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "FamilyMailingZIP",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "FamilyMailingZIPChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "FamilyHomePhone",
+          "type": "VARCHAR",
+          "size": 15
+        },
+        {
+          "name": "FamilyHomePhoneChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "FamilyWorkPhone",
+          "type": "VARCHAR",
+          "size": 15
+        },
+        {
+          "name": "FamilyWorkPhoneChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "FamilyMobilePhone",
+          "type": "VARCHAR",
+          "size": 15
+        },
+        {
+          "name": "FamilyMobilePhoneChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "FamilyEmailAddress",
+          "type": "VARCHAR",
+          "size": 60
+        },
+        {
+          "name": "FamilyEmailAddressChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "Relationship",
+          "type": "VARCHAR",
+          "size": 30
+        },
+        {
+          "name": "RelationshipChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "Guardian",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "GuardianChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "PrimaryContact",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "PrimaryContactChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "DateISP",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "DateISPChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "DateConsentFormsSigned",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "DateConsentFormsSignedChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "DateBMMAccessSigned",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "DateBMMAccessSignedChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "DateSPDAuthExpires",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "DateSPDAuthExpiresChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "LastUpdated",
+          "type": "VARCHAR",
+          "size": 10
+        },
+        {
+          "name": "RemoveThisFamilyMember",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "RemoveThisFamilyMemberChanged",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "Comments",
+          "type": "LONGCHAR",
+          "size": 1073741823
+        },
+        {
+          "name": "Processed",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "Applied",
+          "type": "BIT",
+          "size": 1
+        },
+        {
+          "name": "ProcessedBy",
+          "type": "VARCHAR",
+          "size": 25
+        }
+      ],
+      "primary_key": []
+    }
+  ]
+}

@@ -1,0 +1,2 @@
+SELECT tblPeopleClientsSpringboardServices.*
+FROM tblPeopleClientsSpringboardServices;

@@ -1,0 +1,2 @@
+SELECT tblContracts.*
+FROM tblContracts;
