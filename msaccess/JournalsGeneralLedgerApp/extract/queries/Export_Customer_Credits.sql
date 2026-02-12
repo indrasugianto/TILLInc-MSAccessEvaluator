@@ -1,4 +1,0 @@
-SELECT "/C" AS [Transaction Type], [>Resources].SageID AS [Customer ID], 1 AS [Reference #], Format([TransactionDate],"MM/DD/YY") AS [Credit Date], Format(-[DebitAmount],"#.00") AS [Credit Amount], "" AS Description, "" AS [Open Credit #], Left([>Jobs.ID],40) AS [Open Credit Description]
-FROM ([>General Ledger Query] LEFT JOIN [>Jobs] ON [>General Ledger Query].Job=[>Jobs].Key) LEFT JOIN [>Resources] ON [>General Ledger Query].SourceOperative=[>Resources].Key
-WHERE ((([>General Ledger Query].AccountNumber)=121) And (([>General Ledger Query].TransactionDate)>=forms!generalledger.fromdate And ([>General Ledger Query].TransactionDate)<=forms!generalledger!todate) And (([>General Ledger Query].SourceJournal)="Invoice") And (([>General Ledger Query].DebitAmount)<0))
-ORDER BY Format([TransactionDate],"MM/DD/YY");

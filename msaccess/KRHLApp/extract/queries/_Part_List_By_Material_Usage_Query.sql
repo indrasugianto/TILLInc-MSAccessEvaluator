@@ -1,5 +1,0 @@
-SELECT DISTINCTROW [>Part List].*, Activity.Activity, Components.Component, IIf(Forms!PartsList!SelectComponent And nnez([Processcomponent])<>Forms!PartsList!ComponentSort,False,True) AS ComponentSelect
-FROM ([>Part List] LEFT JOIN Activity ON [>Part List].ProcessActivity = Activity.Key) LEFT JOIN Components ON [>Part List].ProcessComponent = Components.key
-WHERE ((([>Part List].ProductList)=[Forms]![ProductListMaster]![ProductListControl]![ProductListName]) AND (([>Part List].DisplayPart)=True Or ([>Part List].DisplayPart)=False) AND ((IIf([Forms]![PartsList]![ViewCNC] And [Forms]![PartsList]![ViewNonCNC],True,IIf([Forms]![PartsList]![ViewCNC] And [CNCSize],True,IIf([Forms]![PartsList]![ViewNonCNC] And Not [CNCSize],True,False))))=True) AND ((IIf([Forms]![PartsList]![SelectComponent] And nnez([Processcomponent])<>[Forms]![PartsList]![ComponentSort],False,True))=True))
-ORDER BY [>Part List].SubAssembly, [>Part List].ItemNumber, [>Part List].DefaultMaterial
-WITH OWNERACCESS OPTION;

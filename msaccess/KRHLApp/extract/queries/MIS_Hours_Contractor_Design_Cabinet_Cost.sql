@@ -1,4 +1,0 @@
-SELECT [>Resources].ID, [>Resources].Key, Sum([>Sales Total].SumOfSaleAmount) AS SumOfSumOfSaleAmount, Sum([MIS Hours Job Cabinet Cost].SumOfCost) AS SumOfSumOfCost, Sum([MIS Hours Job Design Cost].SumOfCost) AS SumOfSumOfCost1
-FROM [>Resources] INNER JOIN (((([>Jobs] LEFT JOIN [MIS Hours Job Cabinet Cost] ON [>Jobs].Key=[MIS Hours Job Cabinet Cost].[Job ID]) LEFT JOIN [MIS Hours Job Design Cost] ON [>Jobs].Key=[MIS Hours Job Design Cost].[Job ID]) LEFT JOIN [>Sales Total Cabinets] ON [>Jobs].Key=[>Sales Total Cabinets].Job) LEFT JOIN [>Sales Total] ON [>Jobs].Key=[>Sales Total].Job) ON [>Resources].Key=[>Jobs].Contractor
-WHERE ((([>Jobs].Estimate)=False))
-GROUP BY [>Resources].ID, [>Resources].Key;

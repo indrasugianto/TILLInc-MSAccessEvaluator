@@ -1,3 +1,0 @@
-SELECT DISTINCTROW Sum([>General Ledger Query].DebitAmount) AS SumOfDebitAmount, Sum([>General Ledger Query].CreditAmount) AS SumOfCreditAmount, -[sumofDebitAmount]+[Sumofcreditamount] AS GrossSales
-FROM [>General Ledger Query]
-WHERE ((([>General Ledger Query].AccountNumber)>=300 And ([>General Ledger Query].AccountNumber)<400) And (([>General Ledger Query].TransactionDate)>=Forms!GeneralLedger!FromDate And ([>General Ledger Query].TransactionDate)<=Forms!GeneralLedger!Todate));

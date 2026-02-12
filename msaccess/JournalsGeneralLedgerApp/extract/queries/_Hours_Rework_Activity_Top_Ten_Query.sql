@@ -1,5 +1,0 @@
-SELECT DISTINCTROW [MIS Hours].Activity, Sum(IIf(Not IsNull([General]),0,IIf([ADPNetAccount]>=700,variable("office hrly cost estimate")*[Hours],variable("shop hrly cost estimate")*[Hours]))) AS CostPlus, Sum(IIf([ADPNetAccount]>=700,variable("office hrly cost estimate")*[Hours],variable("shop hrly cost estimate")*[Hours])) AS HourlyCost
-FROM [>Hours Rework Job Top Ten Chart Query], ([MIS Hours] RIGHT JOIN [>Jobs] ON [MIS Hours].[Job ID] = [>Jobs].Key) LEFT JOIN [MIS Personnel] ON [MIS Hours].ADPFile = [MIS Personnel].ADPFile
-WHERE (((InStr(1,[Activity],"Rework",0))<>0) AND (([MIS Hours].Date)>=[Forms]![Hours]![DateSort] And ([MIS Hours].Date)<=[forms]![Hours]![ToDate]))
-GROUP BY [MIS Hours].Activity
-ORDER BY Sum(IIf(Not IsNull([General]),0,IIf([ADPNetAccount]>=700,variable("office hrly cost estimate")*[Hours],variable("shop hrly cost estimate")*[Hours]))) DESC;

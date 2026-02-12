@@ -1,5 +1,0 @@
-SELECT [>Jobs].ID, [Sales Journal].TheDate, [MIS Personnel].Employee, First([>Resources].TheName) AS FirstOfTheName, First([>Resources].ID) AS FirstOfID3, [Sales Journal].Job, First([>Resources_1].ID) AS FirstOfID, First([>Resources_2].ID) AS FirstOfID1, First([>Resources_3].ID) AS FirstOfID2
-FROM ((((([>Jobs] LEFT JOIN [MIS Personnel] ON [>Jobs].ManagedBy=[MIS Personnel].Key) LEFT JOIN [>Resources] ON [>Jobs].Customer=[>Resources].Key) LEFT JOIN [Sales Journal] ON [>Jobs].Key=[Sales Journal].Job) LEFT JOIN [>Resources] AS [>Resources_1] ON [>Jobs].Architect=[>Resources_1].Key) LEFT JOIN [>Resources] AS [>Resources_2] ON [>Jobs].Contractor=[>Resources_2].Key) LEFT JOIN [>Resources] AS [>Resources_3] ON [>Jobs].DesignedBy=[>Resources_3].Key
-GROUP BY [>Jobs].ID, [Sales Journal].TheDate, [MIS Personnel].Employee, [Sales Journal].Job, [TheDate]>=#1/1/2004#, InStr([Sales Journal]!Category,"Install")
-HAVING ((([TheDate]>=#1/1/2004#)=True) And ((InStr([Sales Journal]!Category,"Install"))<>0))
-ORDER BY [Sales Journal].TheDate;

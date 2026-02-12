@@ -1,3 +1,0 @@
-SELECT DISTINCTROW [General Ledger].*, [>Jobs].ID, [>Resources].ID
-FROM ((([General Ledger] LEFT JOIN [Receipts Journal] ON [General Ledger].SourceKey=[Receipts Journal].Key) LEFT JOIN [Sales Journal] ON [General Ledger].SourceKey=[Sales Journal].Key) LEFT JOIN [>Jobs] ON [Receipts Journal].Job=[>Jobs].Key) LEFT JOIN [>Resources] ON [>Jobs].Customer=[>Resources].Key
-WHERE ((([Receipts Journal].Job)=Forms!Sales.JobName));

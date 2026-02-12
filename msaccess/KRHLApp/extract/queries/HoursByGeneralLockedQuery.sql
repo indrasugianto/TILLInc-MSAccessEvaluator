@@ -1,3 +1,0 @@
-SELECT DISTINCTROW [MIS Hours].Employee, [MIS Hours].Date, [MIS Hours].General, [MIS Hours].EntryDate AS Expr1, [MIS Hours].ADPFile, [MIS Hours].Archive, [MIS Hours].Hours, [MIS Hours].Rate, [MIS Hours].Cost, [MIS Hours].Monday, [MIS Hours].Tuesday, [MIS Hours].Wednesday, [MIS Hours].Thursday, [MIS Hours].Friday, [MIS Hours].Saturday, [MIS Hours].Sunday, [MIS Hours].Key, [MIS Hours].[Job ID]
-FROM [MIS Hours]
-WHERE ((([MIS Hours].Employee)=Forms!HoursEntryLocked!EmpName) And (([MIS Hours].Date)=Forms!HoursEntryLocked!Week) And (([MIS Hours].[Job ID]) Is Null));

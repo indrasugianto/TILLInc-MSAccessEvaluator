@@ -1,3 +1,0 @@
-SELECT [General Ledger Balance Sheet].Index, [General Ledger Balance Sheet].ReportSort, [General Ledger Balance Sheet].Heading, [General Ledger Balance Sheet].SubHeading, [General Ledger Balance Sheet].SubSubHeading, [General Ledger Balance Sheet].[Index Income], [General Ledger Balance Sheet].[Index Expense], [General Ledger Balance Sheet].LockAccount, [General Ledger Balance Sheet].Detail, IIf([Index]<40,"Assets","Liabilities") AS AssetorLiability
-FROM [General Ledger Balance Sheet]
-ORDER BY [General Ledger Balance Sheet].Index;

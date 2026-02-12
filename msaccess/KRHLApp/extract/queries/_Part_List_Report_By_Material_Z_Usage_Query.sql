@@ -1,6 +1,0 @@
-SELECT DISTINCTROW [>Part List].SubAssembly, [>Part List].DefaultMaterial, [>Part List].UsageUnit, Sum([>Part List].Pieces) AS SumOfPieces, Count([>Part List].DefaultMaterial) AS CountOfDefaultMaterial, [>Part List].PartProcessAlternate, Sum([>Part List].Quantity) AS SumOfQuantity, Sum(NNEZ([Quantity])) AS TotalQuantity, Sum([>Part List].MaterialCost) AS SumOfMaterialCost, Sum([>Part List].ProcessCost) AS SumOfProcessCost, [>Part List].ProcessList, [>Part List].ShowPart, [>Part List].MaterialCategory, [>Part List].Item, [>Part List].Z, Sum([>Part List].Y) AS SumOfY, [>Part List].ProcessActivity
-FROM [>Part List]
-GROUP BY [>Part List].SubAssembly, [>Part List].DefaultMaterial, [>Part List].UsageUnit, [>Part List].PartProcessAlternate, [>Part List].ProcessList, [>Part List].ShowPart, [>Part List].MaterialCategory, [>Part List].Item, [>Part List].Z, [>Part List].ProductList, [>Part List].DisplayPart, [>Part List].ProcessActivity
-HAVING (((Sum([>Part List].MaterialCost))<>0) AND (([>Part List].ProductList)=[Forms]![ProductListMaster]![ProductListControl]![ProductListName]) AND (([>Part List].DisplayPart)=True))
-ORDER BY [>Part List].SubAssembly, [>Part List].DefaultMaterial, [>Part List].UsageUnit
-WITH OWNERACCESS OPTION;

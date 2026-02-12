@@ -1,3 +1,0 @@
-SELECT DISTINCTROW [>Jobs].ID, [General Ledger].AccountNumber, [General Ledger].TransactionDate, [General Ledger].DebitAmount, [General Ledger].CreditAmount, [General Ledger].SourceOperative, [>Jobs].Closed, [>Resources].ID, [General Ledger].Job
-FROM ([General Ledger] LEFT JOIN [>Jobs] ON [General Ledger].Job=[>Jobs].Key) LEFT JOIN [>Resources] ON [>Jobs].Customer=[>Resources].Key
-WHERE ((([General Ledger].AccountNumber)=205) AND (([>Jobs].Closed)=False));

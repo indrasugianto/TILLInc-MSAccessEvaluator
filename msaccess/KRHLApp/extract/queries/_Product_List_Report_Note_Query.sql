@@ -1,4 +1,0 @@
-SELECT DISTINCTROW [>Note].*, [>Product List Whole Query].Key, [>Product List Whole Query].[>Product Lists].ProductList, [>Product List Whole Query].Item, [>Product List Whole Query].Reference1, [>Product List Whole Query].Reference2, [>Product List Whole Query].Sort1, [>Product List Whole Query].Sort2, [>Product List Whole Query].X, [>Product List Whole Query].Y, [>Product List Whole Query].Z, [>Product List Whole Query].Description, [>Note].Note
-FROM [>Product List Whole Query] LEFT JOIN [>Note] ON [>Product List Whole Query].Key=[>Note].ProductListKey
-WHERE ((([>Note].Note) Is Not Null) AND (([>Note].DrawNote)=False))
-WITH OWNERACCESS OPTION;

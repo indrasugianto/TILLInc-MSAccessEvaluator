@@ -1,6 +1,0 @@
-SELECT DISTINCTROW [General Ledger].TransactionDate AS CheckDate, [General Ledger].AccountNumber, [General Ledger].SourceTransaction, Sum(IIf(InStr([SourceTransaction],"FSA")<>0,[CreditAmount],0)) AS sumofFSA, Sum(IIf(InStr([SourceTransaction],"Optional")<>0,[CreditAmount],0)) AS sumofInsurance, Sum(IIf(InStr([SourceTransaction],"Dental")<>0,[CreditAmount],0)) AS SumofDental, Sum(IIf(InStr([SourceTransaction],"Medical")<>0,[CreditAmount],0)) AS SumofMedical
-FROM [General Ledger] LEFT JOIN [>Resources] ON [General Ledger].SourceOperative=[>Resources].Key
-WHERE (((IIf([ID]="ADP" Or InStr([ID],"AFLAC")<>0,True,False))=True) AND ((IIf(InStr([SourceTransaction],"Medical")<>0 Or InStr([SourceTransaction],"Dental")<>0 Or InStr([SourceTransaction],"Optional")<>0 Or InStr([SourceTransaction],"FSA")<>0,True,False))=True))
-GROUP BY [General Ledger].TransactionDate, [General Ledger].AccountNumber, [General Ledger].SourceTransaction
-HAVING ((([General Ledger].AccountNumber)=713 Or ([General Ledger].AccountNumber)=714 Or ([General Ledger].AccountNumber)=717))
-ORDER BY [General Ledger].TransactionDate, [General Ledger].AccountNumber;

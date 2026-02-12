@@ -1,3 +1,0 @@
-SELECT DISTINCTROW [>Payroll GL Query].*, IIf(nnez([checknumber])=0 And [>Payroll GL Query].adpfile>5,[Gross]-[Federal]-[State]-[>Payroll GL Query].SocialSecurity-[Medicare]-[field1]-[field2]-[field3]-[field4]-[field5],0) AS PrePay, [MIS Personnel].WitholdingAccount, IIf([>Payroll GL Query].adpfile=0,[net],0) AS ADPTax, IIf([>Payroll GL Query].adpfile=1,[net],0) AS ADPDirect, IIf([>Payroll GL Query].adpfile=2,[net],0) AS ADPGarnish, IIf([>Payroll GL Query].adpfile>5,[net],0) AS NetNet
-FROM [>Payroll GL Query] LEFT JOIN [MIS Personnel] ON [>Payroll GL Query].ADPFile=[MIS Personnel].ADPFile
-WHERE ((([>Payroll GL Query].Void)=False));

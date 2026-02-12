@@ -1,5 +1,0 @@
-SELECT DISTINCTROW [>Settings].YCoordinateDimensionCode AS Expr1, [>Settings].YCoordinateDimension AS Expr2
-FROM [>Settings]
-WHERE ((([>Settings].YCoordinateDimensionCode)=4 Or ([>Settings].YCoordinateDimensionCode)=5 Or ([>Settings].YCoordinateDimensionCode)=3 Or ([>Settings].YCoordinateDimensionCode)=2 Or ([>Settings].YCoordinateDimensionCode)=1 Or ([>Settings].YCoordinateDimensionCode)=100 Or ([>Settings].YCoordinateDimensionCode)=0 Or ([>Settings].YCoordinateDimensionCode)=101 Or ([>Settings].YCoordinateDimensionCode)=102 Or ([>Settings].YCoordinateDimensionCode)=103 Or ([>Settings].YCoordinateDimensionCode)=93 Or ([>Settings].YCoordinateDimensionCode)=91 Or ([>Settings].YCoordinateDimensionCode)=92 Or ([>Settings].YCoordinateDimensionCode)=300))
-ORDER BY [>Settings].YCoordinateDimensionCode
-WITH OWNERACCESS OPTION;

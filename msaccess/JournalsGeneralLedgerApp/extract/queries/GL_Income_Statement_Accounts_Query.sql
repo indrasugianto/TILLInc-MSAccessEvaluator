@@ -1,2 +1,0 @@
-SELECT DISTINCTROW [General Ledger Income Statement].ReportSort, [General Ledger Income Statement].Index, [General Ledger Income Statement].Heading, [General Ledger Income Statement].SubHeading, [General Ledger Income Statement].Highlight, [General Ledger Income Statement].SubSubHeading, [General Ledger Income Statement].[Index Income], [General Ledger Income Statement].[Index Expense], [General Ledger Income Statement].Detail, [General Ledger Income Statement].Budget, [General Ledger Income Statement].PBudget
-FROM [General Ledger Income Statement];

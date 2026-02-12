@@ -1,7 +1,0 @@
-SELECT DISTINCTROW [>Jobs].ID AS Job, [>Jobs].Key, Max([Sales Journal].Due) AS Proposal, Sum([SaleAmount]\1) AS [Total Sale], [MIS Personnel].Text1 & "/" & [MIS Personnel_1].text1 AS Team, [>Resources].ID AS Referral, [>Jobs].Parent, [>Jobs].Family, [>Jobs].Info2 AS Outcome, [>Jobs].DesignJob
-FROM ((([>Jobs] LEFT JOIN [MIS Personnel] ON [>Jobs].ManagedBy=[MIS Personnel].Key) LEFT JOIN [Sales Journal] ON [>Jobs].Key=[Sales Journal].Job) LEFT JOIN [MIS Personnel] AS [MIS Personnel_1] ON [>Jobs].SpecifiedBy=[MIS Personnel_1].Key) LEFT JOIN [>Resources] ON [>Jobs].Contact1=[>Resources].Key
-WHERE ((([>Jobs].Closed)=IIf(InStr(Forms!Sales.ViewClosed,"Closed")<>0,True,False)) And ((IIf(Forms!Sales.SelectPartnerManager,IIf([Managedby]=Forms!Sales.PartnerManagerSelection Or [Specifiedby]=Forms!Sales.PartnerManagerSelection,True,False),True))=True))
-GROUP BY [>Jobs].ID, [>Jobs].Key, [MIS Personnel].Text1 & "/" & [MIS Personnel_1].text1, [>Resources].ID, [>Jobs].Parent, [>Jobs].Family, [>Jobs].Info2, [>Jobs].DesignJob, [>Jobs].Estimate, [>Jobs].Closed, [>Jobs].Estimate, [>Jobs].ID
-HAVING ((([>Jobs].DesignJob)=IIf(InStr(Forms!Sales.ViewClosed,"Design")<>0,True,False)) And (([>Jobs].Estimate)=True))
-ORDER BY Max([Sales Journal].Due) DESC
-WITH OWNERACCESS OPTION;

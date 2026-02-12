@@ -1,5 +1,0 @@
-SELECT DISTINCTROW [>Settings].ZCoordinateDimensionCode AS Expr1, [>Settings].ZCoordinateDimension AS Expr2
-FROM [>Settings]
-WHERE ((([>Settings].ZCoordinateDimensionCode)=4 Or ([>Settings].ZCoordinateDimensionCode)=5 Or ([>Settings].ZCoordinateDimensionCode)=3 Or ([>Settings].ZCoordinateDimensionCode)=2 Or ([>Settings].ZCoordinateDimensionCode)=1 Or ([>Settings].ZCoordinateDimensionCode)=100 Or ([>Settings].ZCoordinateDimensionCode)=0 Or ([>Settings].ZCoordinateDimensionCode)=101 Or ([>Settings].ZCoordinateDimensionCode)=102 Or ([>Settings].ZCoordinateDimensionCode)=103 Or ([>Settings].ZCoordinateDimensionCode)=93 Or ([>Settings].ZCoordinateDimensionCode)=91 Or ([>Settings].ZCoordinateDimensionCode)=92 Or ([>Settings].ZCoordinateDimensionCode)=300))
-ORDER BY [>Settings].ZCoordinateDimensionCode
-WITH OWNERACCESS OPTION;

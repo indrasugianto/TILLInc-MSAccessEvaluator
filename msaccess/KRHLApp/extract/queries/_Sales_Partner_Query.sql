@@ -1,4 +1,0 @@
-SELECT [>Jobs].ID, [Job Agreement Sales NIC Stone].SumOfSaleAmount, [>Jobs].ProductionPhase, [MIS Personnel].Key, [MIS Personnel].Employee, [MIS Personnel].Text1, [MIS Personnel_1].Key, [MIS Personnel_1].Employee, [MIS Personnel_1].Text1, [>Jobs].Info5
-FROM (([>Jobs] LEFT JOIN [Job Agreement Sales NIC Stone] ON [>Jobs].Key=[Job Agreement Sales NIC Stone].Key) LEFT JOIN [MIS Personnel] ON [>Jobs].SpecifiedBy=[MIS Personnel].Key) LEFT JOIN [MIS Personnel] AS [MIS Personnel_1] ON [>Jobs].ManagedBy=[MIS Personnel_1].Key
-WHERE ((([>Jobs].ProductionPhase)<>"Archive" And ([>Jobs].ProductionPhase)<>"Completed") AND (([>Jobs].Estimate)=False) AND (([>Jobs].Closed)=False))
-ORDER BY [>Jobs].ID;

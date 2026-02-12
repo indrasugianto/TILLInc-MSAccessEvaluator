@@ -1,6 +1,0 @@
-SELECT [>Settings].PhaseSort, [>Jobs].ProductionPhase, [>Jobs].ID, Sum([Sales Journal].SaleAmount) AS SumOfSaleAmount, [>Jobs].Info5, [MIS Personnel].Text1, [MIS Personnel].Employee, [>Jobs].SpecifiedBy, [>Jobs].ManagedBy, [MIS Personnel_1].Employee, [>Jobs].Preliminary, [>Jobs].ProductionPhase
-FROM ((([Sales Journal] RIGHT JOIN [>Jobs] ON [Sales Journal].Job=[>Jobs].Key) LEFT JOIN [MIS Personnel] AS [MIS Personnel_1] ON [>Jobs].ManagedBy=[MIS Personnel_1].Key) LEFT JOIN [MIS Personnel] ON [>Jobs].SpecifiedBy=[MIS Personnel].Key) LEFT JOIN [>Settings] ON [>Jobs].ProductionPhase=[>Settings].Phase
-WHERE ((([>Jobs].Closed)=False) AND (([>Jobs].Estimate)=False))
-GROUP BY [>Settings].PhaseSort, [>Jobs].ProductionPhase, [>Jobs].ID, [>Jobs].Info5, [MIS Personnel].Text1, [MIS Personnel].Employee, [>Jobs].SpecifiedBy, [>Jobs].ManagedBy, [MIS Personnel_1].Employee, [>Jobs].Preliminary, [>Jobs].ProductionPhase, [Sales Journal].Journal, InStr([Sales Journal].Category,'Stone')=0, [>Jobs].Family
-HAVING ((([>Jobs].ProductionPhase)<>"Archive" And ([>Jobs].ProductionPhase)<>"Completed") And (([Sales Journal].Journal)="Sale") And (([>Jobs].Family)=False) And ((InStr([Sales Journal].Category,'Stone')=0)=True))
-ORDER BY [>Settings].PhaseSort, [>Jobs].ID;

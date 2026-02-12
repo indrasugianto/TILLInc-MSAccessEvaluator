@@ -1,3 +1,0 @@
-SELECT [>Jobs].Key, Format(nnez([EstimatedPM])+nnez([EstimatedSpec])+nnez([estimatedOther])+nnez([estimatedmaterial])+nnez([estimatedsolidlumber])+nnez([estimatedveneer])+nnez([estimatedspecial])+nnez([estimatedshopstaff])+nnez([estimatedfinish])+nnez([estimatedassembly])+nnez([estimatedinstallstaff])+nnez([estimateddriving])+nnez([estimatedcontract])+nnez([estimatedofficestaff]),"#,#") AS [Estimated $]
-FROM [>Jobs]
-WHERE ((([>Jobs].ID) Is Not Null));

@@ -1,3 +1,0 @@
-SELECT DISTINCTROW [MIS Hours].[Job ID], [MIS Hours].Date, [MIS Hours].Employee, [MIS Hours].Activity, [MIS Hours].Hours, [MIS Hours].Charge, [MIS Hours].Cost, [MIS Hours].Rate
-FROM [MIS Hours]
-WHERE ((([MIS Hours].[Job ID])=Forms!MISHoursEntry!JobName) And (([MIS Hours].Date)=Forms!MISHoursEntry!Week) And (([MIS Hours].Employee)=Forms!MISHoursEntry!EmpName) And (([MIS Hours].Activity) Is Not Null));

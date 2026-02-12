@@ -1,3 +1,0 @@
-SELECT DISTINCTROW [Receivables Report Query].ID AS Expr1, [Receivables Report Query].AccountNumber, Last([Receivables Report Query].TransactionDate) AS LastOfTransactionDate, First([Receivables Report Query].TheName) AS FirstOfTheName, Sum([Receivables Report Query].DebitAmount) AS SumOfDebitAmount, Sum([Receivables Report Query].CreditAmount) AS SumOfCreditAmount, [Receivables Report Query].Key
-FROM [Receivables Report Query]
-GROUP BY [Receivables Report Query].ID, [Receivables Report Query].AccountNumber, [Receivables Report Query].Key;

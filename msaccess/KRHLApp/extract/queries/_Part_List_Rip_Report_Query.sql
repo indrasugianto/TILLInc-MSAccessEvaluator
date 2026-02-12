@@ -1,4 +1,0 @@
-SELECT DISTINCTROW [>Rip Report].Pieces, [>Rip Report].SubAssembly, [>Rip Report].DefaultMaterial, [>Rip Report].Z, [>Rip Report].X, [>Rip Report].Y, [>Rip Report].PartPositionName, [>Rip Report].PartName
-FROM [>Rip Report]
-GROUP BY [>Rip Report].Pieces, [>Rip Report].SubAssembly, [>Rip Report].DefaultMaterial, [>Rip Report].Z, [>Rip Report].X, [>Rip Report].Y, [>Rip Report].PartPositionName, [>Rip Report].PartName, [>Rip Report].SubAssembly, [>Rip Report].DefaultMaterial, [>Rip Report].Z, [>Rip Report].X, [>Rip Report].ProductList
-HAVING ((([>Rip Report].ProductList)=Forms!ProductListMaster!ProductListControl!ProductListName));

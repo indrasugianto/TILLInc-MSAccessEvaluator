@@ -1,5 +1,0 @@
-SELECT IIf(NNEN([PrivateNote])="",[Description],[PrivateNote]) & IIf([Parent]," " & [ID],"") AS InvoiceNote, [Sales Journal].InvoiceAmount, [Sales Journal].InvoiceNumber, [Sales Journal].Job, [>Jobs].ID, [Sales Journal].Due
-FROM [>Jobs] LEFT JOIN [Sales Journal] ON [>Jobs].Key=[Sales Journal].Job
-GROUP BY IIf(NNEN([PrivateNote])="",[Description],[PrivateNote]) & IIf([Parent]," " & [ID],""), [Sales Journal].InvoiceAmount, [Sales Journal].InvoiceNumber, [Sales Journal].Job, [>Jobs].ID, [Sales Journal].Due, IIf(Not forms!Sales!Family And [Job]=forms!Sales!Jobname,True,IIf(forms!Sales!Family And [Parent]=Forms!Sales!JobName Or forms!Sales!Family And [Job]=Forms!Sales!JobName,True,False)), InStr([description],"Proposal")=0
-HAVING ((([Sales Journal].InvoiceAmount)<>0) And (([Sales Journal].Due) Is Not Null) And ((InStr([description],"Proposal")=0)=True) And ((IIf(Not forms!Sales!Family And [Job]=forms!Sales!Jobname,True,IIf(forms!Sales!Family And [Parent]=Forms!Sales!JobName Or forms!Sales!Family And [Job]=Forms!Sales!JobName,True,False)))=True))
-ORDER BY [Sales Journal].InvoiceNumber;

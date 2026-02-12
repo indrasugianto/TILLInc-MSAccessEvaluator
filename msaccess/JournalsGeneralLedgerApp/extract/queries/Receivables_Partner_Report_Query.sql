@@ -1,4 +1,0 @@
-SELECT DISTINCTROW [MIS Personnel].Employee, [>Jobs].ID, [General Ledger].AccountNumber, [General Ledger].TransactionDate, [General Ledger].DebitAmount, [General Ledger].CreditAmount, [>Jobs].Closed, [MIS Personnel].Text2 AS Partner, [>Jobs].Key, [General Ledger].SourceOperative, [>Resources].ID
-FROM (([General Ledger] RIGHT JOIN [>Jobs] ON [General Ledger].Job=[>Jobs].Key) LEFT JOIN [>Resources] ON [>Jobs].Agreement=[>Resources].Key) RIGHT JOIN [MIS Personnel] ON [>Jobs].ManagedBy=[MIS Personnel].Key
-WHERE ((([General Ledger].AccountNumber)=121) AND (([>Jobs].Closed)=False) AND (([MIS Personnel].Text2)="Partner"))
-ORDER BY [MIS Personnel].Employee, [>Jobs].ID, [General Ledger].TransactionDate;

@@ -1,3 +1,0 @@
-SELECT DISTINCTROW [>Resources].Category, [>Resources].ID, [General Ledger].AccountNumber, [General Ledger].SourceJournal, [General Ledger].TransactionDate, [MIS Accounts].Account, [>Resources].Key, [MIS Accounts].Balance, [General Ledger].DebitAmount, [General Ledger].CreditAmount, [General Ledger].SourceOperative, [General Ledger].SourceTransaction
-FROM ([General Ledger] INNER JOIN [>Resources] ON [General Ledger].SourceOperative = [>Resources].Key) LEFT JOIN [MIS Accounts] ON [General Ledger].AccountNumber = [MIS Accounts].Number
-ORDER BY [>Resources].Category, [>Resources].ID, [General Ledger].AccountNumber, [General Ledger].SourceJournal, [General Ledger].TransactionDate;

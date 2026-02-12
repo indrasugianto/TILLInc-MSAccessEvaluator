@@ -1,2 +1,0 @@
-SELECT DISTINCTROW [Payroll Journal].OverTime, [Payroll Journal].Vacation, [Payroll Journal].Holiday, [Payroll Journal].RetroactiveVacation, [Payroll Journal].RetroactiveHoliday, [Payroll Journal].Bonus, [Payroll Journal].Retroactive, [Payroll Journal].Other
-FROM [Payroll Journal];

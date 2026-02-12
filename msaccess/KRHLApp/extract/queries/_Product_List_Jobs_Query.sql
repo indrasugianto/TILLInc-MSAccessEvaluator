@@ -1,4 +1,0 @@
-SELECT DISTINCTROW [>Jobs].ID, [>Jobs].Key
-FROM [>Jobs]
-ORDER BY [>Jobs].ID
-WITH OWNERACCESS OPTION;

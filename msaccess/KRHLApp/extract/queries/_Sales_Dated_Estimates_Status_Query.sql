@@ -1,5 +1,0 @@
-SELECT DISTINCTROW First([MIS Personnel].Employee) AS FirstOfEmployee, [>Jobs].Info2, [>Jobs].ID, Max([Sales Journal].Due) AS MaxOfDue, Sum([Sales Journal].SaleAmount) AS SumOfSaleAmount, First([>Resources].ID) AS FirstOfID, First([>Jobs].Category) AS FirstOfCategory, [>Resources_1].ID, [>Resources_2].ID, [>Resources_3].ID, [>Resources_4].ID, [>Jobs].Closed
-FROM ((((([Sales Journal] LEFT JOIN ([>Jobs] LEFT JOIN [MIS Personnel] ON [>Jobs].ManagedBy=[MIS Personnel].Key) ON [Sales Journal].Job=[>Jobs].Key) LEFT JOIN [>Resources] ON [>Jobs].Customer=[>Resources].Key) LEFT JOIN [>Resources] AS [>Resources_1] ON [>Jobs].Architect=[>Resources_1].Key) LEFT JOIN [>Resources] AS [>Resources_2] ON [>Jobs].Contractor=[>Resources_2].Key) LEFT JOIN [>Resources] AS [>Resources_3] ON [>Jobs].Contact1=[>Resources_3].Key) LEFT JOIN [>Resources] AS [>Resources_4] ON [>Jobs].DesignedBy=[>Resources_4].Key
-GROUP BY [>Jobs].Info2, [>Jobs].ID, [>Resources_1].ID, [>Resources_2].ID, [>Resources_3].ID, [>Resources_4].ID, [>Jobs].Closed, [>Jobs].Estimate
-HAVING (((Max([Sales Journal].Due))>=#1/1/2000#) AND (([>Jobs].Estimate)=True))
-ORDER BY First([MIS Personnel].Employee);

@@ -1,4 +1,0 @@
-SELECT DISTINCTROW First([MIS Personnel].Employee) AS FirstOfEmployee, [MIS Personnel].Text2, [>Jobs].Key, Max([Sales Journal].Due) AS MaxOfDue, [Sales Journal].Description
-FROM [Sales Journal] LEFT JOIN ([>Jobs] LEFT JOIN [MIS Personnel] ON [>Jobs].ManagedBy=[MIS Personnel].Key) ON [Sales Journal].Job=[>Jobs].Key
-GROUP BY [MIS Personnel].Text2, [>Jobs].Key, [Sales Journal].Description, [>Jobs].Closed, [>Jobs].Estimate
-HAVING ((([MIS Personnel].Text2)="Partner") AND ((Max([Sales Journal].Due)) Is Not Null) AND (([Sales Journal].Description)="Proposal") AND (([>Jobs].Closed)=False) AND (([>Jobs].Estimate)=True));

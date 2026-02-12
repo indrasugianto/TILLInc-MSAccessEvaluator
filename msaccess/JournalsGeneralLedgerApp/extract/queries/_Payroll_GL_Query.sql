@@ -1,4 +1,0 @@
-SELECT DISTINCTROW [Payroll Journal].*, [MIS Personnel].WitholdingAccount, [MIS Personnel].ADPName, [MIS Personnel].ADPNetAccount, [MIS Personnel].Text2, [MIS Personnel].TerminationDate, [MIS Personnel].BonusPlan, [MIS Personnel].Closed, [Payroll Journal].Closed, [MIS Personnel].EmploymentDate, [MIS Personnel].Rate
-FROM [Payroll Journal], [MIS Personnel]
-WHERE (((IIf([CheckDate]>=Forms!GeneralLedger.FromDate And [CheckDate]<=Forms!GeneralLedger.ToDate,True,False))=True) And (([Payroll Journal].Void)=False))
-ORDER BY IIf([CheckDate]>=Forms!GeneralLedger.FromDate And [CheckDate]<=Forms!GeneralLedger.ToDate,True,False) DESC , [Payroll Journal].Closed DESC , [Payroll Journal].CheckNumber DESC , [Payroll Journal].Employee DESC;

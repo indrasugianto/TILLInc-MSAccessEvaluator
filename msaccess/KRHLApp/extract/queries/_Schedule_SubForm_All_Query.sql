@@ -1,4 +1,0 @@
-SELECT ProjectSchedule.Task, ProjectSchedule.TaskEnd, [>Jobs].ID, ProjectSchedule.PercentComplete, [>Jobs].ProductionPhase, [MIS Personnel].Text1, [>Jobs].SpecifiedBy, ProjectSchedule.Drawing, [>Jobs].Key, [MIS Personnel_1].Employee
-FROM ProjectSchedule LEFT JOIN (([>Jobs] LEFT JOIN [MIS Personnel] AS [MIS Personnel_1] ON [>Jobs].ManagedBy=[MIS Personnel_1].Key) LEFT JOIN [MIS Personnel] ON [>Jobs].SpecifiedBy=[MIS Personnel].Key) ON ProjectSchedule.Job=[>Jobs].Key
-WHERE (((ProjectSchedule.PercentComplete)<100) AND (([>Jobs].ProductionPhase)<>"Archive" And ([>Jobs].ProductionPhase)<>"Completed") AND ((ProjectSchedule.TaskDuration)=0) AND (([>Jobs].Estimate)=False) AND (([>Jobs].Closed)=False))
-ORDER BY Left([Task],1), ProjectSchedule.TaskEnd, [>Jobs].ID, [MIS Personnel].Text1;

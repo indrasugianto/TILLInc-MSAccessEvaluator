@@ -1,2 +1,0 @@
-SELECT [>Product List].Item, [>Product Lists].ProductList
-FROM ([>Product List] INNER JOIN [>Correspondence] ON [>Product List].Key = [>Correspondence].Name) INNER JOIN [>Product Lists] ON [>Product List].ProductListKey = [>Product Lists].Key;

@@ -1,5 +1,0 @@
-SELECT [MIS Hours].Date, [MIS Hours].Employee, Sum([MIS Hours].Hours) AS SumOfHours, [Invoice Report Payments Total].ID, Min([>Design Rate].DesignRate) AS MinOfDesignRate, [Invoice Report Payments Total].SumOfAmount, [Invoice Report Design Invoices Total].SumOfInvoiceAmount, [SumofHours]*[MinofDesignRate] AS DesignCost
-FROM (([MIS Hours] LEFT JOIN [>Design Rate] ON [MIS Hours].Employee=[>Design Rate].Designer) LEFT JOIN [Invoice Report Payments Total] ON [MIS Hours].[Job ID]=[Invoice Report Payments Total].Job) LEFT JOIN [Invoice Report Design Invoices Total] ON [MIS Hours].[Job ID]=[Invoice Report Design Invoices Total].Job
-WHERE ((([MIS Hours].Date)>=Forms!Sales!FromDate And ([MIS Hours].Date)<=Forms!Sales!toDate) And (([MIS Hours].[Job ID])=forms!Sales!thejobname))
-GROUP BY [MIS Hours].Date, [MIS Hours].Employee, [Invoice Report Payments Total].ID, [Invoice Report Payments Total].SumOfAmount, [Invoice Report Design Invoices Total].SumOfInvoiceAmount
-ORDER BY [MIS Hours].Date, [MIS Hours].Employee;

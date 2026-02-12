@@ -1,3 +1,0 @@
-SELECT [>Jobs].ID, [>Jobs].Key, [>Jobs].Info4, [>Jobs].Spreadsheet, [>Jobs].Category, [>Jobs].Info3, [MIS Personnel].Employee, [MIS Personnel_1].Employee, [>Jobs].ManagedBy, [>Jobs].SpecifiedBy, [Invoice Report Invoices Total].SumOfInvoiceAmount AS BillableDesignInvoices
-FROM (([>Jobs] LEFT JOIN [MIS Personnel] ON [>Jobs].ManagedBy=[MIS Personnel].Key) LEFT JOIN [MIS Personnel] AS [MIS Personnel_1] ON [>Jobs].SpecifiedBy=[MIS Personnel_1].Key) LEFT JOIN [Invoice Report Invoices Total] ON [>Jobs].Key=[Invoice Report Invoices Total].Job
-WHERE ((([>Jobs].Key)=Forms!Sales!JobName));

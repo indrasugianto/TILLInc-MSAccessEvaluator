@@ -1,4 +1,0 @@
-SELECT DISTINCTROW [>Resources].Category, [>Resources].ID, [>General Ledger Query].AccountNumber, [>General Ledger Query].SourceJournal, First([>General Ledger Query].TransactionDate) AS FirstOfTransactionDate, [>General Ledger Query].Account, Sum([>General Ledger Query].DebitAmount) AS SumOfDebitAmount, Sum([>General Ledger Query].CreditAmount) AS SumOfCreditAmount, [>General Ledger Query].SourceOperative
-FROM [>General Ledger Query] INNER JOIN [>Resources] ON [>General Ledger Query].SourceOperative=[>Resources].Key
-GROUP BY [>Resources].Category, [>Resources].ID, [>General Ledger Query].AccountNumber, [>General Ledger Query].SourceJournal, [>General Ledger Query].Account, [>General Ledger Query].SourceOperative
-ORDER BY [>Resources].Category, [>Resources].ID, [>General Ledger Query].AccountNumber;

@@ -1,5 +1,0 @@
-SELECT DISTINCTROW [>Part List].Item, Sum([>Part List].Pieces) AS SumOfPieces, [>Part List].DefaultMaterial, [>Part List].Z, [>Part List].Y, [>Part List].X, [>Part List].PartProcessAlternate, [>Part List].MaterialCategory, [>Part List].ShowPart, [>Part List].ProcessList
-FROM [>Part List]
-GROUP BY [>Part List].Item, [>Part List].DefaultMaterial, [>Part List].Z, [>Part List].Y, [>Part List].X, [>Part List].PartProcessAlternate, [>Part List].MaterialCategory, [>Part List].ShowPart, [>Part List].ProcessList, [>Part List].ProductList, [>Part List].DisplayPart
-HAVING ((([>Part List].Item)=forms!PartsList!CategorySort) And (([>Part List].X)<>0) And (([>Part List].ShowPart)=True) And (([>Part List].ProcessList)=False) And (([>Part List].ProductList)=Forms!ProductListMaster!ProductListControl!ProductListName) And (([>Part List].DisplayPart)=True))
-WITH OWNERACCESS OPTION;

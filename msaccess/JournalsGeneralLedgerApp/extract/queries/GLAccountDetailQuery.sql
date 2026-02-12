@@ -1,4 +1,0 @@
-SELECT DISTINCTROW [General Ledger].AccountNumber, [General Ledger].SourceJournal, [General Ledger].TransactionDate, [MIS Accounts].Balance, [>Resources].ID, [MIS Accounts].Account, [General Ledger].DebitAmount, [General Ledger].CreditAmount, [General Ledger].SourceTransaction
-FROM ([General Ledger] INNER JOIN [MIS Accounts] ON [General Ledger].AccountNumber=[MIS Accounts].Number) LEFT JOIN [>Resources] ON [General Ledger].SourceOperative=[>Resources].Key
-WHERE ((([General Ledger].TransactionDate)>=Forms!GeneralLedger.FromDate And ([General Ledger].TransactionDate)<=Forms!GeneralLedger.toDate))
-ORDER BY [General Ledger].AccountNumber, [General Ledger].SourceJournal, [General Ledger].TransactionDate;

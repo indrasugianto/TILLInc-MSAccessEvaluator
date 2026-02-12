@@ -1,3 +1,0 @@
-SELECT DISTINCTROW [Cash Disbursements Journal].*, [>Resources].ID
-FROM [Cash Disbursements Journal] LEFT JOIN [>Resources] ON [Cash Disbursements Journal].SupplierID=[>Resources].Key
-WHERE (((IIf([CheckDate]<=forms!GeneralLedger!ToDate And [Closed]=False Or [CheckDate]<=Forms!GeneralLedger!ToDate And [Closed]=True And [EntryDate]>=DatePlus30(Forms!GeneralLedger!ToDate),True,False))=True) And (([Cash Disbursements Journal].Void)=False) And (([Cash Disbursements Journal].DebitAmount)<>0));

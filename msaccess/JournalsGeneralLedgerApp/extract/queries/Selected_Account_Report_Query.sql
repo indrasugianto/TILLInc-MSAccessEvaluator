@@ -1,3 +1,0 @@
-SELECT DISTINCTROW [General Ledger].AccountNumber, [>Resources].ID, [General Ledger].TransactionDate, [General Ledger].DebitAmount, [General Ledger].CreditAmount, [General Ledger].SourceOperative, [General Ledger].SourceJournal, [General Ledger].SourceTransaction
-FROM [General Ledger] LEFT JOIN [>Resources] ON [General Ledger].SourceOperative=[>Resources].Key
-WHERE ((([General Ledger].AccountNumber)=Forms!GeneralLedger.SelectedAccount));
